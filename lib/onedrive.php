@@ -1,14 +1,17 @@
 <?php
 	class onedrive{
-		static $client_id;
-		static $client_secret;
-		static $redirect_uri;
+		static $client_id="ea2b36f6-b8ad-40be-bc0f-e5e4a4a7d4fa";
+		static $client_secret="EIVCx5ztMSxMsga18MQ7rmGf9EIP7zv6tfimb0Kp5Uc=";
+		static $redirect_uri="https://ju.tn/onedrive-login";
+		static $dir_cache_time=600;
+		static $file_cache_time=86400;
 		static $app_url;
 
 		static function authorize_url(){
 			$client_id = self::$client_id;
 			$redirect_uri = self::$redirect_uri;
 			$url ="https://login.microsoftonline.com/common/oauth2/authorize?response_type=code&client_id={$client_id}&redirect_uri={$redirect_uri}";
+			$url .= '&state='.urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 			return $url;
 		}
 		
@@ -42,7 +45,8 @@
 			if($token['expires_on'] > time()+600){
 				return $token['access_token'];
 			}else{
-				$token = self::get_token(config('refresh_token'));
+				$refresh_token = empty($token['access_token'])?config('refresh_token'):$token['access_token'];
+				$token = self::get_token($refresh_token);
 				if(!empty($token['refresh_token'])){
 					config('@token', $token);
 					return $token['access_token'];
@@ -80,7 +84,7 @@
 			$resp = fetch::get($url);
 			$data = json_decode($resp->content, true);
 			if(!empty($data)){
-				cache($key, $data, 300);
+				cache($key, $data, self::$dir_cache_time);
 			}
 			return $data;
 		}
@@ -106,7 +110,7 @@
 			$resp = fetch::get($url);
 			$data = json_decode($resp->content, true);
 			if(!empty($data)){
-				cache($key, $data, 600);
+				cache($key, $data, self::$file_cache_time);
 			}
 			return $data;
 		}

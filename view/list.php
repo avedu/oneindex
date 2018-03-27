@@ -1,5 +1,5 @@
 <?php 
-$root_path = "?";
+$root_path = config('root_path');
 ?><!DOCTYPE html>
 <html>
     <head>
