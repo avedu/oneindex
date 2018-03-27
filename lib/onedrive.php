@@ -1,10 +1,10 @@
 <?php
 	class onedrive{
-		static $client_id="ea2b36f6-b8ad-40be-bc0f-e5e4a4a7d4fa";
-		static $client_secret="EIVCx5ztMSxMsga18MQ7rmGf9EIP7zv6tfimb0Kp5Uc=";
-		static $redirect_uri="https://ju.tn/onedrive-login";
-		static $dir_cache_time=600;
-		static $file_cache_time=86400;
+		static $client_id;
+		static $client_secret;
+		static $redirect_uri;
+		static $dir_cache_time;
+		static $file_cache_time;
 		static $app_url;
 
 		static function authorize_url(){

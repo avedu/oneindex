@@ -1,9 +1,15 @@
 <?php
 require 'init.php';
 
-onedrive::$app_url = config('app_url');
+
+onedrive::$client_id = config('client_id');
+onedrive::$client_secret = config('client_secret');
+onedrive::$redirect_uri = config('redirect_uri');
 onedrive::$dir_cache_time = config('dir_cache_time');
 onedrive::$file_cache_time = config('file_cache_time');
+
+onedrive::$app_url = config('app_url');
+
 
 if( empty(onedrive::$app_url) ){
 	route::any('/install',function(){
@@ -23,9 +29,6 @@ if( empty(onedrive::$app_url) ){
 			}
 			config('refresh_token', $data['refresh_token']);
 			config('app_url', $app_url);
-			config('root_path', '?');
-			config('dir_cache_time', 600);
-			config('file_cache_time', 86400);
 			view::direct('/');
 	});
 	if((route::$runed) == false){
