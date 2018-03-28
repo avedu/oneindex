@@ -92,6 +92,7 @@ if (!function_exists('db')) {
 	}
 }
 
+!defined('VIEW_PATH') && define('VIEW_PATH', ROOT . 'view/');
 if (!function_exists('view')) {
 	function view($file, $set = null) {
 		return view::load($file, $set = null);

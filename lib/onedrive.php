@@ -64,7 +64,6 @@
 			$post_data = "client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&refresh_token={$refresh_token}&grant_type=refresh_token&resource={$resource_id}";
 			fetch::$headers = "Content-Type: application/x-www-form-urlencoded";
 			$resp = fetch::post($url, $post_data);
-			var_dump($resp);
 			$data = json_decode($resp->content, true);
 			return $data;
 		}
