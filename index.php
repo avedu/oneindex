@@ -45,16 +45,26 @@ route::get('{path:#all}',function(){
 	
 	//是否有缓存
 	list($time, $items) = cache('dir_'.$path);
-	//缓存失效，重新抓取
-	if( is_null($items) || (TIME - $time) > config('cache_expire_time') ){
+	//缓存失效或文件不存在，重新抓取
+	if( !is_array($items) || (TIME - $time) > config('cache_expire_time') || (!empty($name) && !array_key_exists($name, $items))){
 		$items = onedrive::dir($path);
 		if(is_array($items)){
 			$time = TIME;
 			cache('dir_'.$path, $items);
+		} else {
+			http_response_code(404);
+			view::load('404')->with('path',urldecode($url_path))->show();
+			die();
 		}
 	}
 	//输出
 	if(!empty($name)){//file
+		//文件不存在
+		if (!array_key_exists($name, $items)) {
+			http_response_code(404);
+			view::load('404')->with('path',urldecode($url_path).$name)->show();
+			die();
+		}
 		if(in_array($_GET['thumbnails'],['large','medium','small'])){
 			list($time, $item) = cache('thumbnails_'.$path.$name);
 			if(empty($item[$_GET['thumbnails']]) ||  (TIME - $time) > config('cache_expire_time') ){
