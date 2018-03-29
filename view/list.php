@@ -12,13 +12,14 @@ $root_path = get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).config('root_pa
     <body>
 		<h1 id="heading">Index of <?php echo urldecode($path);?></h1>
 		<table id="table">
-			<tr><th class="file-name">Name</th><th class="file-size">Size</th><th class="file-date-modified">Date Modified</th></tr>
+			<tr><th class="file-name">Name</th><th class="file-size">Size</th><th class="file-date-created">Date Created</th><th class="file-date-modified">Date Modified</th></tr>
 			<?php if($path != '/'):?>
 				<tr>
 					<td class="file-name">
 						<a class="icon icon-up" href="<?php echo get_absolute_path($root_path.$path.'../');?>">..</a>
 					</td>
 					<td class="file-size"></td>
+					<td class="file-date-created"></td>
 					<td class="file-date-modified"></td>
 				</tr>
 			<?php endif;?>
@@ -27,13 +28,15 @@ $root_path = get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).config('root_pa
 					<tr>
 						<td class="file-name"><a class="icon icon-dir" href="<?php echo get_absolute_path($root_path.$path.$item['name']);?>"><?php echo $item['name'];?>/</a></td>
 						<td class="file-size"><?php echo $item['size'];?></td>
-						<td class="file-date-modified"><?php echo $item['lastModifiedDateTime'];?></td>
+						<td class="file-date-created"><?php echo date("Y-m-d H:i:s", $item['createdDateTime']);?></td>
+						<td class="file-date-modified"><?php echo date("Y-m-d H:i:s", $item['lastModifiedDateTime']);?></td>
 					</tr>
 				<?php else:?>
 					<tr>
 						<td class="file-name"><a class="icon icon-file" href="<?php echo get_absolute_path($root_path.$path).$item['name'];?>"><?php echo $item['name'];?></a></td>
 						<td class="file-size"><?php echo $item['size'];?></td>
-						<td class="file-date-modified">&nbsp;<?php echo $item['lastModifiedDateTime'];?></td>
+						<td class="file-date-created">&nbsp;<?php echo date("Y-m-d H:i:s", $item['createdDateTime']);?></td>
+						<td class="file-date-modified">&nbsp;<?php echo date("Y-m-d H:i:s", $item['lastModifiedDateTime']);?></td>
 					</tr>
 				<?php endif;?>
 			<?php endforeach;?>

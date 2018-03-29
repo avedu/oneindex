@@ -87,7 +87,8 @@
 				$return[$item['name']] = array(
 					'name'=>$item['name'],
 					'size'=>self::human_filesize($item['size']),
-					'lastModifiedDateTime'=>$item['lastModifiedDateTime'],
+					'createdDateTime'=>strtotime($item['createdDateTime']),
+					'lastModifiedDateTime'=>strtotime($item['lastModifiedDateTime']),
 					'downloadUrl'=>$item['@content.downloadUrl'],
 					'folder'=>empty($item['folder'])?false:true
 				);
