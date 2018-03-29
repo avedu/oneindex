@@ -16,12 +16,12 @@ if( empty(onedrive::$app_url) ){
 			$data = onedrive::authorize($_REQUEST['code']);
 			if(empty($data['access_token'])){
 				return view::load('auth')->with('authorize_url',$authorize_url)
-							->with('error','ÈÏÖ¤Ê§°Ü');
+							->with('error','è®¤è¯å¤±è´¥');
 			}
 			$app_url = onedrive::get_app_url($data['access_token']);
 			if(empty($app_url)){
 				return view::load('auth')->with('authorize_url',$authorize_url)
-							->with('error','»ñÈ¡app url Ê§°Ü');
+							->with('error','èŽ·å–app url å¤±è´¥');
 			}
 			config('refresh_token', $data['refresh_token']);
 			config('app_url', $app_url);
@@ -35,7 +35,7 @@ if( empty(onedrive::$app_url) ){
 
 
 route::get('{path:#all}',function(){
-	//»ñÈ¡Â·¾¶ºÍÎÄ¼þÃû
+	//èŽ·å–è·¯å¾„å’Œæ–‡ä»¶å
 	$paths = explode('/', $_GET['path']);
 	if(substr($_SERVER['REQUEST_URI'], -1) != '/'){
 		$name = urldecode(array_pop($paths));
@@ -43,9 +43,9 @@ route::get('{path:#all}',function(){
 	$path = '/'.implode('/', $paths).'/';
 	$path = str_replace('//','/',$path);
 
-	//ÊÇ·ñÓÐ»º´æ
+	//æ˜¯å¦æœ‰ç¼“å­˜
 	list($time, $items) = cache('dir_'.$path);
-	//»º´æÊ§Ð§£¬ÖØÐÂ×¥È¡
+	//ç¼“å­˜å¤±æ•ˆï¼Œé‡æ–°æŠ“å–
 	if( is_null($items) || (TIME - $time) > config('cache_expire_time') ){
 		$items = onedrive::dir($path);
 		if(is_array($items)){
@@ -53,7 +53,7 @@ route::get('{path:#all}',function(){
 			cache('dir_'.$path, $items);
 		}
 	}
-	//Êä³ö
+	//è¾“å‡º
 	if(!empty($name)){//file
 		if(in_array($_GET['thumbnails'],['large','medium','small'])){
 			list($time, $item) = cache('thumbnails_'.$path.$name);
@@ -73,7 +73,7 @@ route::get('{path:#all}',function(){
 		view::load('list')->with('path',$path)->with('items', $items)->show();
 	}
 	
-	//ºóÌ¨Ë¢ÐÂ»º´æ
+	//åŽå°åˆ·æ–°ç¼“å­˜
 	if((TIME - $time) > config('cache_refresh_time')){
 		fastcgi_finish_request();
 		$items = onedrive::dir($path);
