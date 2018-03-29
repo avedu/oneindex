@@ -80,6 +80,9 @@
 			$url = self::$app_url."_api/v2.0/me/drive/root".$path."children";
 			$resp = fetch::get($url);
 			$data = json_decode($resp->content, true);
+			if(!empty($data['@odata.nextLink'])){
+				self::dir_next_page($data['@odata.nextLink'], $data);
+			}
 			if(empty($data)){
 				return false;
 			}
@@ -94,6 +97,15 @@
 				);
 			}
 			return (array)$return;
+		}
+
+		static function dir_next_page($nextlink, &$data){
+			$resp = fetch::get($nextlink);
+			$next_data = json_decode($resp->content, true);
+			$data['value'] = array_merge($data['value'],$next_data['value']);
+			if(!empty($next_data['@odata.nextLink'])){
+				self::dir_next_page($next_data['@odata.nextLink'], $data);
+			}
 		}
 
 		static function thumbnails($path){
