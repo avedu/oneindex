@@ -32,6 +32,8 @@ if( empty(onedrive::$app_url) ){
 	}
 }
 
+
+
 route::get('{path:#all}',function(){
 	//获取路径和文件名
 	$paths = explode('/', $_GET['path']);
@@ -51,7 +53,6 @@ route::get('{path:#all}',function(){
 			cache('dir_'.$path, $items);
 		}
 	}
-	
 	//输出
 	if(!empty($name)){//file
 		if(in_array($_GET['thumbnails'],['large','medium','small'])){
@@ -68,6 +69,7 @@ route::get('{path:#all}',function(){
 		}
 		header('Location: '.$url);
 	}else{//dir
+		
 		view::load('list')->with('path',$path)->with('items', $items)->show();
 	}
 	

@@ -1,5 +1,5 @@
 <?php 
-$root_path = config('root_path');
+$root_path = get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).config('root_path');
 ?><!DOCTYPE html>
 <html>
     <head>
@@ -16,7 +16,7 @@ $root_path = config('root_path');
 			<?php if($path != '/'):?>
 				<tr>
 					<td class="file-name">
-						<a class="icon icon-up" href="<?php echo $root_path;?><?php echo ltrim(str_replace("\\", "/", dirname($path)),'/');?>/">..</a>
+						<a class="icon icon-up" href="<?php echo get_absolute_path($root_path.$path.'../');?>">..</a>
 					</td>
 					<td class="file-size"></td>
 					<td class="file-date-modified"></td>
@@ -25,13 +25,13 @@ $root_path = config('root_path');
 			<?php foreach((array)$items as $item):?>
 				<?php if(!empty($item['folder'])):?>
 					<tr>
-						<td class="file-name"><a class="icon icon-dir" href="<?php echo $root_path;?><?php echo $path.$item['name']; ?>/"><?php echo $item['name'];?>/</a></td>
+						<td class="file-name"><a class="icon icon-dir" href="<?php echo get_absolute_path($root_path.$path.$item['name']);?>"><?php echo $item['name'];?>/</a></td>
 						<td class="file-size"><?php echo $item['size'];?></td>
 						<td class="file-date-modified"><?php echo $item['lastModifiedDateTime'];?></td>
 					</tr>
 				<?php else:?>
 					<tr>
-						<td class="file-name"><a class="icon icon-file" href="<?php echo $root_path;?><?php echo $path.$item['name']; ?>"><?php echo $item['name'];?></a></td>
+						<td class="file-name"><a class="icon icon-file" href="<?php echo get_absolute_path($root_path.$path).$item['name'];?>"><?php echo $item['name'];?></a></td>
 						<td class="file-size"><?php echo $item['size'];?></td>
 						<td class="file-date-modified">&nbsp;<?php echo $item['lastModifiedDateTime'];?></td>
 					</tr>

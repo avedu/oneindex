@@ -107,3 +107,18 @@ if (!function_exists("fastcgi_finish_request")) {
       	flush();
       }
 }
+
+function get_absolute_path($path) {
+    $path = str_replace(array('/', '\\', '//'), '/', $path);
+    $parts = array_filter(explode('/', $path), 'strlen');
+    $absolutes = array();
+    foreach ($parts as $part) {
+        if ('.' == $part) continue;
+        if ('..' == $part) {
+            array_pop($absolutes);
+        } else {
+            $absolutes[] = $part;
+        }
+    }
+    return str_replace('//','/','/'.implode('/', $absolutes).'/');
+}
