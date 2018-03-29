@@ -25,13 +25,13 @@ $root_path = config('root_path');
 			<?php foreach((array)$items as $item):?>
 				<?php if(!empty($item['folder'])):?>
 					<tr>
-						<td class="file-name"><a class="icon icon-dir" href="<?php echo $root_path;?><?php echo ltrim($path.$item['name'], '/'); ?>/"><?php echo $item['name'];?>/</a></td>
+						<td class="file-name"><a class="icon icon-dir" href="<?php echo $root_path;?><?php echo $path.$item['name']; ?>/"><?php echo $item['name'];?>/</a></td>
 						<td class="file-size"><?php echo $item['size'];?></td>
 						<td class="file-date-modified"><?php echo $item['lastModifiedDateTime'];?></td>
 					</tr>
 				<?php else:?>
 					<tr>
-						<td class="file-name"><a class="icon icon-file" href="<?php echo $root_path;?><?php echo ltrim($path.$item['name'], '/'); ?>"><?php echo $item['name'];?></a></td>
+						<td class="file-name"><a class="icon icon-file" href="<?php echo $root_path;?><?php echo $path.$item['name']; ?>"><?php echo $item['name'];?></a></td>
 						<td class="file-size"><?php echo $item['size'];?></td>
 						<td class="file-date-modified">&nbsp;<?php echo $item['lastModifiedDateTime'];?></td>
 					</tr>

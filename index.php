@@ -35,8 +35,9 @@ if( empty(onedrive::$app_url) ){
 route::get('{path:#all}',function(){
 	//获取路径和文件名
 	$paths = explode('/', $_GET['path']);
+	$paths = array_map('urldecode',$paths);
 	if(substr($_SERVER['REQUEST_URI'], -1) != '/'){
-		$name = urldecode(array_pop($paths));
+		$name = array_pop($paths);
 	}
 	$path = '/'.implode('/', $paths).'/';
 	$path = str_replace('//','/',$path);
