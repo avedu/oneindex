@@ -26,11 +26,7 @@ Onedrive Directory Index
 ![thumbnails](http://xn.tn/bg.jpg?thumbnails=small)
 
 
-<video id="video" controls="" preload="none" poster="https://xn.tn/trailer.mp4?thumbnails=medium">
-      <source id="mp4" src="https://xn.tn/trailer.mp4" type="video/mp4">
-      <p>Your user agent does not support the HTML5 Video element.</p>
-</video>
-![thumbnails](http://xn.tn/bg.jpg?thumbnails=large)
+[![Watch the video](https://xn.tn/bg.jpg?thumbnails=large)](https://xn.tn/trailer.mp4)
 
 ## 可配置项
 配置在 `config/base.php` 文件中:  
