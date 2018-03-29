@@ -1,15 +1,11 @@
 <?php
 require 'init.php';
 
-
 onedrive::$client_id = config('client_id');
 onedrive::$client_secret = config('client_secret');
 onedrive::$redirect_uri = config('redirect_uri');
-onedrive::$dir_cache_time = config('dir_cache_time');
-onedrive::$file_cache_time = config('file_cache_time');
 
 onedrive::$app_url = config('app_url');
-
 
 if( empty(onedrive::$app_url) ){
 	route::any('/install',function(){
@@ -37,15 +33,42 @@ if( empty(onedrive::$app_url) ){
 }
 
 route::get('{path:#all}',function(){
-	if(substr($_SERVER['REQUEST_URI'],-1) != '/'){
-		$item = onedrive::file($_GET['path']);
-		$downloadurl = $item["@content.downloadUrl"];
-		if(!empty($downloadurl)){
-			header('Location: '.$downloadurl);
-		}
-		return;
+	//获取路径和文件名
+	$paths = explode('/', $_GET['path']);
+	if(substr($_SERVER['REQUEST_URI'], -1) != '/'){
+		$name = array_pop($paths);
 	}
-	$path = str_replace('//','/', '/'.$_GET['path'].'/');
-	$dir = onedrive::dir($path);
-	view::load('list')->with('path',$path)->with('items', $dir['value'])->show();
+	$path = '/'.implode('/', $paths).'/';
+	$path = str_replace('//','/',$path);
+
+	//是否有缓存
+	list($time, $items) = cache('dir_'.$path);
+	//缓存失效，重新抓取
+	if( is_null($items) || (TIME - $time) > config('cache_expire_time') ){
+		$items = onedrive::dir($path);
+		if(is_array($items)){
+			$time = TIME;
+			cache('dir_'.$path, $items);
+		}
+	}
+	
+	//输出
+	if(!empty($name)){//file
+		$item = $items[$name];
+		if(!empty($item['downloadUrl'])){
+			header('Location: '.$item['downloadUrl']);
+		}
+	}else{//dir
+		view::load('list')->with('path',$path)->with('items', $items)->show();
+	}
+	
+	//后台刷新缓存
+	if((TIME - $time) > config('cache_refresh_time')){
+		fastcgi_finish_request();
+		$items = onedrive::dir($path);
+		if(is_array($items)){
+			cache('dir_'.$path, $items);
+		}
+	}
 });
+

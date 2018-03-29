@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 date_default_timezone_set('PRC');
-define('TIME', microtime(true));
+define('TIME', time());
 define('ROOT', str_replace("\\", "/", dirname(__FILE__)) . '/');
 
 //__autoload方法
@@ -70,18 +70,14 @@ function config($key) {
  * config('@file');
  */
 !defined('CACHE_PATH') && define('CACHE_PATH', ROOT . 'cache/');
-function cache($key, $value = null, $time = 86400) {
-	$file = CACHE_PATH . md5($key) . '.php';
+function cache($key, $value = null) {
+	$file = CACHE_PATH . urlencode($key) . '.php';
 	if (is_null($value)) {
 		$cache = @include $file;
-		if ($cache['time'] > TIME) {
-			return $cache['data'];
-		} else {
-			@unlink($file);
-		}
+		return (array)$cache;
 	} else {
-		file_put_contents($file, "<?php return " . var_export(array('data' => $value, 'time' => TIME + $time), true) . ";", LOCK_EX);
-		return $value;
+		file_put_contents($file, "<?php return " . var_export(array(TIME, $value), true) . ";", LOCK_EX);
+		return array(TIME, $value);
 	}
 }
 
@@ -103,4 +99,12 @@ if (!function_exists('_')) {
 	function _($str) {
 		return htmlspecialchars($str);
 	}
+}
+
+if (!function_exists("fastcgi_finish_request")) {
+      function fastcgi_finish_request()  {
+      	header("Connection: Close");
+      	ob_flush();
+      	flush();
+      }
 }

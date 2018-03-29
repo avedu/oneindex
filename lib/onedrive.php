@@ -3,8 +3,6 @@
 		static $client_id;
 		static $client_secret;
 		static $redirect_uri;
-		static $dir_cache_time;
-		static $file_cache_time;
 		static $app_url;
 
 		static function authorize_url(){
@@ -69,49 +67,26 @@
 		}
 
 		static function dir($path="/"){
-			$key = 'dir'.$path;
-			$data = cache($key);
-			if(!empty($data)){
-				return $data;
-			}
 			$token = self::access_token();
 			fetch::$headers = "Authorization: bearer {$token}";
-			//$path = ($path=='/')?$path:str_replace("/",":/",$path);
 			if($path != '/'){
 				$path = ':'.rtrim($path, '/').':/';
 			}
 			$url = self::$app_url."_api/v2.0/me/drive/root".$path."children";
 			$resp = fetch::get($url);
 			$data = json_decode($resp->content, true);
-			if(!empty($data)){
-				cache($key, $data, self::$dir_cache_time);
+			if(empty($data)){
+				return false;
 			}
-			return $data;
-		}
-
-		static function file2($path){
-			$token = self::access_token();
-			fetch::$headers = "Authorization: bearer {$token}";
-			$url = self::$app_url."_api/v2.0/me/drive/root:/".$path.':/content';
-			echo $url;
-			$resp = fetch::get($url);
-			return $resp['redirect_url'];
-		}
-
-		static function file($path){
-			$key = 'file'.$path;
-			$data = cache($key);
-			if(!empty($data)){
-				return $data;
+			foreach((array)$data['value'] as $item){
+				$return[$item['name']] = array(
+					'name'=>$item['name'],
+					'size'=>$item['size'],
+					'lastModifiedDateTime'=>$item['lastModifiedDateTime'],
+					'downloadUrl'=>$item['@content.downloadUrl'],
+					'folder'=>empty($item['folder'])?false:true
+				);
 			}
-			$token = self::access_token();
-			fetch::$headers = "Authorization: bearer {$token}";
-			$url = self::$app_url."_api/v2.0/me/drive/root:/".$path;
-			$resp = fetch::get($url);
-			$data = json_decode($resp->content, true);
-			if(!empty($data)){
-				cache($key, $data, self::$file_cache_time);
-			}
-			return $data;
+			return (array)$return;
 		}
 	}
