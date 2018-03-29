@@ -16,18 +16,6 @@ Onedrive Directory Index
 2、浏览器访问、绑定账号  
 3、可以使用  
 
-## demo
-列目录：[https://xn.tn](url)  
-直连下载：[https://xn.tn/node-v8.9.4-x64.msi](url)  
-图片直连：http://xn.tn/bg.jpg  
-![Alt text](http://xn.tn/bg.jpg)
-缩略图：thumbnails=large|medium|small  
-![thumbnails](http://xn.tn/bg.jpg?thumbnails=medium)
-![thumbnails](http://xn.tn/bg.jpg?thumbnails=small)
-
-
-[![Watch the video](https://xn.tn/trailer.mp4?thumbnails=large)](https://xn.tn/trailer.mp4)
-
 ## 可配置项
 配置在 `config/base.php` 文件中:  
 
@@ -39,8 +27,20 @@ Onedrive Directory Index
 如果想只共享onedrive下的 /document/share/ 目录  
 ```
 'onedrive_root'=> '/document/share', //最后不带 '/'
+```  
+  
+**去掉链接中的 /?/ :** 
+需要添加apache/nginx/iis的rewrite的配置文件  
+参考程序根目录下的：`.htaccess`或`nginx.conf`或`Web.config`  
 ```
+    'root_path' => '?' 
+```
+改为  
 
+```
+    'root_path' => '?' 
+```  
+  
 **缓存时间:**  
 初步测试直链过期时间为一小时,默认设置为： 
 ```
@@ -54,8 +54,21 @@ Onedrive Directory Index
 ```
   
 **设置缓存模式为sqlite:**  
-'cache_type'=> 'sqlite'  
+```
+'cache_type'=> 'sqlite'  // file | sqlite
+```
 
+## demo
+列目录：[https://xn.tn](url)  
+直连下载：[https://xn.tn/node-v8.9.4-x64.msi](url)  
+图片直连：http://xn.tn/bg.jpg  
+![Alt text](http://xn.tn/bg.jpg)
+缩略图：thumbnails=large|medium|small  
+![thumbnails](http://xn.tn/bg.jpg?thumbnails=medium)
+![thumbnails](http://xn.tn/bg.jpg?thumbnails=small)
+
+
+[![Watch the video](https://xn.tn/trailer.mp4?thumbnails=large)](https://xn.tn/trailer.mp4)
 
 ## Q&A:  
 **Q:需要企业版或教育版的全局管理员？**  
@@ -64,9 +77,6 @@ A:不需要，全局管理员开出来的子账号就可以，不过该域名在
 **Q:文件上传后，不能即时在程序页面显示出来？**  
 A:有缓存，可以在config/base.php设置缓存时间。  
 
-**Q:能去掉链接中的`/?/`吗？**  
-A:可以，使用wordrepss的规则，然后修改 config/base.php:  
-    'root_path' => '?' 改为 'root_path' => ''  
 
 **Q:能否使用自己的client_id、client_secret？**  
 A: 1、按照 https://moeclub.org/2017/03/17/24/ 教程获得 client_id、client_secret、code  
