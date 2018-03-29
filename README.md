@@ -37,7 +37,7 @@ Onedrive Directory Index
 'onedrive_root'=> '/document/share', //最后不带 '/'
 ```  
   
-**去掉链接中的 /?/ :** 
+**去掉链接中的 /?/ :**  
 需要添加apache/nginx/iis的rewrite的配置文件  
 参考程序根目录下的：`.htaccess`或`nginx.conf`或`Web.config`  
 ```
