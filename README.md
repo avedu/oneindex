@@ -22,6 +22,12 @@ Onedrive Directory Index
 图片直连：http://xn.tn/bg.jpg  
 ![Alt text](http://xn.tn/bg.jpg)
 
+## 可配置项
+配置在 `config/base.php` 文件中:  
+**设置缓存模式为sqlite:**  
+'cache_type'=> 'sqlite'  
+
+
 ## Q&A:  
 **Q:需要企业版或教育版的全局管理员？**  
 A:不需要，全局管理员开出来的子账号就可以，不过该域名在office365必须要有管理员  
