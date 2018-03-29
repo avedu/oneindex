@@ -89,4 +89,16 @@
 			}
 			return (array)$return;
 		}
+
+		static function thumbnails($path){
+			$token = self::access_token();
+			fetch::$headers = "Authorization: bearer {$token}";
+			$url = self::$app_url."_api/v2.0/me/drive/root:/".$path.':/thumbnails';
+			$resp = fetch::get($url);
+			$data = json_decode($resp->content, true);
+			if(!empty($data['value'][0])){
+				return $data['value'][0];
+			}
+			return false;
+		}
 	}

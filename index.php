@@ -36,7 +36,7 @@ route::get('{path:#all}',function(){
 	//获取路径和文件名
 	$paths = explode('/', $_GET['path']);
 	if(substr($_SERVER['REQUEST_URI'], -1) != '/'){
-		$name = array_pop($paths);
+		$name = urldecode(array_pop($paths));
 	}
 	$path = '/'.implode('/', $paths).'/';
 	$path = str_replace('//','/',$path);
@@ -54,10 +54,19 @@ route::get('{path:#all}',function(){
 	
 	//输出
 	if(!empty($name)){//file
-		$item = $items[$name];
-		if(!empty($item['downloadUrl'])){
-			header('Location: '.$item['downloadUrl']);
+		if(in_array($_GET['thumbnails'],['large','medium','small'])){
+			list($time, $item) = cache('thumbnails_'.$path.$name);
+			if(empty($item[$_GET['thumbnails']]) ||  (TIME - $time) > config('cache_expire_time') ){
+				$item = onedrive::thumbnails($path.$name);
+				if(!empty($items)){
+					cache('thumbnails_'.$path.$name, $item);
+				}
+			}
+			$url = $item[$_GET['thumbnails']]['url'];
+		}else{
+			$url = $items[$name]['downloadUrl'];
 		}
+		header('Location: '.$url);
 	}else{//dir
 		view::load('list')->with('path',$path)->with('items', $items)->show();
 	}
