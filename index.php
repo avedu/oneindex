@@ -58,8 +58,8 @@ route::get('{path:#all}',function(){
 		if(in_array($_GET['thumbnails'],['large','medium','small'])){
 			list($time, $item) = cache('thumbnails_'.$path.$name);
 			if(empty($item[$_GET['thumbnails']]) ||  (TIME - $time) > config('cache_expire_time') ){
-				$item = onedrive::thumbnails($path.$name);
-				if(!empty($items)){
+				$item = onedrive::thumbnails($path.$name); 
+				if(!empty($item)){
 					cache('thumbnails_'.$path.$name, $item);
 				}
 			}
