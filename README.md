@@ -24,6 +24,18 @@ Onedrive Directory Index
 
 ## 可配置项
 配置在 `config/base.php` 文件中:  
+**缓存时间:**  
+初步测试直链过期时间为一小时,默认设置为： 
+```
+  'cache_expire_time' => 3600, //缓存过期时间 /秒
+  'cache_refresh_time' => 600, //缓存刷新时间 /秒
+```
+如果经常出现链接失效，可尝试缩短缓存时间,如:  
+```
+  'cache_expire_time' => 300, //缓存过期时间 /秒
+  'cache_refresh_time' => 60, //缓存刷新时间 /秒
+```
+  
 **设置缓存模式为sqlite:**  
 'cache_type'=> 'sqlite'  
 
