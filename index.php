@@ -40,9 +40,9 @@ route::get('{path:#all}',function(){
 	if(substr($_SERVER['REQUEST_URI'], -1) != '/'){
 		$name = urldecode(array_pop($paths));
 	}
-	$path = '/'.implode('/', $paths).'/';
-	$path = str_replace('//','/',$path);
-
+	$url_path = get_absolute_path(implode('/', $paths));
+	$path = config('onedrive_root').$url_path;
+	
 	//是否有缓存
 	list($time, $items) = cache('dir_'.$path);
 	//缓存失效，重新抓取
@@ -70,7 +70,7 @@ route::get('{path:#all}',function(){
 		header('Location: '.$url);
 	}else{//dir
 		
-		view::load('list')->with('path',$path)->with('items', $items)->show();
+		view::load('list')->with('path',$url_path)->with('items', $items)->show();
 	}
 	
 	//后台刷新缓存
