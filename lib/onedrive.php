@@ -66,6 +66,11 @@
 			return $data;
 		}
 
+		static function human_filesize($size, $precision = 1) {
+			for($i = 0; ($size / 1024) > 1; $i++, $size /= 1024) {}
+			return round($size, $precision).['B','kB','MB','GB','TB','PB','EB','ZB','YB'][$i];
+		}
+
 		static function dir($path="/"){
 			$token = self::access_token();
 			fetch::$headers = "Authorization: bearer {$token}";
@@ -81,8 +86,9 @@
 			foreach((array)$data['value'] as $item){
 				$return[$item['name']] = array(
 					'name'=>$item['name'],
-					'size'=>$item['size'],
-					'lastModifiedDateTime'=>$item['lastModifiedDateTime'],
+					'size'=>self::human_filesize($item['size']),
+					'createdDateTime'=>strtotime($item['createdDateTime']),
+					'lastModifiedDateTime'=>strtotime($item['lastModifiedDateTime']),
 					'downloadUrl'=>$item['@content.downloadUrl'],
 					'folder'=>empty($item['folder'])?false:true
 				);
