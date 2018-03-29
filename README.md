@@ -6,6 +6,14 @@ Onedrive Directory Index
 
 直接列onedrive目录，文件直链下载。  
 
+## change log:  
+18-03-29: 更新直链获取机制、缓存机制，避免频繁访问的token失效  
+18-03-29: 解决非英文编码问题  
+18-03-29: 添加onedrive共享的起始目录 功能  
+18-03-29: 添加rewrite的配置文件  
+18-03-29: 增加sqlite模式cache支持  
+18-03-29: 添加缩略图功能  
+
 ## 需求：
 1、PHP空间，PHP 5.6+ 打开curl支持  
 2、onedrive business 账号 (企业版或教育版)  
@@ -29,7 +37,7 @@ Onedrive Directory Index
 'onedrive_root'=> '/document/share', //最后不带 '/'
 ```  
   
-**去掉链接中的 /?/ :** 
+**去掉链接中的 /?/ :**  
 需要添加apache/nginx/iis的rewrite的配置文件  
 参考程序根目录下的：`.htaccess`或`nginx.conf`或`Web.config`  
 ```
