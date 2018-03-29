@@ -21,10 +21,17 @@ Onedrive Directory Index
 直连下载：[https://xn.tn/node-v8.9.4-x64.msi](url)  
 图片直连：http://xn.tn/bg.jpg  
 ![Alt text](http://xn.tn/bg.jpg)
-
 缩略图：thumbnails=large|medium|small  
 ![thumbnails](http://xn.tn/bg.jpg?thumbnails=medium)
 ![thumbnails](http://xn.tn/bg.jpg?thumbnails=small)
+
+
+<video id="video" controls="" preload="none" poster="https://xn.tn/trailer.mp4?thumbnails=medium">
+      <source id="mp4" src="https://xn.tn/trailer.mp4" type="video/mp4">
+      <p>Your user agent does not support the HTML5 Video element.</p>
+</video>
+![thumbnails](http://xn.tn/bg.jpg?thumbnails=large)
+
 ## 可配置项
 配置在 `config/base.php` 文件中:  
 **缓存时间:**  
