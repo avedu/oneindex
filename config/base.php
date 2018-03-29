@@ -4,5 +4,5 @@
   'redirect_uri' => 'https://ju.tn/onedrive-login',
   'cache_expire_time' => 300,
   'cache_refresh_time' => 30,
-  'root_path' => '?/'
+  'root_path' => '?'
 );
