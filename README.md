@@ -22,6 +22,9 @@ Onedrive Directory Index
 图片直连：http://xn.tn/bg.jpg  
 ![Alt text](http://xn.tn/bg.jpg)
 
+缩略图：thumbnails=large|medium|small  
+![thumbnails](http://xn.tn/bg.jpg?thumbnails=medium)
+![thumbnails](http://xn.tn/bg.jpg?thumbnails=small)
 ## 可配置项
 配置在 `config/base.php` 文件中:  
 **缓存时间:**  
