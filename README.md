@@ -30,6 +30,17 @@ Onedrive Directory Index
 
 ## 可配置项
 配置在 `config/base.php` 文件中:  
+
+**onedrive共享的起始目录:**  
+```
+'onedrive_root'=> '', //默认为根目录
+```  
+
+如果想只共享onedrive下的 /document/share/ 目录  
+```
+'onedrive_root'=> '/document/share', //最后不带 '/'
+```
+
 **缓存时间:**  
 初步测试直链过期时间为一小时,默认设置为： 
 ```
