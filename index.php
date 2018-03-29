@@ -47,11 +47,19 @@ route::get('{path:#all}',function(){
 	list($time, $items) = cache('dir_'.$path);
 	//缓存失效或文件不存在，重新抓取
 	if( !is_array($items) || (TIME - $time) > config('cache_expire_time') || (!empty($name) && !array_key_exists($name, $items))){
+		//查询是否404，60秒内不重复抓取
+		list($time_404, $tmp) = cache('404_'.$path);
+		if( (TIME - $time_404) < 60 ){ 
+			http_response_code(404);
+			view::load('404')->with('path',urldecode($url_path))->show();
+			die();
+		}
 		$items = onedrive::dir($path);
 		if(is_array($items)){
 			$time = TIME;
 			cache('dir_'.$path, $items);
 		} else {
+			cache('404_'.$path,true);
 			http_response_code(404);
 			view::load('404')->with('path',urldecode($url_path))->show();
 			die();
@@ -61,6 +69,7 @@ route::get('{path:#all}',function(){
 	if(!empty($name)){//file
 		//文件不存在
 		if (!array_key_exists($name, $items)) {
+			cache('404_'.$path,true);
 			http_response_code(404);
 			view::load('404')->with('path',urldecode($url_path).$name)->show();
 			die();
