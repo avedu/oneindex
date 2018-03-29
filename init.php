@@ -103,7 +103,6 @@ if (!function_exists('_')) {
 
 if (!function_exists("fastcgi_finish_request")) {
       function fastcgi_finish_request()  {
-      	header("Connection: Close");
       	ob_flush();
       	flush();
       }
