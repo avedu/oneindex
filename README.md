@@ -26,7 +26,7 @@ Onedrive Directory Index
 ![thumbnails](http://xn.tn/bg.jpg?thumbnails=small)
 
 
-[![Watch the video](https://xn.tn/bg.jpg?thumbnails=large)](https://xn.tn/trailer.mp4)
+[![Watch the video](https://xn.tn/trailer.mp4?thumbnails=medium)](https://xn.tn/trailer.mp4)
 
 ## 可配置项
 配置在 `config/base.php` 文件中:  
