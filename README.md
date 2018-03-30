@@ -47,7 +47,7 @@ Onedrive Directory Index
 改为  
 
 ```
-    'root_path' => '?' 
+    'root_path' => '' 
 ```  
   
 **缓存时间:**  
