@@ -74,6 +74,10 @@ route::get('{path:#all}',function(){
 			view::load('404')->with('path',urldecode($url_path).$name)->show();
 			die();
 		}
+		//是文件夹
+		if ($items[$name]['folder']) {
+			header('Location: '.$_SERVER['REQUEST_URI'].'/');
+		}
 		if(in_array($_GET['thumbnails'],['large','medium','small'])){
 			list($time, $item) = cache('thumbnails_'.$path.$name);
 			if(empty($item[$_GET['thumbnails']]) ||  (TIME - $time) > config('cache_expire_time') ){
