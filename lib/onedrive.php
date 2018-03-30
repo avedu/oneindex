@@ -119,4 +119,57 @@
 			}
 			return false;
 		}
+
+		//文件上传函数
+		static function upload($path,$content){
+			$token = self::access_token();
+			fetch::$headers = "Authorization: bearer {$token}";
+			$url = self::$app_url."_api/v2.0/me/drive/root:/".$path.':/content';	
+			$resp = fetch::put($url,$content);
+			$data = json_decode($resp->content, true);
+			return @$data['@content.downloadUrl'];
+		}
+
+		static function create_upload_session($path){
+			$token = self::access_token();
+			fetch::$headers = "Authorization: bearer {$token}\r\nContent-Type: application/json";
+			$url = self::$app_url."_api/v2.0/me/drive/root:/".$path.":/createUploadSession";
+			$post_data = '{"item": {"@microsoft.graph.conflictBehavior": "rename","name": "'.$path.'"}}';
+			$resp = fetch::post($url,$post_data);
+			$data = json_decode($resp->content, true);
+			return $data['uploadUrl'];
+		}
+
+		static function upload_session($url, $file, $offset, $length){
+			$token = self::access_token();
+			
+			$file_size = filesize($file);
+			$content_length = (($offset+$length)>$file_size)?($file_size-$offset):$length;
+			$end = $offset+$content_length-1;
+			$post_data = self::file_content($file, $offset, $length);
+
+			$request['url'] = $url;
+			$request['headers'] = "Authorization: bearer {$token}".PHP_EOL;
+			$request['headers'] .= "Content-Length: {$content_length}".PHP_EOL;
+			$request['headers'] .= "Content-Range: bytes {$offset}-{$end}/{$file_size}";
+			$request['post_data'] = $post_data;
+
+			$resp = fetch::put($request);
+			$data = json_decode($resp->content, true);
+			return $data;
+		}
+
+		static function upload_session_status($url){
+			$token = self::access_token();
+			fetch::$headers = "Authorization: bearer {$token}\r\nContent-Type: application/json";
+			$resp = fetch::get($url);
+			$data = json_decode($resp->content, true);
+			return $data;
+		}
+
+		static function file_content($file, $offset, $length){
+			$handler = fopen($file, "r");
+			fseek($handler, $offset);
+			return fread($handler, $length);
+		}
 	}
