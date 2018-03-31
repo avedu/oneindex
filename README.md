@@ -79,8 +79,8 @@ Onedrive Directory Index
 ```
 
 ## demo
-列目录：[https://xn.tn](url)  
-直连下载：[https://xn.tn/node-v8.9.4-x64.msi](url)  
+列目录：[https://xn.tn](https://xn.tn)  
+直连下载：[https://xn.tn/node-v8.9.4-x64.msi](https://xn.tn/node-v8.9.4-x64.msi)  
 图片直连：http://xn.tn/bg.jpg  
 ![Alt text](http://xn.tn/bg.jpg)
 缩略图：thumbnails=large|medium|small  
