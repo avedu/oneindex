@@ -1,12 +1,6 @@
 <?php
 require 'init.php';
 
-onedrive::$client_id = config('client_id');
-onedrive::$client_secret = config('client_secret');
-onedrive::$redirect_uri = config('redirect_uri');
-
-onedrive::$app_url = config('app_url');
-
 if( empty(onedrive::$app_url) ){
 	route::any('/install',function(){
 			$authorize_url = onedrive::authorize_url();
