@@ -88,8 +88,8 @@ A:有缓存，可以在config/base.php设置缓存时间。
 
 
 **Q:能否使用自己的client_id、client_secret？**  
-A: 1、按照 https://moeclub.org/2017/03/17/24/ 教程获得 client_id、client_secret
-    2、修改 config/base.php 中的client_id、client_secret、redirect_uri(回调url)的值，获取code
+A: 1、按照 https://moeclub.org/2017/03/17/24/ 教程获得 client_id、client_secret  
+    2、修改 config/base.php 中的client_id、client_secret、redirect_uri(回调url)的值，获取code  
     3、访问 http://你的域名/?/install&code=你的code 完成账号绑定  
 
 **Q:回调地址的功能和代码是什么？会不会影响程序使用**
