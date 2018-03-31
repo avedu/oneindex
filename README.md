@@ -25,6 +25,16 @@ Onedrive Directory Index
 2、浏览器访问、绑定账号  
 3、可以使用  
 
+## 配置计划任务  
+推荐配置，后台定时刷新缓存，可增加前台访问的速度  
+```
+# 每小时刷新一次token
+0 * * * * /具体路径/php /程序具体路径/one.php token:refresh
+
+# 每十分钟后台刷新一遍缓存
+*/10 * * * * /具体路径/php /程序具体路径/one.php cache:refresh
+```
+
 ## 可配置项
 配置在 `config/base.php` 文件中:  
 
