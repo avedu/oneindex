@@ -14,6 +14,7 @@ Onedrive Directory Index
 18-03-29: 增加sqlite模式cache支持  
 18-03-29: 添加缩略图功能  
 18-03-29: 添加404判断 
+18-03-31: 添加console
 
 ## 需求：
 1、PHP空间，PHP 5.6+ 打开curl支持  
