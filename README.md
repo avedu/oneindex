@@ -92,7 +92,7 @@ A: 1、按照 https://moeclub.org/2017/03/17/24/ 教程获得 client_id、client
     2、修改 config/base.php 中的client_id、client_secret、redirect_uri(回调url)的值，获取code  
     3、访问 http://你的域名/?/install&code=你的code 完成账号绑定  
 
-**Q:回调地址的功能和代码是什么？会不会影响程序使用**
+**Q:回调地址的功能和代码是什么？会不会影响程序使用**  
 A:由于client_id、client_secret和callback_url是绑定的，为了实现一键绑定，添加了/onedrive-login作为中转  
   其功能仅为跳转回安装目录，代码如下：  
   ```
@@ -101,6 +101,6 @@ if(!empty($_GET['state'])){
     header('Location: '.$_GET['state'].'&code='.$_GET['code']);
 }
   ```   
-  可自行使用 .com .org .tn 的域名进行部署。
+  可自行使用 .com .org .tn 的域名进行部署。  
   
 > 感谢 moeclub 提供的 client_id 和 client_secret,以实现一键绑定
