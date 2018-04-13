@@ -173,6 +173,9 @@
 			fetch::$headers = "Authorization: bearer {$token}\r\nContent-Type: application/json";
 			$resp = fetch::get($url);
 			$data = json_decode($resp->content, true);
+			if($resp->http_code == 404){
+				return false;
+			}
 			return $data;
 		}
 
