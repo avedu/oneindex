@@ -131,18 +131,25 @@
 		}
 
 		static function create_upload_session($path){
+			$path = self::urlencode($path);
 			$token = self::access_token();
+
 			fetch::$headers = "Authorization: bearer {$token}\r\nContent-Type: application/json";
 			$url = self::$app_url."_api/v2.0/me/drive/root:/".$path.":/createUploadSession";
-			$post_data = '{"item": {"@microsoft.graph.conflictBehavior": "rename","name": "'.$path.'"}}';
+			$post_data['item'] = array(
+				'@microsoft.graph.conflictBehavior'=>'rename'
+			);
+			$post_data = json_encode($post_data);
 			$resp = fetch::post($url,$post_data);
 			$data = json_decode($resp->content, true);
-			return $data['uploadUrl'];
+			if($resp->http_code == 409){
+				return false;
+			}
+			return $data;
 		}
 
-		static function upload_session($url, $file, $offset, $length){
+		static function upload_session($url, $file, $offset, $length=10240){
 			$token = self::access_token();
-			
 			$file_size = filesize($file);
 			$content_length = (($offset+$length)>$file_size)?($file_size-$offset):$length;
 			$end = $offset+$content_length-1;
@@ -155,7 +162,9 @@
 			$request['post_data'] = $post_data;
 
 			$resp = fetch::put($request);
+			//var_dump($resp);
 			$data = json_decode($resp->content, true);
+			
 			return $data;
 		}
 
@@ -171,5 +180,13 @@
 			$handler = fopen($file, "r");
 			fseek($handler, $offset);
 			return fread($handler, $length);
+		}
+
+		static function urlencode($path){
+			$paths = explode('/', $path);
+			foreach($paths as $k=>$v){
+				$paths[$k] = rawurlencode($v);
+			}
+			return join('/',$paths);
 		}
 	}
