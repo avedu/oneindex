@@ -33,7 +33,7 @@ $root_path = get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).config('root_pa
 					</tr>
 				<?php else:?>
 					<tr>
-						<td class="file-name"><a class="icon icon-file" href="<?php echo get_absolute_path($root_path.$path).$item['name'];?>"><?php echo $item['name'];?></a></td>
+						<td class="file-name"><a class="icon icon-file" href="<?php echo get_absolute_path($root_path.$path).urlencode($item['name']);?>"><?php echo $item['name'];?></a></td>
 						<td class="file-size"><?php echo $item['size'];?></td>
 						<td class="file-date-created"><?php echo date("Y-m-d H:i:s", $item['createdDateTime']);?></td>
 						<td class="file-date-modified"><?php echo date("Y-m-d H:i:s", $item['lastModifiedDateTime']);?></td>
