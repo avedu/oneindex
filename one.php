@@ -101,14 +101,14 @@ class one{
 			return self::upload_large_file($localfile, $remotepath);
 		}
 		
-		print '上传分块'.round(($info['offset']/$info['filesize'])*100).'%	'.onedrive::human_filesize($info['length']).'	';
+		print '上传分块'.onedrive::human_filesize($info['length']).'	';
 		$begin_time = microtime(true);
 		$data = onedrive::upload_session($info['url'], $info['localfile'], $info['offset'], $info['length']);
 
 		if(!empty($data['nextExpectedRanges'])){
 			$upload_time = microtime(true) - $begin_time;
-			print onedrive::human_filesize($info['length']/$upload_time).'/s'.'	'.intval($upload_time).'s'.PHP_EOL;
-			$info['length'] = intval($info['length']/$upload_time/100)*1024;
+			print onedrive::human_filesize($info['length']/$upload_time).'/s'.'	'.round(($info['offset']/$info['filesize'])*100).'%	'.PHP_EOL;
+			$info['length'] = intval($info['length']/$upload_time/32768)*327680;
 			
 			list($offset, $filesize) = explode('-',$data['nextExpectedRanges'][0]);
 			$info['offset'] = $offset;
