@@ -53,7 +53,8 @@ class one{
 		}
 		print '远程文件：'.$remotepath.PHP_EOL;
 		
-		$filesize = filesize($localfile);
+		$filesize = onedrive::_filesize($localfile) OR die('无法获取文件大小');
+		var_dump($filesize);
 		if($filesize < 10485760){
 			print '上传方式：直接上传'.PHP_EOL;
 			$begin_time = microtime(true);
@@ -83,7 +84,7 @@ class one{
 				$info['url'] = $data['uploadUrl'];
 				$info['localfile'] = $localfile;
 				$info['remotepath'] = $remotepath;
-				$info['filesize'] = filesize($localfile);
+				$info['filesize'] = onedrive::_filesize($localfile);
 				$info['offset'] = 0;
 				$info['length'] = 327680;
 				$info['update_time'] = time();

@@ -150,7 +150,7 @@
 
 		static function upload_session($url, $file, $offset, $length=10240){
 			$token = self::access_token();
-			$file_size = filesize($file);
+			$file_size = self::_filesize($file);
 			$content_length = (($offset+$length)>$file_size)?($file_size-$offset):$length;
 			$end = $offset+$content_length-1;
 			$post_data = self::file_content($file, $offset, $length);
@@ -160,11 +160,8 @@
 			$request['headers'] .= "Content-Length: {$content_length}".PHP_EOL;
 			$request['headers'] .= "Content-Range: bytes {$offset}-{$end}/{$file_size}";
 			$request['post_data'] = $post_data;
-
 			$resp = fetch::put($request);
-			//var_dump($resp);
 			$data = json_decode($resp->content, true);
-			
 			return $data;
 		}
 
@@ -180,16 +177,50 @@
 		}
 
 		static function file_content($file, $offset, $length){
-			$handler = fopen($file, "r");
+			$handler = fopen($file, "rb") OR die('获取文件内容失败');
 			fseek($handler, $offset);
+			
 			return fread($handler, $length);
 		}
 
 		static function urlencode($path){
 			$paths = explode('/', $path);
-			foreach($paths as $k=>$v){
-				$paths[$k] = rawurlencode($v);
+				foreach($paths as $k=>$v){
+					$paths[$k] = rawurlencode($v);
+				}
+				return join('/',$paths);
 			}
-			return join('/',$paths);
+				static function _filesize($path){
+		    if (!file_exists($path))
+		        return false;
+		    $size = filesize($path);
+		    
+		    if (!($file = fopen($path, 'rb')))
+		        return false;
+		    
+		    if ($size >= 0){//Check if it really is a small file (< 2 GB)
+		        if (fseek($file, 0, SEEK_END) === 0){//It really is a small file
+		            fclose($file);
+		            return $size;
+		        }
+		    }
+		    
+		    //Quickly jump the first 2 GB with fseek. After that fseek is not working on 32 bit php (it uses int internally)
+		    $size = PHP_INT_MAX - 1;
+		    if (fseek($file, PHP_INT_MAX - 1) !== 0){
+		        fclose($file);
+		        return false;
+		    }
+		    
+		    $length = 1024 * 1024;
+		    while (!feof($file)){//Read the file until end
+		        $read = fread($file, $length);
+		        $size = bcadd($size, $length);
+		    }
+		    $size = bcsub($size, $length);
+		    $size = bcadd($size, strlen($read));
+		    
+		    fclose($file);
+		    return $size;
 		}
 	}
