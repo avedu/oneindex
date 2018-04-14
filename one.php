@@ -3,7 +3,7 @@ if( php_sapi_name() !== "cli" ){
    die( "NoAccess" );
 }
 require 'init.php';
-ini_set('memory_limit', '128M');
+ini_set('memory_limit', '512M');
 
 class one{
 	static function cache_clear(){
@@ -111,7 +111,7 @@ class one{
 			$upload_time = microtime(true) - $begin_time;
 			print onedrive::human_filesize($info['length']/$upload_time).'/s'.'	'.round(($info['offset']/$info['filesize'])*100).'%	'.PHP_EOL;
 			$info['length'] = intval($info['length']/$upload_time/32768)*327680;
-			$info['length'] = ($info['length']>104857600)?104857600:$info['length'];
+			//$info['length'] = ($info['length']>104857600)?104857600:$info['length'];
 			
 			list($offset, $filesize) = explode('-',$data['nextExpectedRanges'][0]);
 			$info['offset'] = $offset;
@@ -122,7 +122,7 @@ class one{
 			unset($upload[$remotepath]);
 			config('@upload', $upload);
 			print '上传完成！'.PHP_EOL;
-			_refresh_cache(pathinfo($remotepath,PATHINFO_DIRNAME));
+			self::_refresh_cache(pathinfo($remotepath,PATHINFO_DIRNAME));
 			return;
 		}else{
 			print '失败!'.PHP_EOL;
