@@ -15,6 +15,8 @@ Onedrive Directory Index
 18-03-29: 添加缩略图功能  
 18-03-29: 添加404判断  
 18-03-31: 添加console  
+18-04-13: 修复特殊文件名无法下载问题  
+18-04-13: 添加命令行上传功能  
 
 ## 需求：
 1、PHP空间，PHP 5.6+ 打开curl支持  
@@ -34,6 +36,36 @@ Onedrive Directory Index
 
 # 每十分钟后台刷新一遍缓存
 */10 * * * * /具体路径/php /程序具体路径/one.php cache:refresh
+```
+
+## 命令行功能  
+仅能在php cli模式下运行  
+**清除缓存:**  
+```
+php one.php cache:clear
+```
+**刷新缓存:**  
+```
+php one.php cache:refresh
+```
+**刷新令牌:**  
+```
+php one.php token:refresh
+```
+**上传文件:**  
+```
+php one.php upload:file 本地文件 [onedrive文件]
+```
+例如：  
+```
+//上传demo.zip 到onedrive 根目录  
+php one.php upload:file demo.zip  
+
+//上传demo.zip 到onedrive /test/目录  
+php one.php upload:file demo.zip /test/  
+
+//上传demo.zip 到onedrive /test/目录并命名为 d.zip
+php one.php upload:file demo.zip /test/d.zip  
 ```
 
 ## 可配置项
