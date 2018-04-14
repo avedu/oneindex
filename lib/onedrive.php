@@ -129,17 +129,18 @@
 			$data = json_decode($resp->content, true);
 			return @$data['@content.downloadUrl'];
 		}
-
+		
 		static function create_upload_session($path){
 			$path = self::urlencode($path);
 			$token = self::access_token();
 
-			fetch::$headers = "Authorization: bearer {$token}\r\nContent-Type: application/json";
+			fetch::$headers = "Authorization: bearer {$token}".PHP_EOL."Content-Type: application/json".PHP_EOL;
 			$url = self::$app_url."_api/v2.0/me/drive/root:/".$path.":/createUploadSession";
 			$post_data['item'] = array(
 				'@microsoft.graph.conflictBehavior'=>'rename'
 			);
 			$post_data = json_encode($post_data);
+			
 			$resp = fetch::post($url,$post_data);
 			$data = json_decode($resp->content, true);
 			if($resp->http_code == 409){
@@ -167,7 +168,7 @@
 
 		static function upload_session_status($url){
 			$token = self::access_token();
-			fetch::$headers = "Authorization: bearer {$token}\r\nContent-Type: application/json";
+			fetch::$headers = "Authorization: bearer {$token}".PHP_EOL."Content-Type: application/json".PHP_EOL;
 			$resp = fetch::get($url);
 			$data = json_decode($resp->content, true);
 			if($resp->http_code == 404){
