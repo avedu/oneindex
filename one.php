@@ -3,7 +3,7 @@ if( php_sapi_name() !== "cli" ){
    die( "NoAccess" );
 }
 require 'init.php';
-ini_set('memory_limit', '512M');
+ini_set('memory_limit', '128M');
 
 class one{
 	static function cache_clear(){
@@ -110,8 +110,8 @@ class one{
 		if(!empty($data['nextExpectedRanges'])){
 			$upload_time = microtime(true) - $begin_time;
 			print onedrive::human_filesize($info['length']/$upload_time).'/s'.'	'.round(($info['offset']/$info['filesize'])*100).'%	'.PHP_EOL;
-			$info['length'] = intval($info['length']/$upload_time/32768)*327680;
-			//$info['length'] = ($info['length']>104857600)?104857600:$info['length'];
+			$info['length'] = intval($info['length']/$upload_time/32768*2)*327680;
+			$info['length'] = ($info['length']>104857600)?104857600:$info['length'];
 			
 			list($offset, $filesize) = explode('-',$data['nextExpectedRanges'][0]);
 			$info['offset'] = $offset;
