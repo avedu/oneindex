@@ -78,7 +78,6 @@ class one{
 		$info = $upload[$remotepath];
 		if(empty($info['url'])){
 			print '创建上传会话'.PHP_EOL;
-			$info['url'] = onedrive::create_upload_session($remotepath);
 			$data = onedrive::create_upload_session($remotepath);
 			if(!empty($data['uploadUrl'])){
 				$info['url'] = $data['uploadUrl'];
@@ -104,7 +103,6 @@ class one{
 		
 		print '上传分块'.onedrive::human_filesize($info['length']).'	';
 		$begin_time = microtime(true);
-		
 		$data = onedrive::upload_session($info['url'], $info['localfile'], $info['offset'], $info['length']);
 
 		if(!empty($data['nextExpectedRanges'])){
@@ -128,6 +126,7 @@ class one{
 			print '失败!'.PHP_EOL;
 			$data = onedrive::upload_session_status($info['url']);
 			if($data === false){
+				onedrive::delete_upload_session($info['url']);
 				unset($upload[$remotepath]);
 				config('@upload', $upload);
 			}elseif(!empty($data['nextExpectedRanges'])){

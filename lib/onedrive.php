@@ -177,6 +177,15 @@
 			return $data;
 		}
 
+		static function delete_upload_session($url){
+			$token = self::access_token();
+			fetch::$headers = "Authorization: bearer {$token}".PHP_EOL."Content-Type: application/json".PHP_EOL;
+			$resp = fetch::delete($url);
+			$data = json_decode($resp->content, true);
+			var_dump($resp);
+			return $data;
+		}
+
 		static function file_content($file, $offset, $length){
 			$handler = fopen($file, "rb") OR die('获取文件内容失败');
 			fseek($handler, $offset);
