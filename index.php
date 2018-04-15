@@ -72,15 +72,13 @@ route::get('{path:#all}',function(){
 		if ($items[$name]['folder']) {
 			header('Location: '.$_SERVER['REQUEST_URI'].'/');
 		}
-		if(in_array($_GET['thumbnails'],['large','medium','small'])){
-			list($time, $item) = cache('thumbnails_'.$path.$name);
-			if(empty($item[$_GET['thumbnails']]) ||  (TIME - $time) > config('cache_expire_time') ){
-				$item = onedrive::thumbnails($path.$name); 
-				if(!empty($item)){
-					cache('thumbnails_'.$path.$name, $item);
-				}
+		if(!is_null($_GET['t']) && !empty($items[$name]['thumbnails'])){
+			$url = $items[$name]['thumbnails'][0]['large']['url'];
+			if(!empty($_GET['t'])){
+				list($width, $height) = explode('|', $_GET['t']);
+				list($url, $tmp) = explode("&width=",$url);
+				$url = $url."&width={$width}&height={$height}";
 			}
-			$url = $item[$_GET['thumbnails']]['url'];
 		}else{
 			$url = $items[$name]['downloadUrl'];
 		}

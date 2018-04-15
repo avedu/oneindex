@@ -77,7 +77,7 @@
 			if($path != '/'){
 				$path = ':'.rtrim($path, '/').':/';
 			}
-			$url = self::$app_url."_api/v2.0/me/drive/root".$path."children";
+			$url = self::$app_url."_api/v2.0/me/drive/root".$path."children?expand=thumbnails";
 			$resp = fetch::get($url);
 			$data = json_decode($resp->content, true);
 			if(!empty($data['@odata.nextLink'])){
@@ -87,12 +87,14 @@
 				return false;
 			}
 			foreach((array)$data['value'] as $item){
+				
 				$return[$item['name']] = array(
 					'name'=>$item['name'],
 					'size'=>self::human_filesize($item['size']),
 					'createdDateTime'=>strtotime($item['createdDateTime']),
 					'lastModifiedDateTime'=>strtotime($item['lastModifiedDateTime']),
 					'downloadUrl'=>$item['@content.downloadUrl'],
+					'thumbnails'=>$item['thumbnails'],
 					'folder'=>empty($item['folder'])?false:true
 				);
 			}
