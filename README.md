@@ -115,12 +115,14 @@ php one.php upload:file demo.zip /test/d.zip
 直连下载：[https://xn.tn/node-v8.9.4-x64.msi](https://xn.tn/node-v8.9.4-x64.msi)  
 图片直连：http://xn.tn/bg.jpg  
 ![Alt text](http://xn.tn/bg.jpg)
-缩略图：thumbnails=large|medium|small  
-![thumbnails](http://xn.tn/bg.jpg?thumbnails=medium)
-![thumbnails](http://xn.tn/bg.jpg?thumbnails=small)
+缩略图：
+http://xn.tn/bg.jpg?t  
+![http://xn.tn/bg.jpg?t](http://xn.tn/bg.jpg?t)  
+http://xn.tn/bg.jpg?t=100|100  
+![http://xn.tn/bg.jpg?t=100|100](http://xn.tn/bg.jpg?t=100|100)  
 
-
-[![Watch the video](https://xn.tn/trailer.mp4?thumbnails=large)](https://xn.tn/trailer.mp4)
+https://xn.tn/trailer.mp4?t=300|300  
+[![Watch the video](https://xn.tn/trailer.mp4?t=300|300)](https://xn.tn/trailer.mp4)
 
 ## Q&A:  
 **Q:需要企业版或教育版的全局管理员？**  
