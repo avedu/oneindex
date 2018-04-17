@@ -92,13 +92,15 @@ php one.php upload:file demo.zip /test/d.zip
 需要添加apache/nginx/iis的rewrite的配置文件  
 参考程序根目录下的：`.htaccess`或`nginx.conf`或`Web.config`  
 ```
-    'root_path' => '?' 
+  //在config/base.php 中
+  'root_path' => '?' 
 ```
 改为  
 
 ```
     'root_path' => '' 
 ```  
+> nginx图片404问题,参考https://github.com/donwa/oneindex/issues/14
   
 **缓存时间:**  
 初步测试直链过期时间为一小时,默认设置为： 
