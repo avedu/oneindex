@@ -3,7 +3,7 @@ class AdminController{
 	function __construct(){
 		session_start();
 		
-		//无后台密码，先设置后密码
+		//鏃犲悗鍙板瘑鐮侊紝鍏堣缃悗瀵嗙爜
 		//if( is_null(config('password')) ){
 		//	echo $this->setpass();
 		//	exit();
@@ -31,12 +31,12 @@ class AdminController{
 		$data = onedrive::authorize($_REQUEST['code']);
 		if(empty($data['access_token'])){
 			return view::load('auth')->with('authorize_url',$authorize_url)
-						->with('error','认证失败');
+						->with('error','璁よ瘉澶辫触');
 		}
 		$app_url = onedrive::get_app_url($data['access_token']);
 		if(empty($app_url)){
 			return view::load('auth')->with('authorize_url',$authorize_url)
-						->with('error','获取app url 失败');
+						->with('error','鑾峰彇app url 澶辫触');
 		}
 		config('refresh_token', $data['refresh_token']);
 		config('app_url', $app_url);
