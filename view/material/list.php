@@ -23,7 +23,7 @@ function file_ico($item){
 		</li>
 		<?php if($path != '/'):?>
 		<li class="mdui-list-item mdui-ripple">
-			<a href="<?php echo get_absolute_path($root_path.$path.'../');?>">
+			<a href="<?php echo get_absolute_path($root.$path.'../');?>">
 			  <div class="mdui-col-xs-12 mdui-col-sm-7">
 				<i class="mdui-icon material-icons">arrow_upward</i>
 		    	..
