@@ -45,7 +45,7 @@
 		.mdui-toolbar>a:last-child{
 			opacity:1;
 		}
-		@media screen and (max-width:600px){
+		@media screen and (max-width:980px){
 			.mdui-list-item .mdui-text-right{
 				display: none;
 			}
@@ -56,7 +56,7 @@
 			.mdui-toolbar>*{
 				display: none;
 			}
-			.mdui-toolbar>a:last-child{
+			.mdui-toolbar>a:last-child,.mdui-toolbar>.mdui-typo-headline,.mdui-toolbar>i:first-child{
 				display: block;
 			}
 		}
