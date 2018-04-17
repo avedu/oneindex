@@ -10,10 +10,7 @@ require 'init.php';
 
 //未初始化
 if( empty(onedrive::$app_url) ){
-	route::any('/install','AdminController@install');
-	if((route::$runed) == false){
-		view::direct('?/install');
-	}
+	route::any('/','AdminController@install');
 }
 
 //列目录
