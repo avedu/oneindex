@@ -4,6 +4,9 @@ date_default_timezone_set('PRC');
 define('TIME', time());
 define('ROOT', str_replace("\\", "/", dirname(__FILE__)) . '/');
 
+define('CONTROLLER_PATH', ROOT.'controller/');
+define('VIEW_PATH', ROOT.'view/material/');
+
 //__autoload方法
 function i_autoload($className) {
 	if (is_int(strripos($className, '..'))) {
@@ -118,12 +121,18 @@ if (!function_exists('_')) {
 	}
 }
 
-if (!function_exists("fastcgi_finish_request")) {
-      function fastcgi_finish_request()  {
-      	ob_flush();
-      	flush();
-      }
+if (!function_exists('e')) {
+	function e($str) {
+		echo $str;
+	}
 }
+
+//if (!function_exists("fastcgi_finish_request")) {
+//      function fastcgi_finish_request()  {
+//      	ob_flush();
+//      	flush();
+//      }
+//}
 
 function get_absolute_path($path) {
     $path = str_replace(array('/', '\\', '//'), '/', $path);

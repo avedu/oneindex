@@ -44,7 +44,7 @@ class route {
 		}
 	}
 
-	public static function init($path = null) {
+	public static function init() {
 		if (!empty(self::$method)) {return;}
 		self::$uri = self::get_uri();
 		self::$method = empty($_POST['_METHOD']) ? $_SERVER['REQUEST_METHOD'] : $_POST['_METHOD'];

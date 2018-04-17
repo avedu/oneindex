@@ -87,7 +87,6 @@
 				return false;
 			}
 			foreach((array)$data['value'] as $item){
-				
 				$return[$item['name']] = array(
 					'name'=>$item['name'],
 					'size'=>self::human_filesize($item['size']),
@@ -95,6 +94,8 @@
 					'lastModifiedDateTime'=>strtotime($item['lastModifiedDateTime']),
 					'downloadUrl'=>$item['@content.downloadUrl'],
 					'thumbnails'=>$item['thumbnails'],
+					'video'=>$item['video'],
+					'image'=>$item['image'],
 					'folder'=>empty($item['folder'])?false:true
 				);
 			}
