@@ -47,6 +47,10 @@
 			.mdui-list-item .mdui-text-right{
 				display: none;
 			}
+			.mdui-container{
+				width:100% !important;
+				margin:0px;
+			}
 		}
 	</style>
 </head>
