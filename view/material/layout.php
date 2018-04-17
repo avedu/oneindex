@@ -42,7 +42,9 @@
 		.mdui-list-item{
 			margin: 2px 0px;
 		}
-
+		.mdui-toolbar>a:last-child{
+			opacity:1;
+		}
 		@media screen and (max-width:600px){
 			.mdui-list-item .mdui-text-right{
 				display: none;
@@ -50,6 +52,12 @@
 			.mdui-container{
 				width:100% !important;
 				margin:0px;
+			}
+			.mdui-toolbar>*{
+				display: none;
+			}
+			.mdui-toolbar>a:last-child{
+				display: block;
 			}
 		}
 	</style>
