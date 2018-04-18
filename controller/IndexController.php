@@ -25,6 +25,10 @@ class IndexController{
 
 		$this->is_password();
 
+		header("Expires:-1");
+		header("Cache-Control:no_cache");
+		header("Pragma:no-cache");
+
 		if(!empty($this->name)){//file
 			return $this->file();
 		}else{//dir
