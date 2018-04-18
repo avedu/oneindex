@@ -83,6 +83,9 @@ class IndexController{
 		if(in_array($ext,['mp4'])){
 			return view::load('show/video')->with($data);
 		}
+		if(in_array($ext,['ogg','mp3','wav'])){
+			return view::load('show/audio')->with($data);
+		}
 
 		$code_type = $this->code_type($ext);
 		if($code_type){
