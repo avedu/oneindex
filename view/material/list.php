@@ -14,6 +14,14 @@ function file_ico($item){
 <?php view::begin('content');?>
 	
 <div class="mdui-container-fluid">
+
+<?php if($head):?>
+<div class="mdui-typo" style="padding: 20px;">
+	<?php e($head);?>
+</div>
+<?php endif;?>
+
+	
 <div class="mdui-row">
 	<ul class="mdui-list">
 		<li class="mdui-list-item th">
@@ -63,7 +71,7 @@ function file_ico($item){
 	</ul>
 </div>
 <?php if($readme):?>
-<div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin-top: 20px;">
+<div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px; 0">
 	<div class="mdui-chip">
 	  <span class="mdui-chip-icon"><i class="mdui-icon material-icons">face</i></span>
 	  <span class="mdui-chip-title">README.md</span>

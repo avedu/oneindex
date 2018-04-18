@@ -23,11 +23,38 @@ class IndexController{
 		//是否404
 		$this->is404();
 
+		$this->is_password();
+
 		if(!empty($this->name)){//file
 			return $this->file();
 		}else{//dir
 			return $this->dir();
 		}
+	}
+
+	//判断是否加密
+	function is_password(){
+		if(empty($this->items['.password'])){
+			return false;
+		}
+		
+		$password = $this->get_content($this->items['.password']);
+		unset($this->items['.password']);
+		if(!empty($password) && $password == $_COOKIE[md5($this->path)]){
+			return true;
+		}
+
+		$this->password($password);
+		
+	}
+
+	function password($password){
+		if(!empty($_POST['password']) && $password == $_POST['password']){
+			setcookie(md5($this->path), $_POST['password']);
+			return true;
+		}
+		echo view::load('password');
+		exit();
 	}
 
 	//文件
@@ -56,6 +83,16 @@ class IndexController{
 			$readme = $this->get_content($this->items['README.md']);
 			$Parsedown = new Parsedown();
 			$readme = $Parsedown->text($readme);
+			//不在列表中展示
+			unset($this->items['README.md']);
+		}
+
+		if($this->items['HEAD.md']){
+			$head = $this->get_content($this->items['HEAD.md']);
+			$Parsedown = new Parsedown();
+			$head = $Parsedown->text($head);
+			//不在列表中展示
+			unset($this->items['HEAD.md']);
 		}
 		
 		return view::load('list')->with('title', 'one index of '. urldecode($this->url_path))
@@ -63,6 +100,7 @@ class IndexController{
 					->with('path',$this->url_path)
 					->with('root', $root)
 					->with('items', $this->items)
+					->with('head',$head)
 					->with('readme',$readme);
 	}
 
