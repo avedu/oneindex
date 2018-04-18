@@ -24,8 +24,8 @@ Onedrive Directory Index
 18-04-16: 视频在线播放  
 18-04-16: 代码在线查看（js、css、html、sh、php、java、md等）  
 18-04-16: README.md 支持，解析各目录下(onedirive目录下) README.md 文件，在页面尾部展示。  
-18-04-18: 音频在线播放  
-18-04-18: HEAD.md 支持，在页面头部展示。  
+18-04-18: 音频在线播放  
+18-04-18: HEAD.md 支持，在页面头部展示   
 18-04-18: .password 文件夹加密  
 
 ## 需求：
