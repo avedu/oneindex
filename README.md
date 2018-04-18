@@ -33,7 +33,7 @@ Onedrive Directory Index
 
 ## 需求：
 1、PHP空间，PHP 5.6+ 打开curl支持  
-2、onedrive business 账号 (企业版或教育版)  
+2、onedrive business 账号 (企业版或教育版/工作或学校帐户)
 3、oneindex 程序   
 
 ## 安装：
