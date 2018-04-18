@@ -46,6 +46,18 @@ Onedrive Directory Index
 */10 * * * * /具体路径/php /程序具体路径/one.php cache:refresh
 ```
 
+## 特殊文件实现功能  
+` README.md `、`HEAD.md` 、 `.password`特殊文件使用  
+
+**在文件夹底部添加说明:**  
+>在onedrive的文件夹中添加` README.md `文件，使用markdown语法。  
+
+**在文件夹头部添加说明:**  
+>在onedrive的文件夹中添加`HEAD.md` 文件，使用markdown语法。  
+
+**加密文件夹:**  
+>在onedrive的文件夹中添加`.password`文件，填入密码，密码不能为空。  
+
 ## 命令行功能  
 仅能在php cli模式下运行  
 **清除缓存:**  
