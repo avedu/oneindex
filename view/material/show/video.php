@@ -1,10 +1,9 @@
 <?php view::layout('layout')?>
 
 <?php view::begin('content');?>
-	
 <div class="mdui-container-fluid">
 	<br>
-	<video class="mdui-video-fluid mdui-center" controls autoplay>
+	<video class="mdui-video-fluid mdui-center" preload controls autoplay poster="<?php @e($item['thumbnails'][0]['large']['url']);?>">
 	  <source src="<?php e($item['downloadUrl']);?>" type="video/mp4">
 	</video>
 	<br>
