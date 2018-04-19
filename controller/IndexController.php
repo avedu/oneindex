@@ -25,6 +25,10 @@ class IndexController{
 
 		$this->is_password();
 
+		header("Expires:-1");
+		header("Cache-Control:no_cache");
+		header("Pragma:no-cache");
+
 		if(!empty($this->name)){//file
 			return $this->file();
 		}else{//dir
@@ -55,7 +59,8 @@ class IndexController{
 			setcookie(md5($this->path), $_POST['password']);
 			return true;
 		}
-		echo view::load('password');
+		$navs = $this->navs();
+		echo view::load('password')->with('navs',$navs);
 		exit();
 	}
 
@@ -109,13 +114,10 @@ class IndexController{
 	function show($item){
 		$root = get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).config('root_path');
 		$ext = strtolower(pathinfo($item['name'], PATHINFO_EXTENSION));
-		$navs = $this->navs();
-		$navs[$item['name']] = end($navs).urlencode($item['name']);
-
 		$data['title'] = $item['name'];
-		$data['navs'] = $navs;
+		$data['navs'] = $this->navs();
 		$data['item'] = $item;
-		$data['url'] = (isset($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['HTTP_HOST'].end($navs);
+		$data['url'] = (isset($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['HTTP_HOST'].end($data['navs']);
 		
 		if(in_array($ext,['bmp','jpg','jpeg','png','gif'])){
 			return view::load('show/image')->with($data);
@@ -172,6 +174,10 @@ class IndexController{
 			}
 			$navs[urldecode($v)] = end($navs).$v.'/';
 		}
+		if(!empty($this->name)){
+			$navs[$this->name] = end($navs).urlencode($this->name);
+		}
+		
 		return $navs;
 	}
 

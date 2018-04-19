@@ -4,9 +4,7 @@
 <div class="mdui-container-fluid">
 	<br>
 	<center>
-	<img src="<?php @e($item['thumbnails'][0]['medium']['url']);?>" onerror='javascript:this.remove();'/>
-	<br>
-	<audio src="<?php e($item['downloadUrl']);?>" controls autoplay style="width: 100%;">
+	<audio src="<?php e($item['downloadUrl']);?>" controls autoplay style="width: 100%;"  poster="<?php @e($item['thumbnails'][0]['medium']['url']);?>">
 	</audio>
 	</center>
 	<br>

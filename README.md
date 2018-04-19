@@ -6,6 +6,9 @@ Onedrive Directory Index
 
 直接列onedrive目录，文件直链下载。  
 
+## demo
+[https://xn.tn](https://xn.tn)  
+
 ## change log:  
 18-03-29: 更新直链获取机制、缓存机制，避免频繁访问的token失效  
 18-03-29: 解决非英文编码问题  
@@ -24,11 +27,13 @@ Onedrive Directory Index
 18-04-16: 视频在线播放  
 18-04-16: 代码在线查看（js、css、html、sh、php、java、md等）  
 18-04-16: README.md 支持，解析各目录下(onedirive目录下) README.md 文件，在页面尾部展示。  
-18-04-18: 音频在线播放  
+18-04-18: 音频在线播放  
+18-04-18: HEAD.md 支持，在页面头部展示   
+18-04-18: .password 文件夹加密  
 
 ## 需求：
 1、PHP空间，PHP 5.6+ 打开curl支持  
-2、onedrive business 账号 (企业版或教育版)  
+2、onedrive business 账号 (企业版或教育版/工作或学校帐户)
 3、oneindex 程序   
 
 ## 安装：
@@ -132,19 +137,8 @@ php one.php upload:file demo.zip /test/d.zip
 'cache_type'=> 'sqlite'  // file | sqlite
 ```
 
-## demo
-列目录：[https://xn.tn](https://xn.tn)  
-直连下载：[https://xn.tn/node-v8.9.4-x64.msi](https://xn.tn/node-v8.9.4-x64.msi)  
-图片直连：http://xn.tn/bg.jpg  
-![Alt text](http://xn.tn/bg.jpg)
-缩略图：
-http://xn.tn/bg.jpg?t  
-![http://xn.tn/bg.jpg?t](http://xn.tn/bg.jpg?t)  
-http://xn.tn/bg.jpg?t=100|100  
-![http://xn.tn/bg.jpg?t=100|100](http://xn.tn/bg.jpg?t=100|100)  
 
-https://xn.tn/trailer.mp4?t=300|300  
-[![Watch the video](https://xn.tn/trailer.mp4?t=300|300)](https://xn.tn/trailer.mp4)
+
 
 ## Q&A:  
 **Q:需要企业版或教育版的全局管理员？**  
