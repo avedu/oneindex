@@ -102,7 +102,7 @@ class IndexController{
 			unset($this->items['HEAD.md']);
 		}
 		
-		return view::load('list')->with('title', 'one index of '. urldecode($this->url_path))
+		return view::load('list')->with('title', 'index of '. urldecode($this->url_path))
 					->with('navs', $navs)
 					->with('path',$this->url_path)
 					->with('root', $root)

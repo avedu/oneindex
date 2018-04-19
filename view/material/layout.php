@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
-	<title><?php e($title);?></title>
+	<title><?php e(config('site_name').' '.$title);?></title>
 	<link rel="stylesheet" href="//cdn.bootcss.com/mdui/0.4.1/css/mdui.min.css">
 	<script src="//cdn.bootcss.com/mdui/0.4.1/js/mdui.min.js"></script>
 	<style>
@@ -41,6 +41,7 @@
 		}
 		.mdui-list-item{
 			margin: 2px 0px;
+			padding:0;
 		}
 		.mdui-toolbar>a:last-child{
 			opacity:1;
@@ -65,7 +66,7 @@
 <body class="mdui-theme-primary-blue-grey mdui-theme-accent-blue">
 	<header class="mdui-appbar mdui-color-theme">
 		<div class="mdui-toolbar mdui-container">
-			<a href="/" class="mdui-typo-headline">one</a>
+			<a href="/" class="mdui-typo-headline"><?php e(config('site_name'));?></a>
 			<?php foreach((array)$navs as $n=>$l):?>
 			<i class="mdui-icon material-icons mdui-icon-dark" style="margin:0;">chevron_right</i>
 			<a href="<?php e($l);?>"><?php e($n);?></a>
@@ -77,7 +78,5 @@
 	<div class="mdui-container">
     	<?php view::section('content');?>
   	</div>
-
-	
 </body>
 </html>
