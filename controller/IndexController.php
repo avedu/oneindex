@@ -39,6 +39,8 @@ class IndexController{
 		}
 		
 		$password = $this->get_content($this->items['.password']);
+		list($password) = explode("\n",$password);
+		$password = trim($password);
 		unset($this->items['.password']);
 		if(!empty($password) && $password == $_COOKIE[md5($this->path)]){
 			return true;
