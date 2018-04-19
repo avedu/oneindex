@@ -105,6 +105,9 @@
 		static function dir_next_page($nextlink, &$data){
 			$resp = fetch::get($nextlink);
 			$next_data = json_decode($resp->content, true);
+			if(empty($next_data )){
+				return self::dir_next_page($nextlink, $data);
+			}
 			$data['value'] = array_merge($data['value'],$next_data['value']);
 			if(!empty($next_data['@odata.nextLink'])){
 				self::dir_next_page($next_data['@odata.nextLink'], $data);
