@@ -99,6 +99,7 @@
 					'downloadUrl'=>$item['@content.downloadUrl'],
 					'video'=>$item['video'],
 					'image'=>$item['image'],
+					'type'=>$item['file']['mimeType'],
 					'folder'=>empty($item['folder'])?false:true
 				);
 				if(!empty($item['thumbnails'])){
