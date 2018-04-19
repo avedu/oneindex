@@ -4,7 +4,7 @@
 <div class="mdui-container-fluid">
 	<br>
 	<center>
-	<audio src="<?php e($item['downloadUrl']);?>" controls autoplay style="width: 100%;"  poster="<?php @e($item['thumbnails'][0]['medium']['url']);?>">
+	<audio src="<?php e($item['downloadUrl']);?>" controls autoplay style="width: 100%;"  poster="<?php @e($item['thumb'].'&width=176&height=176');?>">
 	</audio>
 	</center>
 	<br>

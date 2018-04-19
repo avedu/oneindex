@@ -69,7 +69,7 @@ class IndexController{
 		$item = $this->items[$this->name];
 		if ($item['folder']) {//是文件夹
 			$url = $_SERVER['REQUEST_URI'].'/';
-		}elseif(!is_null($_GET['t']) && !empty($item['thumbnails'])){//缩略图
+		}elseif(!is_null($_GET['t']) && !empty($item['thumb'])){//缩略图
 			$url = $this->thumbnail($item);
 		}elseif($_SERVER['REQUEST_METHOD'] == 'POST' || !is_null($_GET['s']) ){
 			return $this->show($item);
@@ -141,13 +141,13 @@ class IndexController{
 	}
 	//缩略图
 	function thumbnail($item){
-		$url = $item['thumbnails'][0]['large']['url'];
 		if(!empty($_GET['t'])){
 			list($width, $height) = explode('|', $_GET['t']);
-			list($url, $tmp) = explode("&width=",$url);
-			$url = $url."&width={$width}&height={$height}";
+		}else{
+			//800 176 96
+			$width = $height = 800;
 		}
-		return $url;
+		return $item['thumb']."&width={$width}&height={$height}";
 	}
 
 	//文件夹下元素
