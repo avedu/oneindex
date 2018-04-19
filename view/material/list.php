@@ -5,7 +5,7 @@ function file_ico($item){
   if(in_array($ext,['bmp','jpg','jpeg','png','gif'])){
   	return "image";
   }
-  if(in_array($ext,['mp4','mkv'])){
+  if(in_array($ext,['mp4','mkv','webm','wmv'])){
   	return "ondemand_video";
   }
   if(in_array($ext,['ogg','mp3','wav'])){

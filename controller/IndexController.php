@@ -122,7 +122,7 @@ class IndexController{
 		if(in_array($ext,['bmp','jpg','jpeg','png','gif'])){
 			return view::load('show/image')->with($data);
 		}
-		if(in_array($ext,['mp4','mkv'])){
+		if(in_array($ext,['mp4','mkv','webm','wmv'])){
 			return view::load('show/video')->with($data);
 		}
 		if(in_array($ext,['ogg','mp3','wav'])){
