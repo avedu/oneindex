@@ -4,7 +4,7 @@
 	
 <div class="mdui-container-fluid">
 	<br>
-	<img class="mdui-img-fluid" src="<?php @e($item['thumb'].'&width=964');?>"/>
+	<img class="mdui-img-fluid" src="<?php e($url);?>"/>
 	<br>
 	<div class="mdui-textfield">
 	  <label class="mdui-textfield-label">下载地址</label>
