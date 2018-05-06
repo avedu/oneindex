@@ -30,7 +30,10 @@ Onedrive Directory Index
 18-04-18: 音频在线播放  
 18-04-18: HEAD.md 支持，在页面头部展示   
 18-04-18: .password 文件夹加密  
-
+18-05-06: 在线视频播放器替换成 Dplayer  
+18-05-06: 在线视频播放支持'mp4','webm','avi','mpg', 'mpeg', 'rm', 'rmvb', 'mov', 'wmv', 'mkv', 'asf'  
+  
+  
 ## 需求：
 1、PHP空间，PHP 5.6+ 打开curl支持  
 2、onedrive business 账号 (企业版或教育版/工作或学校帐户)
