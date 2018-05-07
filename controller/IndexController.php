@@ -120,7 +120,9 @@ class IndexController{
 		$data['url'] = (isset($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['HTTP_HOST'].end($data['navs']);
 
 		if(in_array($ext,['csv','doc','docx','odp','ods','odt','pot','potm','potx','pps','ppsx','ppsxm','ppt','pptm','pptx','rtf','xls','xlsx'])){
-			return view::load('show/pdf')->with($data);
+			$url = 'https://view.officeapps.live.com/op/view.aspx?src='.urlencode($item['downloadUrl']);
+			return view::direct($url);
+			//return view::load('show/pdf')->with($data);
 		}
 		
 		if(in_array($ext,['bmp','jpg','jpeg','png','gif'])){
