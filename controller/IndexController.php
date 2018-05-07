@@ -118,6 +118,10 @@ class IndexController{
 		$data['navs'] = $this->navs();
 		$data['item'] = $item;
 		$data['url'] = (isset($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['HTTP_HOST'].end($data['navs']);
+
+		if(in_array($ext,['csv','doc','docx','odp','ods','odt','pot','potm','potx','pps','ppsx','ppsxm','ppt','pptm','pptx','rtf','xls','xlsx'])){
+			return view::load('show/pdf')->with($data);
+		}
 		
 		if(in_array($ext,['bmp','jpg','jpeg','png','gif'])){
 			return view::load('show/image')->with($data);
