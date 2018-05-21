@@ -3,41 +3,46 @@
 		static $client_id;
 		static $client_secret;
 		static $redirect_uri;
-		static $app_url;
+		static $api_url = 'https://graph.microsoft.com/v1.0';
+		static $oauth_url = 'https://login.microsoftonline.com/common/oauth2/v2.0';
 
+		//验证URL，浏览器访问、授权
 		static function authorize_url(){
 			$client_id = self::$client_id;
+			$scope = urlencode("offline_access files.readwrite.all");
 			$redirect_uri = self::$redirect_uri;
-			$url ="https://login.microsoftonline.com/common/oauth2/authorize?response_type=code&client_id={$client_id}&redirect_uri={$redirect_uri}";
-			$url .= '&state='.urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+			$url = self::$oauth_url."/authorize?client_id={$client_id}&scope={$scope}&response_type=code&redirect_uri={$redirect_uri}";
 			return $url;
 		}
-		
-		static function authorize($code = "", $resource_id="https://api.office.com/discovery/"){
+
+		//使用 $code, 获取 $refresh_token
+		static function authorize($code = ""){
 			$client_id = self::$client_id;
 			$client_secret = self::$client_secret;
 			$redirect_uri = self::$redirect_uri;
 
-			$url = "https://login.microsoftonline.com/common/oauth2/token";
-			$post_data = "client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&code={$code}&grant_type=authorization_code&resource={$resource_id}";
+			$url = self::$oauth_url."/token";
+			$post_data = "client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&code={$code}&grant_type=authorization_code";
 			fetch::$headers = "Content-Type: application/x-www-form-urlencoded";
 			$resp = fetch::post($url, $post_data);
 			$data = json_decode($resp->content, true);
 			return $data;
 		}
 
-		static function get_app_url($token){
-			fetch::$headers = "Authorization: bearer {$token}";
-
-			$resp = fetch::get("https://api.office.com/discovery/v2.0/me/services");
-
+		//使用 $refresh_token，获取 $access_token
+		static function get_token($refresh_token){
+			$client_id = self::$client_id;
+			$client_secret = self::$client_secret;
+			$redirect_uri = self::$redirect_uri;
+			$url = self::$oauth_url."/token";
+			$post_data = "client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&refresh_token={$refresh_token}&grant_type=refresh_token";
+			fetch::$headers = "Content-Type: application/x-www-form-urlencoded";
+			$resp = fetch::post($url, $post_data);
 			$data = json_decode($resp->content, true);
-			if(!empty($data['value'])){
-				return $data['value'][0]['serviceResourceId'];
-			}
-			return ;
+			return $data;
 		}
 
+		//获取 $access_token, 带缓存
 		static function access_token(){
 			$token = config('@token');
 			if($token['expires_on'] > time()+600){
@@ -52,102 +57,91 @@
 			}
 			return "";
 		}
+
+
+		// 生成一个request，带token
+		static function request($path="/", $query=""){
+			$path = self::urlencode($path);
+			$path = empty($path)?'/':":/{$path}:/";
+			$token = self::access_token();
+			$request['headers'] = "Authorization: bearer {$token}".PHP_EOL."Content-Type: application/json".PHP_EOL;
+			$request['url'] = self::$api_url."/me/drive/root".$path.$query;
+			return $request;
+		}
+
 		
-		static function get_token($refresh_token){
-			$client_id = self::$client_id;
-			$client_secret = self::$client_secret;
-			$redirect_uri = self::$redirect_uri;
-			$resource_id = self::$app_url;
-			$url = "https://login.microsoftonline.com/common/oauth2/token";
-			$post_data = "client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&refresh_token={$refresh_token}&grant_type=refresh_token&resource={$resource_id}";
-			fetch::$headers = "Content-Type: application/x-www-form-urlencoded";
-			$resp = fetch::post($url, $post_data);
-			$data = json_decode($resp->content, true);
-			return $data;
-		}
-
-		static function human_filesize($size, $precision = 1) {
-			for($i = 0; ($size / 1024) > 1; $i++, $size /= 1024) {}
-			return round($size, $precision).['B','kB','MB','GB','TB','PB','EB','ZB','YB'][$i];
-		}
-
+		//返回目录信息
 		static function dir($path="/"){
 			$token = self::access_token();
-			fetch::$headers = "Authorization: bearer {$token}";
-			if($path != '/'){
-				$path = ':'.rtrim($path, '/').':/';
-			}
-			$url = self::$app_url."_api/v2.0/me/drive/root".$path."children?expand=thumbnails";
+
+			$request = self::request($path, "children?select=name,size,folder,@microsoft.graph.downloadUrl,lastModifiedDateTime");
 			$items = array();
-			self::dir_next_page($url, $items);
+			self::dir_next_page($request, $items);
 			return $items;
 		}
 
-		static function dir_next_page($nextlink, &$items){
-			$resp = fetch::get($nextlink);
+		//通过分页获取页面所有item
+		static function dir_next_page($request, &$items, $retry=0){
+			$resp = fetch::get($request);
+			
 			$data = json_decode($resp->content, true);
-			if(empty($data)){
-				return self::dir_next_page($nextlink, $items);
+			if(empty($data) && $retry < 3){
+				$retry += 1;
+				return self::dir_next_page($request, $items, $retry);
 			}
 			
 			foreach((array)$data['value'] as $item){
+				//var_dump($item);
 				$items[$item['name']] = array(
 					'name'=>$item['name'],
 					'size'=>self::human_filesize($item['size']),
-					'createdDateTime'=>strtotime($item['createdDateTime']),
 					'lastModifiedDateTime'=>strtotime($item['lastModifiedDateTime']),
-					'downloadUrl'=>$item['@content.downloadUrl'],
-					'video'=>$item['video'],
-					'image'=>$item['image'],
-					'type'=>$item['file']['mimeType'],
+					'downloadUrl'=>$item['@microsoft.graph.downloadUrl'],
 					'folder'=>empty($item['folder'])?false:true
 				);
-				if(!empty($item['thumbnails'])){
-					$url = $item['thumbnails'][0]['large']['url'];
-					list($url, $tmp) = explode("&width=",$url);
-					$items[$item['name']]['thumb'] = $url;
-				}
 			}
 
 			if(!empty($data['@odata.nextLink'])){
-				return self::dir_next_page($data['@odata.nextLink'], $items);
+				$request = self::request();
+				$request['url'] = $data['@odata.nextLink'];
+				return self::dir_next_page($request, $items);
 			}
 		}
 
-		static function thumbnails($path){
-			$token = self::access_token();
-			fetch::$headers = "Authorization: bearer {$token}";
-			$url = self::$app_url."_api/v2.0/me/drive/root:/".$path.':/thumbnails';
-			$resp = fetch::get($url);
+		
+		//static function content($path){
+		//	$token = self::access_token();
+		//	fetch::$headers = "Authorization: bearer {$token}";
+		//	$url = self::$api_url."/me/drive/root:".self::urlencode($path).":/content";
+		//	$resp = fetch::get($url);
+		//	return $resp->content;
+		//}
+
+		//文件缩略图链接
+		static function thumbnail($path,$size='large'){
+			$request = self::request($path,"thumbnails/0?select={$size}");
+			$resp = fetch::get($request);
 			$data = json_decode($resp->content, true);
-			if(!empty($data['value'][0])){
-				return $data['value'][0];
-			}
-			return false;
+			$request = self::request($path,"thumbnails/0?select={$size}");
+			return @$data[$size]['url'];
 		}
 
 		//文件上传函数
 		static function upload($path,$content){
-			$token = self::access_token();
-			fetch::$headers = "Authorization: bearer {$token}";
-			$url = self::$app_url."_api/v2.0/me/drive/root:/".$path.':/content';	
-			$resp = fetch::put($url,$content);
+			$request = self::request($path,"content");
+			$request['post_data'] = $content;
+			$resp = fetch::put($request);
 			$data = json_decode($resp->content, true);
-			return @$data['@content.downloadUrl'];
+			return @$data['@microsoft.graph.downloadUrl'];
 		}
 		
 		static function create_upload_session($path){
-			$path = self::urlencode($path);
-			$token = self::access_token();
-
-			fetch::$headers = "Authorization: bearer {$token}".PHP_EOL."Content-Type: application/json".PHP_EOL;
-			$url = self::$app_url."_api/v2.0/me/drive/root:/".$path.":/createUploadSession";
+			$request = self::request($path, 'createUploadSession');
 			$post_data['item'] = array(
 				'@microsoft.graph.conflictBehavior'=>'rename'
 			);
-			$post_data = json_encode($post_data);
-			
-			$resp = fetch::post($url,$post_data);
+			$request['post_data'] = json_encode($post_data);
+			$resp = fetch::post($request);
 			$data = json_decode($resp->content, true);
 			if($resp->http_code == 409){
 				return false;
@@ -188,7 +182,6 @@
 			fetch::$headers = "Authorization: bearer {$token}".PHP_EOL."Content-Type: application/json".PHP_EOL;
 			$resp = fetch::delete($url);
 			$data = json_decode($resp->content, true);
-			var_dump($resp);
 			return $data;
 		}
 
@@ -199,14 +192,21 @@
 			return fread($handler, $length);
 		}
 
+		static function human_filesize($size, $precision = 1) {
+			for($i = 0; ($size / 1024) > 1; $i++, $size /= 1024) {}
+			return round($size, $precision).(['B','KB','MB','GB','TB','PB','EB','ZB','YB'][$i]);
+		}
+
 		static function urlencode($path){
-			$paths = explode('/', $path);
-				foreach($paths as $k=>$v){
-					$paths[$k] = rawurlencode($v);
+			foreach(explode('/', $path) as $k=>$v){
+				if(empty(!$v)){
+					$paths[] = rawurlencode($v);
 				}
-				return join('/',$paths);
 			}
-				static function _filesize($path){
+			return @join('/',$paths);
+		}
+			
+		static function _filesize($path){
 		    if (!file_exists($path))
 		        return false;
 		    $size = filesize($path);

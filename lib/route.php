@@ -88,11 +88,17 @@ class route {
 	public static function uri_match($pattern, $uri) {
 		$pattern = ($pattern == '/') ? '/' : rtrim($pattern, '\/');
 
+		$ps = explode('/', $pattern);
+
 		$searches = array_keys(static::$patterns);
 		$replaces = array_values(static::$patterns);
 
-		$pattern = str_replace($searches, $replaces, $pattern);
-		$pattern = preg_replace("`\{(\w+)\:([^\)]+)\}`", '(?P<$1>$2)', $pattern);
+		foreach($ps as &$p){
+				$p = str_replace($searches, $replaces, $p);
+				$p = preg_replace("`\{(\w+)\:([^\)]+)\}`", '(?P<$1>$2)', $p);	
+		}
+
+		$pattern = join('/',$ps);
 
 		if (preg_match("`^{$pattern}$`", $uri)) {
 			preg_match_all("`^{$pattern}$`", $uri, $matches, PREG_PATTERN_ORDER);

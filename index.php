@@ -4,8 +4,12 @@ require 'init.php';
 
 !defined('SITE_NAME') && define('SITE_NAME', 'one');
 
+//世纪互联
+//onedrive::$api_url = "https://microsoftgraph.chinacloudapi.cn/v1.0";
+
+
 //未初始化
-if( empty(onedrive::$app_url) ){
+if( empty( config('refresh_token') ) ){
 	route::any('/','AdminController@install');
 }
 

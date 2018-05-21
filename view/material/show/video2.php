@@ -1,5 +1,6 @@
 <?php view::layout('layout')?>
 <?php $mpd =  str_replace("thumbnail","videomanifest",$item['thumb'])."&part=index&format=dash&useScf=True&pretranscode=0&transcodeahead=0";?>
+
 <?php view::begin('content');?>
 <link class="dplayer-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.css">
 <script src="https://cdn.jsdelivr.net/npm/dashjs/dist/dash.all.min.js"></script>
@@ -24,7 +25,7 @@ const dp = new DPlayer({
 	lang:'zh-cn',
 	video: {
 	    url: '<?php echo $mpd;?>',
-	    pic: '<?php @e($item['thumb'].'&width=176&height=176');?>',
+	    pic: '<?php @e($item['thumb']);?>',
 	    type: 'dash'
 	}
 });

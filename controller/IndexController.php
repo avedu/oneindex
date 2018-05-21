@@ -8,9 +8,9 @@ class IndexController{
 
 	function __construct(){
 		//获取路径和文件名
-		$paths = explode('/', $_GET['path']);
+		$paths = explode('/', urldecode($_GET['path']));
 		if(substr($_SERVER['REQUEST_URI'], -1) != '/'){
-			$this->name = urldecode(array_pop($paths));
+			$this->name = array_pop($paths);
 		}
 		$this->url_path = get_absolute_path(implode('/', $paths));
 		$this->path = config('onedrive_root').$this->url_path;
@@ -69,7 +69,7 @@ class IndexController{
 		$item = $this->items[$this->name];
 		if ($item['folder']) {//是文件夹
 			$url = $_SERVER['REQUEST_URI'].'/';
-		}elseif(!is_null($_GET['t']) && !empty($item['thumb'])){//缩略图
+		}elseif(!is_null($_GET['t']) ){//缩略图
 			$url = $this->thumbnail($item);
 		}elseif($_SERVER['REQUEST_METHOD'] == 'POST' || !is_null($_GET['s']) ){
 			return $this->show($item);
@@ -128,23 +128,24 @@ class IndexController{
 		if(in_array($ext,['bmp','jpg','jpeg','png','gif'])){
 			return view::load('show/image')->with($data);
 		}
-		if(in_array($ext,['mp4','webm'])){
+		if(in_array($ext,['mp4','webm','mkv'])){
+			$data['item']['thumb'] = onedrive::thumbnail($this->path.$this->name);
 			return view::load('show/video')->with($data);
 		}
-		
-		if(in_array($ext,['mp4','webm','avi','mpg', 'mpeg', 'rm', 'rmvb', 'mov', 'wmv', 'mkv', 'asf'])){
-			return view::load('show/video2')->with($data);
-		}
-		
+
 		if(in_array($ext,['ogg','mp3','wav'])){
 			return view::load('show/audio')->with($data);
+		}
+		
+		if(in_array($ext,['mp4','webm','avi','mpg', 'mpeg', 'rm', 'rmvb', 'mov', 'wmv', 'mkv', 'asf', 'ts', 'flv']) && strpos($item['downloadUrl'],"sharepoint.com")>0 ){
+			$data['item']['thumb'] = onedrive::thumbnail($this->path.$this->name);
+			return view::load('show/video2')->with($data);
 		}
 
 		$code_type = $this->code_type($ext);
 		if($code_type){
 			$data['content'] = $this->get_content($item);
 			$data['language'] = $code_type;
-			
 			return view::load('show/code')->with($data);
 		}
 
@@ -158,7 +159,9 @@ class IndexController{
 			//800 176 96
 			$width = $height = 800;
 		}
-		return $item['thumb']."&width={$width}&height={$height}";
+		$item['thumb'] = onedrive::thumbnail($this->path.$this->name);
+		$item['thumb'] .= strpos($item['thumb'], '?')?'&':'?';
+		return $item['thumb']."width={$width}&height={$height}";
 	}
 
 	//文件夹下元素

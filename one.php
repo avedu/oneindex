@@ -42,7 +42,7 @@ class one{
 		if(!file_exists($localfile)){
 			exit('file not exists');
 		}
-		print '本地文件：'.$localfile.PHP_EOL;
+		print ' 本地文件：'.$localfile.PHP_EOL;
 
 		if(empty($remotefile)){
 			$remotepath = pathinfo($localfile, PATHINFO_BASENAME);
@@ -52,21 +52,21 @@ class one{
 		}else{
 			$remotepath = ltrim($remotefile, '/');
 		}
-		print '远程文件：'.$remotepath.PHP_EOL;
+		print ' 远程文件：'.$remotepath.PHP_EOL;
 		
 		$filesize = onedrive::_filesize($localfile) OR die('无法获取文件大小');
 		if($filesize < 10485760){
-			print '上传方式：直接上传'.PHP_EOL;
+			print ' 上传方式：直接上传'.PHP_EOL;
 			$begin_time = microtime(true);
 			$result = onedrive::upload($remotepath, file_get_contents($localfile));
 			if(!empty($result)){
 				$upload_time = microtime(true) - $begin_time;
-				print '上传成功:'.onedrive::human_filesize($filesize/$upload_time).'/s'.PHP_EOL;
+				print ' 上传成功:'.onedrive::human_filesize($filesize/$upload_time).'/s'.PHP_EOL;
 			}else{
-				print '上传失败!'.PHP_EOL;
+				print ' 上传失败!'.PHP_EOL;
 			}
 		}else{
-			print '上传方式：分块上传'.PHP_EOL;
+			print ' 上传方式：分块上传'.PHP_EOL;
 			return self::upload_large_file($localfile, $remotepath);
 		}
 		return;
@@ -77,7 +77,7 @@ class one{
 		$upload = config('@upload');
 		$info = $upload[$remotepath];
 		if(empty($info['url'])){
-			print '创建上传会话'.PHP_EOL;
+			print ' 创建上传会话'.PHP_EOL;
 			$data = onedrive::create_upload_session($remotepath);
 			if(!empty($data['uploadUrl'])){
 				$info['url'] = $data['uploadUrl'];
@@ -90,18 +90,18 @@ class one{
 				$upload[$remotepath] = $info;
 				config('@upload', $upload);
 			}elseif ( $data === false ){
-				print '文件已存在!'.PHP_EOL;
+				print ' 文件已存在!'.PHP_EOL;
 				return;
 			}
 		}
 		
 		if(empty($info['url'])){
-			print '获取会话失败！'.PHP_EOL;
+			print ' 获取会话失败！'.PHP_EOL;
 			sleep(3);
 			return self::upload_large_file($localfile, $remotepath);
 		}
 		
-		print '上传分块'.onedrive::human_filesize($info['length']).'	';
+		print ' 上传分块'.onedrive::human_filesize($info['length']).'	';
 		$begin_time = microtime(true);
 		$data = onedrive::upload_session($info['url'], $info['localfile'], $info['offset'], $info['length']);
 
@@ -119,11 +119,11 @@ class one{
 		}elseif(!empty($data['@content.downloadUrl'])){
 			unset($upload[$remotepath]);
 			config('@upload', $upload);
-			print '上传完成！'.PHP_EOL;
+			print ' 上传完成！'.PHP_EOL;
 			self::_refresh_cache(pathinfo($remotepath,PATHINFO_DIRNAME));
 			return;
 		}else{
-			print '失败!'.PHP_EOL;
+			print ' 失败!'.PHP_EOL;
 			$data = onedrive::upload_session_status($info['url']);
 			if($data === false){
 				onedrive::delete_upload_session($info['url']);

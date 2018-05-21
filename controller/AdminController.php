@@ -1,18 +1,13 @@
 <?php 
 class AdminController{
+	static $default_config = array(
+	  'cache_expire_time' => 3600,
+	  'cache_refresh_time' => 600,
+	  'root_path' => '?'
+	);
+	
 	function __construct(){
 		session_start();
-		
-		//无后台密码，先设置后密码
-		//if( is_null(config('password')) ){
-		//	echo $this->setpass();
-		//	exit();
-		//}
-		
-		//$password = $_SESSION['password'];
-		//if($password != config('password')){
-		//	view::direct('?/admin/login');
-		//}
 	}
 
 	function password($password){
@@ -24,46 +19,59 @@ class AdminController{
 	}
 	
 	function install(){
-		$authorize_url = onedrive::authorize_url();
-		if (empty($_REQUEST['code'])) {
-			return view::load('auth')->with('authorize_url',$authorize_url);
+		if(!empty($_GET['code'])){
+			return $this->install_3();
 		}
-		$data = onedrive::authorize($_REQUEST['code']);
-		if(empty($data['access_token'])){
-			return view::load('auth')->with('authorize_url',$authorize_url)
-						->with('error','认证失败');
+		switch ( intval($_GET['step']) ){
+			case 1:
+				return $this->install_1();
+			case 2:
+				return $this->install_2();	
+			default:
+				return $this->install_0();
 		}
-		$app_url = onedrive::get_app_url($data['access_token']);
-		if(empty($app_url)){
-			return view::load('auth')->with('authorize_url',$authorize_url)
-						->with('error','获取app url 失败');
-		}
-		config('refresh_token', $data['refresh_token']);
-		config('app_url', $app_url);
-		view::direct('./');
 	}
 
-	function login(){
-		$password = $this->password($_POST['password']);
-		if($password === config('password')){
-			$_SESSION['password'] = $password;
-			return view::direct('?/admin');
-		}
-		return view('admin/login');
+	function install_0(){
+		$check['php'] = version_compare(PHP_VERSION,'5.6.0','ge');
+		$check['curl'] = function_exists('curl_init');
+		$check['config'] = is_writable(ROOT.'config/');
+		$check['cache'] = is_writable(ROOT.'cache/');
+
+		return view::load('admin/install_0')->with('title','系统安装')
+						->with('check', $check);
 	}
 
-	function logout(){
-		$_SESSION['password']= null;
-		return view::direct('?/admin');
+	function install_1(){
+		if(!empty($_POST['client_secret']) && !empty($_POST['client_id']) && !empty($_POST['redirect_uri']) ){
+			config('client_secret',$_POST['client_secret']);
+			config('client_id',$_POST['client_id']);
+			config('redirect_uri',$_POST['redirect_uri']);
+			config('onedrive_root', '');
+			config('root_path', '?');
+			config('cache_expire_time', 3600);
+			return view::direct('?step=2');
+		}
+		$redirect_uri = 'http://'.$_SERVER['HTTP_HOST'].get_absolute_path(dirname($_SERVER['PHP_SELF']));
+		$ru = "https://developer.microsoft.com/en-us/graph/quick-start?appID=_appId_&appName=_appName_&redirectUrl={$redirect_uri}&platform=option-php";
+		$deepLink = "/quickstart/graphIO?publicClientSupport=false&appName=oneindex&redirectUrl={$redirect_uri}&allowImplicitFlow=false&ru=".urlencode($ru);
+		$app_url = "https://apps.dev.microsoft.com/?deepLink=".urlencode($deepLink);
+		return view::load('admin/install_1')->with('title','系统安装')
+						->with('redirect_uri', $redirect_uri)
+						->with('app_url', $app_url);
 	}
 
-	function setpass(){
-		if(!empty($_POST['password']) && $_POST['password']==$_POST['password2']){
-			$password = $this->password($_POST['password']);
-			config('password', $password);
-			$_SESSION['password'] = $password;
-			return view::direct('?/admin');
+	function install_2(){
+		return view::load('admin/install_2')->with('title','系统安装');
+	}
+
+	function install_3(){
+		$data = onedrive::authorize($_GET['code']);
+		if(!empty($data['refresh_token'])){
+			config('refresh_token',$data['refresh_token']);
+			config('@token', $data);
 		}
-		return view('admin/setpass');
+		return view::load('admin/install_3')->with('refresh_token',$data['refresh_token']);
+		
 	}
 }
