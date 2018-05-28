@@ -11,8 +11,10 @@ require 'init.php';
 
 //未初始化
 if( empty( config('refresh_token') ) ){
+	define('VIEW_PATH', ROOT.'view/admin/');
 	route::any('/','AdminController@install');
 }
 
+define('VIEW_PATH', ROOT.'view/material/');
 //列目录
 route::any('{path:#all}','IndexController@index');

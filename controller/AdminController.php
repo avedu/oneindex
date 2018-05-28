@@ -38,7 +38,7 @@ class AdminController{
 		$check['config'] = is_writable(ROOT.'config/');
 		$check['cache'] = is_writable(ROOT.'cache/');
 
-		return view::load('admin/install_0')->with('title','系统安装')
+		return view::load('install/install_0')->with('title','系统安装')
 						->with('check', $check);
 	}
 
@@ -56,13 +56,13 @@ class AdminController{
 		$ru = "https://developer.microsoft.com/en-us/graph/quick-start?appID=_appId_&appName=_appName_&redirectUrl={$redirect_uri}&platform=option-php";
 		$deepLink = "/quickstart/graphIO?publicClientSupport=false&appName=oneindex&redirectUrl={$redirect_uri}&allowImplicitFlow=false&ru=".urlencode($ru);
 		$app_url = "https://apps.dev.microsoft.com/?deepLink=".urlencode($deepLink);
-		return view::load('admin/install_1')->with('title','系统安装')
+		return view::load('install/install_1')->with('title','系统安装')
 						->with('redirect_uri', $redirect_uri)
 						->with('app_url', $app_url);
 	}
 
 	function install_2(){
-		return view::load('admin/install_2')->with('title','系统安装');
+		return view::load('install/install_2')->with('title','系统安装');
 	}
 
 	function install_3(){
@@ -71,7 +71,7 @@ class AdminController{
 			config('refresh_token',$data['refresh_token']);
 			config('@token', $data);
 		}
-		return view::load('admin/install_3')->with('refresh_token',$data['refresh_token']);
+		return view::load('install/install_3')->with('refresh_token',$data['refresh_token']);
 		
 	}
 }
