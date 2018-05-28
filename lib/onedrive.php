@@ -139,10 +139,7 @@
 			$request = self::request($path, 'createUploadSession');
 			$request['post_data'] = '{"item": {"@microsoft.graph.conflictBehavior": "rename"}}';
 			$token = self::access_token();
-			//fetch::$headers = "Authorization: bearer {$token}".PHP_EOL."Content-Type: application/json".PHP_EOL;
-			fetch::$headers = "Content-Type: application/x-www-form-urlencoded";
 			$resp = fetch::post($request);
-			var_dump($resp);exit();
 			$data = json_decode($resp->content, true);
 			if($resp->http_code == 409){
 				return false;
@@ -172,9 +169,6 @@
 			fetch::$headers = "Authorization: bearer {$token}".PHP_EOL."Content-Type: application/json".PHP_EOL;
 			$resp = fetch::get($url);
 			$data = json_decode($resp->content, true);
-			if($resp->http_code == 404){
-				return false;
-			}
 			return $data;
 		}
 

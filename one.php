@@ -116,16 +116,15 @@ class one{
 			$info['update_time'] = time();
 			$upload[$remotepath] = $info;
 			config('@upload', $upload);
-		}elseif(!empty($data['@content.downloadUrl'])){
+		}elseif(!empty($data['@content.downloadUrl']) || !empty($data['id'])){
 			unset($upload[$remotepath]);
 			config('@upload', $upload);
 			print ' 上传完成！'.PHP_EOL;
-			self::_refresh_cache(pathinfo($remotepath,PATHINFO_DIRNAME));
 			return;
 		}else{
 			print ' 失败!'.PHP_EOL;
 			$data = onedrive::upload_session_status($info['url']);
-			if($data === false){
+			if(empty($data)){
 				onedrive::delete_upload_session($info['url']);
 				unset($upload[$remotepath]);
 				config('@upload', $upload);
