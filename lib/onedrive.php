@@ -34,10 +34,11 @@
 			$client_id = self::$client_id;
 			$client_secret = self::$client_secret;
 			$redirect_uri = self::$redirect_uri;
-			$url = self::$oauth_url."/token";
-			$post_data = "client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&refresh_token={$refresh_token}&grant_type=refresh_token";
-			fetch::$headers = "Content-Type: application/x-www-form-urlencoded";
-			$resp = fetch::post($url, $post_data);
+
+			$request['url'] = self::$oauth_url."/token";
+			$request['post_data']  = "client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&refresh_token={$refresh_token}&grant_type=refresh_token";
+			$request['headers']= "Content-Type: application/x-www-form-urlencoded";
+			$resp = fetch::post($request);
 			$data = json_decode($resp->content, true);
 			return $data;
 		}
@@ -51,6 +52,7 @@
 				$refresh_token = config('refresh_token');
 				$token = self::get_token($refresh_token);
 				if(!empty($token['refresh_token'])){
+					$token['expires_on'] = time()+ $token['expires_in'];
 					config('@token', $token);
 					return $token['access_token'];
 				}
@@ -72,8 +74,6 @@
 		
 		//返回目录信息
 		static function dir($path="/"){
-			$token = self::access_token();
-
 			$request = self::request($path, "children?select=name,size,folder,@microsoft.graph.downloadUrl,lastModifiedDateTime");
 			$items = array();
 			self::dir_next_page($request, $items);
@@ -137,11 +137,12 @@
 		
 		static function create_upload_session($path){
 			$request = self::request($path, 'createUploadSession');
-			$post_data['item'] = array(
-				'@microsoft.graph.conflictBehavior'=>'rename'
-			);
-			$request['post_data'] = json_encode($post_data);
+			$request['post_data'] = '{"item": {"@microsoft.graph.conflictBehavior": "rename"}}';
+			$token = self::access_token();
+			//fetch::$headers = "Authorization: bearer {$token}".PHP_EOL."Content-Type: application/json".PHP_EOL;
+			fetch::$headers = "Content-Type: application/x-www-form-urlencoded";
 			$resp = fetch::post($request);
+			var_dump($resp);exit();
 			$data = json_decode($resp->content, true);
 			if($resp->http_code == 409){
 				return false;
