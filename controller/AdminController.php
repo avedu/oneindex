@@ -52,7 +52,14 @@ class AdminController{
 			config('cache_expire_time', 3600);
 			return view::direct('?step=2');
 		}
-		$redirect_uri = 'http://'.$_SERVER['HTTP_HOST'].get_absolute_path(dirname($_SERVER['PHP_SELF']));
+		$https = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https'));
+		if($https || $_SERVER['HTTP_HOST'] == 'localhost'){
+			$redirect_uri = 'http://'.$_SERVER['HTTP_HOST'].get_absolute_path(dirname($_SERVER['PHP_SELF']));
+		}else{
+			// 非https,调用ju.tn中转
+			$redirect_uri = 'https://ju.tn/';
+		}
+		
 		$ru = "https://developer.microsoft.com/en-us/graph/quick-start?appID=_appId_&appName=_appName_&redirectUrl={$redirect_uri}&platform=option-php";
 		$deepLink = "/quickstart/graphIO?publicClientSupport=false&appName=oneindex&redirectUrl={$redirect_uri}&allowImplicitFlow=false&ru=".urlencode($ru);
 		$app_url = "https://apps.dev.microsoft.com/?deepLink=".urlencode($deepLink);

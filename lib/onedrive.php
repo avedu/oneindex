@@ -12,6 +12,7 @@
 			$scope = urlencode("offline_access files.readwrite.all");
 			$redirect_uri = self::$redirect_uri;
 			$url = self::$oauth_url."/authorize?client_id={$client_id}&scope={$scope}&response_type=code&redirect_uri={$redirect_uri}";
+			$url .= '&state='.urlencode('http://'.$_SERVER['HTTP_HOST'].get_absolute_path(dirname($_SERVER['PHP_SELF'])));
 			return $url;
 		}
 
