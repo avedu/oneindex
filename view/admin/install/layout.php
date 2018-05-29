@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
-	<title><?php e($title.' - '.SITE_NAME);?></title>
+	<title>OneIndex 安装</title>
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.1/css/mdui.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.1/js/mdui.min.js"></script>
 	<style>
@@ -66,7 +66,7 @@
 <body class="mdui-theme-primary-blue-grey mdui-theme-accent-blue">
 	<header class="mdui-appbar mdui-color-theme">
 		<div class="mdui-toolbar mdui-container">
-			<a href="/" class="mdui-typo-headline"><?php e(SITE_NAME);?></a>
+			<a href="/" class="mdui-typo-headline">OneIndex</a>
 			<?php foreach((array)$navs as $n=>$l):?>
 			<i class="mdui-icon material-icons mdui-icon-dark" style="margin:0;">chevron_right</i>
 			<a href="<?php e($l);?>"><?php e($n);?></a>

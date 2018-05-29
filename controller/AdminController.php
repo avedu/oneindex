@@ -2,22 +2,20 @@
 define('VIEW_PATH', ROOT.'view/admin/');
 class AdminController{
 	static $default_config = array(
+	  'site_name' =>'OneIndex',
+	  'password' => 'oneindex',
+	  'onedrive_root' =>'',
 	  'cache_expire_time' => 3600,
 	  'cache_refresh_time' => 600,
 	  'root_path' => '?'
 	);
 	
 	function __construct(){
-		session_start();
-	}
-
-	function password($password){
-		return md5(md5($password.'oneindex'));
 	}
 
 	function login(){
 		if(!empty($_POST['password']) && $_POST['password'] == config('password')){
-			setcookie('admin', md5(md5($_POST['password']).'oneindex') );
+			setcookie('admin', md5(config('password').config('refresh_token')) );
 			return view::direct('?/admin/');
 		}
 		return view::load('login');
@@ -28,8 +26,48 @@ class AdminController{
 		return view::direct('?/login');
 	}
 
-	function index(){
-		return view::load('index');
+	function settings(){
+		
+		if($_POST){
+
+			config('site_name',$_POST['site_name']);
+			
+			config('onedrive_root',get_absolute_path($_POST['onedrive_root']));
+
+			config('cache_expire_time',intval($_POST['cache_expire_time']));
+
+			$_POST['root_path'] = empty($_POST['root_path'])?'?':'';
+			config('root_path',$_POST['root_path']);
+		}
+		$config = config('@base');
+		return view::load('settings')->with('config', $config);
+	}
+
+	function cache(){
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			$dir=opendir(CACHE_PATH);
+			while ($file=readdir($dir)) {
+				@unlink(CACHE_PATH.$file);
+			}
+			$message = "清除缓存成功";
+		}
+		return view::load('cache')->with('message', $message);
+	}
+
+	function setpass(){
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if($_POST['old_pass'] == config('password')){
+				if($_POST['password'] == $_POST['password2']){
+					config('password', $_POST['password']);
+					$message = "修改成功";
+				}else{
+					$message = "两次密码不一致，修改失败";
+				}
+			}else{
+				$message = "原密码错误，修改失败";
+			}
+		}
+		return view::load('setpass')->with('message', $message);
 	}
 	
 	function install(){
@@ -58,17 +96,17 @@ class AdminController{
 
 	function install_1(){
 		if(!empty($_POST['client_secret']) && !empty($_POST['client_id']) && !empty($_POST['redirect_uri']) ){
+			config('@base', self::$default_config);
 			config('client_secret',$_POST['client_secret']);
 			config('client_id',$_POST['client_id']);
 			config('redirect_uri',$_POST['redirect_uri']);
-			config('onedrive_root', '');
-			config('root_path', '?');
-			config('cache_expire_time', 3600);
 			return view::direct('?step=2');
 		}
 		$https = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https'));
-		if($https || $_SERVER['HTTP_HOST'] == 'localhost'){
+		if($https){
 			$redirect_uri = 'https://'.$_SERVER['HTTP_HOST'].get_absolute_path(dirname($_SERVER['PHP_SELF']));
+		}elseif($_SERVER['HTTP_HOST'] == 'localhost'){
+			$redirect_uri = 'http://'.$_SERVER['HTTP_HOST'].get_absolute_path(dirname($_SERVER['PHP_SELF']));
 		}else{
 			// 非https,调用ju.tn中转
 			$redirect_uri = 'https://ju.tn/';
