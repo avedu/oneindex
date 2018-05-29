@@ -1,4 +1,4 @@
-<?php view::layout('layout')?>
+<?php view::layout('install/layout')?>
 
 <?php view::begin('content');?>
 	

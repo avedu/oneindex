@@ -6,77 +6,42 @@
 	<title><?php e($title.' - '.SITE_NAME);?></title>
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.1/css/mdui.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.1/js/mdui.min.js"></script>
-	<style>
-		.mdui-appbar .mdui-toolbar{
-			height:56px;
-			font-size: 16px;
-		}
-		.mdui-toolbar>*{
-			padding: 0 6px;
-			margin: 0 2px;
-			opacity:0.5;
-		}
-		.mdui-toolbar>.mdui-typo-headline{
-			padding: 0 16px 0 0;
-		}
-		.mdui-toolbar>i{
-			padding: 0;
-		}
-		.mdui-toolbar>a:hover,a.mdui-typo-headline,a.active{
-			opacity:1;
-		}
-		.mdui-container{
-			max-width:980px;
-		}
-		.mdui-list-item{
-			-webkit-transition:none;
-			transition:none;
-		}
-		.mdui-list>.th{
-			background-color:initial;
-		}
-		.mdui-list-item>a{
-			width:100%;
-			line-height: 48px
-		}
-		.mdui-list-item{
-			margin: 2px 0px;
-			padding:0;
-		}
-		.mdui-toolbar>a:last-child{
-			opacity:1;
-		}
-		@media screen and (max-width:980px){
-			.mdui-list-item .mdui-text-right{
-				display: none;
-			}
-			.mdui-container{
-				width:100% !important;
-				margin:0px;
-			}
-			.mdui-toolbar>*{
-				display: none;
-			}
-			.mdui-toolbar>a:last-child,.mdui-toolbar>.mdui-typo-headline,.mdui-toolbar>i:first-child{
-				display: block;
-			}
-		}
-	</style>
 </head>
-<body class="mdui-theme-primary-blue-grey mdui-theme-accent-blue">
-	<header class="mdui-appbar mdui-color-theme">
-		<div class="mdui-toolbar mdui-container">
-			<a href="/" class="mdui-typo-headline"><?php e(SITE_NAME);?></a>
-			<?php foreach((array)$navs as $n=>$l):?>
-			<i class="mdui-icon material-icons mdui-icon-dark" style="margin:0;">chevron_right</i>
-			<a href="<?php e($l);?>"><?php e($n);?></a>
-			<?php endforeach;?>
-			<!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>-->
-		</div>
-	</header>
-	
-	<div class="mdui-container">
-    	<?php view::section('content');?>
-  	</div>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar  mdui-theme-primary-indigo mdui-theme-accent-pink">
+<header class="mdui-appbar mdui-appbar-fixed">
+  <div class="mdui-toolbar mdui-color-theme">
+    <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-drawer="{target: '#main-drawer', swipe: true}"><i class="mdui-icon material-icons">menu</i></span>
+    <a href="?/admin/" class="mdui-typo-headline mdui-hidden-xs">OneIndex</a>
+    <div class="mdui-toolbar-spacer"></div>
+    <a href="?/logout"><i class="mdui-icon material-icons">&#xe8ac;</i> 登出</a>
+  </div>
+</header>
+
+<div class="mdui-drawer" id="main-drawer">
+  <div class="mdui-list" mdui-collapse="{accordion: true}">
+	<a href="?/admin/settings" class="mdui-list-item">
+      <i class="mdui-list-item-icon mdui-icon material-icons">&#xe8b8;</i>
+      <div class="mdui-list-item-content">基本设置</div>
+    </a>
+
+    <a href="https://onedrive.live.com/" class="mdui-list-item" target="_blank">
+      <i class="mdui-list-item-icon mdui-icon material-icons">&#xe2bf;</i>
+      <div class="mdui-list-item-content">文件管理(onedrive)</div>
+    </a>
+
+    <a href="?/admin/setpass" class="mdui-list-item">
+      <i class="mdui-list-item-icon mdui-icon material-icons">&#xe88d;</i>
+      <div class="mdui-list-item-content">后台密码修改</div>
+    </a>
+
+  </div>
+</div>
+
+<a id="anchor-top"></a>
+
+<div class="mdui-container">
+	<?php view::section('content');?>
+</div>
 </body>
+
 </html>

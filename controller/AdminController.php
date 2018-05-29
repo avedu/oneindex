@@ -1,4 +1,5 @@
 <?php 
+define('VIEW_PATH', ROOT.'view/admin/');
 class AdminController{
 	static $default_config = array(
 	  'cache_expire_time' => 3600,
@@ -14,8 +15,21 @@ class AdminController{
 		return md5(md5($password.'oneindex'));
 	}
 
+	function login(){
+		if(!empty($_POST['password']) && $_POST['password'] == config('password')){
+			setcookie('admin', md5(md5($_POST['password']).'oneindex') );
+			return view::direct('?/admin/');
+		}
+		return view::load('login');
+	}
+
+	function logout(){
+		setcookie('admin', '' );
+		return view::direct('?/login');
+	}
+
 	function index(){
-		return "admin/index";
+		return view::load('index');
 	}
 	
 	function install(){

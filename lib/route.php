@@ -75,6 +75,21 @@ class route {
 		}
 	}
 
+	public static function group($middleware, $callback){
+		self::init();
+		if (is_string($middleware) && strpos($middleware, '@') > 0) {
+			list($class, $action) = explode('@', $middleware);
+			$object = new $class();
+			$result = $object->$action();
+		}elseif(is_callable($middleware)){
+			$result = $middleware();
+		}
+
+		if($result == true && is_callable($callback)){
+			return $callback();
+		}
+	}
+
 	public static function resource($name, $controller) {
 		self::get('/' . $name, $controller . '@index');
 		self::get('/' . $name . '/add', $controller . '@add');
