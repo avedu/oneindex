@@ -30,6 +30,11 @@
       <div class="mdui-list-item-content">页面缓存</div>
     </a>
 
+    <!--<a href="?/admin/cache" class="mdui-list-item">
+      <i class="mdui-list-item-icon mdui-icon material-icons">&#xe3a5;</i>
+      <div class="mdui-list-item-content">文件展示设置</div>
+    </a>-->
+
     <a href="https://onedrive.live.com/" class="mdui-list-item" target="_blank">
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe2bf;</i>
       <div class="mdui-list-item-content">文件管理(onedrive)</div>
