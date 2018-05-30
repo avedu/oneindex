@@ -96,7 +96,6 @@ $types = [
 if($item['size'] > 5242880){
 	header('Location: '.$item['downloadUrl']);exit();
 }
-var_dump($item['size']);exit();
 $type = empty($types[$ext])?"application/octet-stream":$types[$ext];
 $content = IndexController::get_content($item);
 
