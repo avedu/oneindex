@@ -6,6 +6,7 @@
 	<title>OneIndex 系统管理</title>
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.1/css/mdui.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.1/js/mdui.min.js"></script>
+	<script>$ = mdui.JQ;</script>
 </head>
 <body class="mdui-drawer-body-left mdui-appbar-with-toolbar  mdui-theme-primary-indigo mdui-theme-accent-blue">
 <header class="mdui-appbar mdui-appbar-fixed">
@@ -30,10 +31,10 @@
       <div class="mdui-list-item-content">页面缓存</div>
     </a>
 
-    <!--<a href="?/admin/cache" class="mdui-list-item">
+    <a href="?/admin/show" class="mdui-list-item">
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe3a5;</i>
       <div class="mdui-list-item-content">文件展示设置</div>
-    </a>-->
+    </a>
 
     <a href="https://onedrive.live.com/" class="mdui-list-item" target="_blank">
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe2bf;</i>

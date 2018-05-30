@@ -23,7 +23,7 @@ route::group(function(){
 	route::get('/logout','AdminController@logout');
 	route::any('/admin/','AdminController@settings');
 	route::any('/admin/cache','AdminController@cache');
-	
+	route::any('/admin/show','AdminController@show');
 	route::any('/admin/setpass','AdminController@setpass');
 });
 //登陆

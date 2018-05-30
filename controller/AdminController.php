@@ -7,7 +7,17 @@ class AdminController{
 	  'onedrive_root' =>'',
 	  'cache_expire_time' => 3600,
 	  'cache_refresh_time' => 600,
-	  'root_path' => '?'
+	  'root_path' => '?',
+	  'show'=> array (
+	  	'stream'=>['txt'],
+	    'image' => ['bmp','jpg','jpeg','png','gif'],
+	    'video5'=>['mp4','webm','mkv'],
+	    'video'=>[],
+	    'video2'=>['avi','mpg', 'mpeg', 'rm', 'rmvb', 'mov', 'wmv', 'asf', 'ts', 'flv'],
+	    'audio'=>['ogg','mp3','wav'],
+	    'code'=>['html','htm','php', 'css', 'go','java','js','json','txt','sh','md'],
+	    'doc'=>['csv','doc','docx','odp','ods','odt','pot','potm','potx','pps','ppsx','ppsxm','ppt','pptm','pptx','rtf','xls','xlsx']
+	  )
 	);
 	
 	function __construct(){
@@ -44,14 +54,51 @@ class AdminController{
 	}
 
 	function cache(){
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		if(!is_null($_POST['clear'])){
 			$dir=opendir(CACHE_PATH);
 			while ($file=readdir($dir)) {
 				@unlink(CACHE_PATH.$file);
 			}
 			$message = "清除缓存成功";
+		}elseif ( !is_null($_POST['refresh']) ){
+			set_time_limit(0);
+			self::_refresh_cache(get_absolute_path(config('onedrive_root')));
+			$message = "重建缓存成功";
 		}
 		return view::load('cache')->with('message', $message);
+	}
+
+	static function _refresh_cache($path){
+		$items = onedrive::dir($path);
+		if(is_array($items)){
+			cache('dir_'.$path, $items);
+		}
+		foreach((array)$items as $item){
+		    if($item['folder']){
+		        self::_refresh_cache($path.urlencode($item['name']).'/');
+		    }
+		}
+	}
+
+	function show(){
+		if(!empty($_POST) ){
+			foreach($_POST as $n=>$ext){
+				$show[$n] = explode(' ', $ext);
+			}
+			config('show', $show);
+		}
+		$names = [
+			'stream'=>'直接输出(<5M)，走本服务器流量(stream)',
+			'image' =>'图片(image)',
+			'video'=>'Dplayer 视频(video)',
+			'video2'=>'Dplayer DASH 视频(video2)/个人版账户不支持',
+			'video5'=>'html5视频(video5)',
+			'audio'=>'音频播放(audio)',
+			'code'=>'文本/代码(code)',
+			'doc'=>'文档(doc)'
+		];
+		$show = config('show');
+		return view::load('show')->with('names', $names)->with('show', $show);
 	}
 
 	function setpass(){

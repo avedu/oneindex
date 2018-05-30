@@ -56,7 +56,7 @@ function file_ico($item){
 		    	<?php e($item['name']);?>
 			  </div>
 			  <div class="mdui-col-sm-3 mdui-text-right"><?php echo date("Y-m-d H:i:s", $item['lastModifiedDateTime']);?></div>
-			  <div class="mdui-col-sm-2 mdui-text-right"><?php echo $item['size'];?></div>
+			  <div class="mdui-col-sm-2 mdui-text-right"><?php echo onedrive::human_filesize($item['size']);?></div>
 		  	</a>
 		</li>
 			<?php else:?>
@@ -67,7 +67,7 @@ function file_ico($item){
 		    	<?php e($item['name']);?>
 			  </div>
 			  <div class="mdui-col-sm-3 mdui-text-right"><?php echo date("Y-m-d H:i:s", $item['lastModifiedDateTime']);?></div>
-			  <div class="mdui-col-sm-2 mdui-text-right"><?php echo $item['size'];?></div>
+			  <div class="mdui-col-sm-2 mdui-text-right"><?php echo onedrive::human_filesize($item['size']);?></div>
 		  	</a>
 		</li>
 			<?php endif;?>

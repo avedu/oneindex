@@ -1,5 +1,24 @@
 <?php view::layout('layout')?>
+<?php 
+	function code_type($ext){
+		$code_type['html'] = 'html';
+		$code_type['htm'] = 'html';
+		$code_type['php'] = 'php';
+		$code_type['css'] = 'css';
+		$code_type['go'] = 'golang';
+		$code_type['java'] = 'java';
+		$code_type['js'] = 'javascript';
+		$code_type['json'] = 'json';
+		$code_type['txt'] = 'Text';
+		$code_type['sh'] = 'sh';
+		$code_type['md'] = 'Markdown';
+		
+		return @$code_type[$ext];
+	}
+	$language = code_type($ext);
 
+	$content = IndexController::get_content($item);
+?>
 <?php view::begin('content');?>
 <style type="text/css" media="screen">
     #editor { 

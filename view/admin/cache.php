@@ -28,37 +28,39 @@ $script_path = $_SERVER['DOCUMENT_ROOT'].'/one.php';
 	<br>
 	<br>
 	<div class="mdui-row-xs-3">
-		<form action="" method="post">
-	  
-	  <div class="mdui-col">
-		
-		    <button type="submit" name="clear" class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple">
-		    	<i class="mdui-icon material-icons">&#xe14c;</i>
-				清除所有缓存
-		    </button>
-	    
-	    <br>
-	    <center class="mdui-typo-headline-opacity"><?php echo $message;?></center>
-	  </div>
+	  <form action="" method="post">
+		  <div class="mdui-col">
+			    <button type="submit" name="clear" class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple">
+			    	<i class="mdui-icon material-icons">&#xe14c;</i>
+					清除所有缓存
+			    </button>
+		  </div>
 
-	  <div class="mdui-col">
-	  </div>
+		  <div class="mdui-col">
+		  </div>
 
-	  <!--<div class="mdui-col">
-		  <button type="submit" name="clear" class="mdui-btn mdui-btn-block mdui-color-green-600 mdui-ripple">
-      			<i class="mdui-icon material-icons">&#xe028;</i>
-				重建所有缓存
-		    </button>
-	  </div>-->
-	  	</form>
+		  <div class="mdui-col">
+			  <button type="submit" name="refresh" class="mdui-btn mdui-btn-block mdui-color-green-600 mdui-ripple">
+	      			<i class="mdui-icon material-icons">&#xe028;</i>
+					重建所有缓存
+			  </button>
+		  </div>
+		  <br><br><br>
+		  <center class="mdui-typo-headline-opacity mdui-text-color-green"><?php echo $message;?></center>
+		  <br><br><br>
+	  </form>
 	</div>
 
 	<div class="mdui-typo">
       <h4 class="doc-article-title">crontab定时刷新缓存 <small>能极大提高系统访问性能</small></h4>
       <p>
+        添加以下命令到crontab<Br>
       	<code>*/10 * * * *  <?php echo "{$php_path} {$script_path} cache:refresh";?></code>
       </p>
     </div>
 	
 </div>
+<script>
+$('button[name=refresh]').on('click',function(){$('center').html('正在重建缓存，请耐心等待...');});
+</script>
 <?php view::end('content');?>
