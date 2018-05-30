@@ -39,6 +39,7 @@ class one{
 	}
 
 	static function upload_file($localfile, $remotefile=null){
+		$localfile = realpath($localfile);
 		if(!file_exists($localfile)){
 			exit('file not exists');
 		}
@@ -71,6 +72,56 @@ class one{
 		}
 		return;
 	}
+	
+	static function upload_folder($localfolder, $remotefolder='/'){
+		$localfolder = realpath($localfolder);
+		$remotefolder = get_absolute_path($remotefolder);
+		print ' 开始上传文件夹'.PHP_EOL;
+		self::folder2upload($localfolder,$remotefolder);
+	}
+
+	static function folder2upload($localfolder, $remotefolder){
+		$files = scandir($localfolder);
+		foreach ($files as $file) {
+			if ($file == '.' || $file == '..') {
+				continue;
+			}
+			if (is_dir($localfolder . '/' . $file)) {
+		        self::folder2upload($localfolder . '/' . $file, $remotefolder.$file.'/');
+		    }else{
+			    $localfile = realpath($localfolder . '/' . $file);
+			    $remotefile = $remotefolder.$file;
+			    self::upload_file($localfile, $remotefile);
+		    }
+		}
+	}
+
+	//static function add2uploading($path,$remotefolder) {
+	//  $files = scandir($path);
+	//  foreach ($files as $file) {
+	//    if ($file != '.' && $file != '..') {
+	//      if (is_dir($path . '/' . $file)) {
+	//        self::add2uploading($path . '/' . $file, $remotefolder.$file.'/');
+	//      } else {
+	//	    $localfile = realpath($path . '/' . $file);
+	//	    echo $localfile.PHP_EOL;
+	//	    $remotepath = $remotefolder.$file;
+	//        $task = array(
+	//			'localfile'=>$localfile,
+	//			'remotepath' => $remotepath,
+	//			'filesize'=>onedrive::_filesize($localfile),
+	//			'update_time'=>0
+	//        );
+	//        $uploads = config('@upload');
+	//        if(empty($uploads[$remotepath])){
+	//	        $uploads[$remotepath] = $task;
+	//	        config('@upload', $uploads);
+	//        }
+	//      }
+	//    }
+	//  }
+	//}
+
 
 	static function upload_large_file($localfile, $remotepath){
 		fetch::init([CURLOPT_TIMEOUT=>200]);
@@ -160,3 +211,4 @@ oneindex commands :
   token:refresh  	refresh token
  upload
   upload:file  		upload a file to onedrive
+  upload:folder  	upload a folder to onedrive

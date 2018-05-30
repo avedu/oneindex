@@ -27,7 +27,7 @@
     </a>
 
     <a href="?/admin/cache" class="mdui-list-item">
-      <i class="mdui-list-item-icon mdui-icon material-icons">&#xe028;</i>
+      <i class="mdui-list-item-icon mdui-icon material-icons">&#xe53b;</i>
       <div class="mdui-list-item-content">页面缓存</div>
     </a>
 
@@ -43,7 +43,7 @@
 
     <!--<a href="?/admin/oneimg" class="mdui-list-item" target="_blank">
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe410;</i>
-      <div class="mdui-list-item-content">图床(OneImg)</div>
+      <div class="mdui-list-item-content">图床设置(OneImg)</div>
     </a>-->
 
     <!--<a href="?/admin/uploading" class="mdui-list-item" target="_blank">

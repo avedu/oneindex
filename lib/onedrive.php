@@ -138,7 +138,7 @@
 		
 		static function create_upload_session($path){
 			$request = self::request($path, 'createUploadSession');
-			$request['post_data'] = '{"item": {"@microsoft.graph.conflictBehavior": "rename"}}';
+			$request['post_data'] = '{"item": {"@microsoft.graph.conflictBehavior": "fail"}}';
 			$token = self::access_token();
 			$resp = fetch::post($request);
 			$data = json_decode($resp->content, true);
