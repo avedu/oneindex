@@ -17,11 +17,10 @@
     <a href="?/logout"><i class="mdui-icon material-icons">&#xe8ac;</i> 登出</a>
   </div>
 </header>
-
 <div class="mdui-drawer" id="main-drawer">
   <div class="mdui-list">
-	<br><br>
-	<a href="?/admin/" class="mdui-list-item">
+	<br><br>  
+	<a href="?/admin" class="mdui-list-item">
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe8b8;</i>
       <div class="mdui-list-item-content">基本设置</div>
     </a>
@@ -55,7 +54,6 @@
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe88d;</i>
       <div class="mdui-list-item-content">修改密码</div>
     </a>
-
   </div>
 </div>
 
@@ -64,6 +62,9 @@
 <div class="mdui-container">
 	<?php view::section('content');?>
 </div>
+<script>
+	$("a[href='<?php echo'?'.(route::get_uri());?>']").addClass("mdui-text-color-blue");
+</script>
 </body>
 
 </html>
