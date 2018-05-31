@@ -133,6 +133,7 @@
 			$request['post_data'] = $content;
 			$resp = fetch::put($request);
 			$data = json_decode($resp->content, true);
+			var_dump($resp);
 			return @$data['@microsoft.graph.downloadUrl'];
 		}
 		
@@ -156,6 +157,7 @@
 			$post_data = self::file_content($file, $offset, $length);
 
 			$request['url'] = $url;
+			$request['curl_opt']=[CURLOPT_TIMEOUT=>360];
 			$request['headers'] = "Authorization: bearer {$token}".PHP_EOL;
 			$request['headers'] .= "Content-Length: {$content_length}".PHP_EOL;
 			$request['headers'] .= "Content-Range: bytes {$offset}-{$end}/{$file_size}";

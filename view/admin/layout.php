@@ -34,25 +34,24 @@
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe3a5;</i>
       <div class="mdui-list-item-content">文件展示设置</div>
     </a>
-
-    <a href="https://onedrive.live.com/" class="mdui-list-item" target="_blank">
-      <i class="mdui-list-item-icon mdui-icon material-icons">&#xe2bf;</i>
-      <div class="mdui-list-item-content">文件管理(onedrive)</div>
-    </a>
-
     <!--<a href="?/admin/oneimg" class="mdui-list-item" target="_blank">
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe410;</i>
       <div class="mdui-list-item-content">图床设置(OneImg)</div>
     </a>-->
 
-    <!--<a href="?/admin/uploading" class="mdui-list-item" target="_blank">
+    <a href="?/admin/upload" class="mdui-list-item">
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe2c6;</i>
-      <div class="mdui-list-item-content">上传进度</div>
-    </a>-->
+      <div class="mdui-list-item-content">上传管理</div>
+    </a>
 
     <a href="?/admin/setpass" class="mdui-list-item">
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe88d;</i>
-      <div class="mdui-list-item-content">修改密码</div>
+      <div class="mdui-list-item-content">密码修改</div>
+    </a>
+
+    <a href="https://onedrive.live.com/" class="mdui-list-item" target="_blank">
+      <i class="mdui-list-item-icon mdui-icon material-icons">&#xe2bf;</i>
+      <div class="mdui-list-item-content">文件管理(onedrive)</div>
     </a>
   </div>
 </div>
