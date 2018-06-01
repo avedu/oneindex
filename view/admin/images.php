@@ -4,7 +4,7 @@
 <div class="mdui-container-fluid">
 
 	<div class="mdui-typo">
-	  <h1> <a href="?/images/" target="_blank">图床</a> <small>OneImages()</small></h1>
+	  <h1> <a href="?/images/" target="_blank">图床</a> <small>OneImages</small></h1>
 	</div>
 	<form action="" method="post">
 		<div class="mdui-textfield">
