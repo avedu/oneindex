@@ -34,10 +34,10 @@
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe3a5;</i>
       <div class="mdui-list-item-content">文件展示设置</div>
     </a>
-    <!--<a href="?/admin/oneimg" class="mdui-list-item" target="_blank">
+    <a href="?/admin/images" class="mdui-list-item">
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe410;</i>
-      <div class="mdui-list-item-content">图床设置(OneImg)</div>
-    </a>-->
+      <div class="mdui-list-item-content">图床设置(OneImages)</div>
+    </a>
 
     <a href="?/admin/upload" class="mdui-list-item">
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe2c6;</i>

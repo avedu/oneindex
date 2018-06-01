@@ -17,7 +17,8 @@ class AdminController{
 	    'audio'=>['ogg','mp3','wav'],
 	    'code'=>['html','htm','php', 'css', 'go','java','js','json','txt','sh','md'],
 	    'doc'=>['csv','doc','docx','odp','ods','odt','pot','potm','potx','pps','ppsx','ppsxm','ppt','pptm','pptx','rtf','xls','xlsx']
-	  )
+	  ),
+	  'images'=>['public'=>false, exts=>['jpg','png','gif','bmp']]
 	);
 	
 	function __construct(){
@@ -66,6 +67,16 @@ class AdminController{
 			$message = "重建缓存成功";
 		}
 		return view::load('cache')->with('message', $message);
+	}
+
+	function images(){
+		if($_POST){
+			$config['public'] = empty($_POST['public'])?false:true;
+			$config['exts'] = explode(" ", $_POST['exts']);
+			config('images@base',$config);
+		}
+		$config = config('images@base');
+		return view::load('images')->with('config', $config);;
 	}
 
 	static function _refresh_cache($path){
