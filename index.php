@@ -27,6 +27,9 @@ route::group(function(){
 	route::any('/admin/setpass','AdminController@setpass');
 
 	route::any('/admin/upload','UploadController@index');
+	//守护进程
+	route::any('/admin/upload/run','UploadController@run');
+	//上传进程
 	route::post('/admin/upload/task','UploadController@task');
 });
 //登陆

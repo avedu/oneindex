@@ -12,13 +12,25 @@ class UploadController{
 			}elseif(is_dir($local)){
 				$this->scan_dir($local, $remotepath);
 				$message = "文件夹<kbd>".$local."</kbd>已添加到队列";
+			}elseif($local == realpath('.')){
+				$message = "因为安全原因，程序文件夹根目录不能上传";
 			}else{
 				$message = "文件不存在";
 			}
-			//$this->begin();
+			$request = $this->task_request();
+			$request['url'] = substr($request['url'],0,-4).'run';
+			fetch::post($request);
+		}elseif(!empty($_POST['begin_task'])){
+			$this->task($_POST['begin_task']);
+		}elseif(!empty($_POST['delete_task'])){
+			unset($_POST['delete_task']);
+			config('@upload', (array)$uploads);
+		}elseif(!empty($_POST['empty_uploaded'])){
+			config('@uploaded', array());
 		}
 		$uploading = config('@upload');
-		return view::load('upload')->with('uploading', $uploading)->with('message', $message);
+		$uploaded = array_reverse(config('@uploaded'));
+		return view::load('upload')->with('uploading', $uploading)->with('uploaded', $uploaded)->with('message', $message);
 	}
 
 	//扫描文件夹，添加到任务队列
@@ -55,7 +67,7 @@ class UploadController{
 	}
 
 	//运行队列中的任务
-	private function begin(){
+	function run(){
 		$uploads = (array)config('@upload');
 		$time = time();
 		$runing = 0;
@@ -63,7 +75,7 @@ class UploadController{
 			if($time < ($task['update_time']+60) AND $task['type']=='web' ){
 				$runing = $runing +1;
 			}
-			if($runing > 5)return;
+			if($runing > 5)break;
 		}
 		
 		foreach($uploads as $remotepath=>$task){
@@ -71,11 +83,18 @@ class UploadController{
 				continue;
 			}
 			$runing = $runing +1;
-
-			$requests[] = $this->task_request($remotepath);
-			if($runing > 5)return;
+			print $remotepath.PHP_EOL;
+			fetch::post($this->task_request($remotepath));
+			if($runing > 5)break;
 		}
-		$resps = fetch::post($requests);
+
+		if(count($uploads) > 5){
+			set_time_limit(100);
+			sleep(60);
+			$request = $this->task_request();
+			$request['url'] = substr($request['url'],0,-4).'run';
+			fetch::get($request);
+		}
 	}
 
 	private function task_request($remotepath=''){
@@ -91,6 +110,7 @@ class UploadController{
 	//执行任务
 	function task($remotepath=null){
 		$remotepath = is_null($remotepath)?$_POST['remotepath']:$remotepath;
+		//file_put_contents('log.txt',$remotepath.PHP_EOL, FILE_APPEND);
 		$uploads = config('@upload');
 		$task = $uploads[$remotepath];
 
@@ -98,12 +118,14 @@ class UploadController{
 			return;
 		}
 		if($task['filesize'] < 10485760){
-			if( onedrive::upload($task['remotepath'], file_get_contents($task['localfile'])) ){
-				unset($uploads[$remotepath]);
-				config('@upload', $uploads);
-				config($remotepath.'@uploaded','success');
-			}
+			@onedrive::upload($task['remotepath'], file_get_contents($task['localfile']));
+			unset($uploads[$remotepath]);
+				
+			config('@upload', (array)$uploads);
+			config($remotepath.'@uploaded','success');
 		}else{
+			$uploads[$remotepath]['update_time'] = time();
+			config('@upload', (array)$uploads);
 			$this->upload_large_file($task);
 		}
 	}
@@ -162,23 +184,8 @@ class UploadController{
 			}
 		}
 		$request= $this->task_request($task['remotepath']);
-		fetch::post($request);
-	}
-
-
-	function upload_file($localfile, $remotefile=null){
-		$localfile = realpath($localfile);
-		if(!file_exists($localfile)){
-			return '文件不存在';
-		}
-		$filesize = onedrive::_filesize($localfile);
-
-		//<10M 直接上传
-		if($filesize < 10485760){
-			return onedrive::upload($remotepath, file_get_contents($localfile));
-		}else{
-			
-		}
+		$resp = fetch::post($request);
+		//var_dump($resp);
 	}
 
 	

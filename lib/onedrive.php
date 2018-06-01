@@ -132,9 +132,8 @@
 			$request = self::request($path,"content");
 			$request['post_data'] = $content;
 			$resp = fetch::put($request);
-			$data = json_decode($resp->content, true);
-			var_dump($resp);
-			return @$data['@microsoft.graph.downloadUrl'];
+			$data = @json_decode($resp->content, true);
+			return $data;
 		}
 		
 		static function create_upload_session($path){
