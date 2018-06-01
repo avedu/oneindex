@@ -105,9 +105,9 @@ php one.php upload:file demo.zip
 //上传demo.zip 到onedrive /test/目录  
 php one.php upload:file demo.zip /test/  
 
-//上传demo.zip 到onedrive /test/目录并命名为 d.zip
+//上传demo.zip 到onedrive /test/目录并命名为 d.zip  
 php one.php upload:file demo.zip /test/d.zip  
 
-//上传up/ 到onedrive /test/
+//上传up/ 到onedrive /test/  
 php one.php upload:file up/ /test/
 ``` 
