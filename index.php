@@ -2,12 +2,45 @@
 
 require 'init.php';
 
-!defined('SITE_NAME') && define('SITE_NAME', 'one');
+//世纪互联
+//onedrive::$api_url = "https://microsoftgraph.chinacloudapi.cn/v1.0";
+//onedrive::$oauth_url = "https://login.partner.microsoftonline.cn/common/oauth2/v2.0";
 
-//未初始化
-if( empty(onedrive::$app_url) ){
+
+/**
+ *    程序安装
+ */
+if( empty( config('refresh_token') ) ){
 	route::any('/','AdminController@install');
 }
 
-//列目录
+/**
+ *    系统后台
+ */
+route::group(function(){
+	return ($_COOKIE['admin'] == md5(config('password').config('refresh_token')) );
+},function(){
+	route::get('/logout','AdminController@logout');
+	route::any('/admin/','AdminController@settings');
+	route::any('/admin/cache','AdminController@cache');
+	route::any('/admin/show','AdminController@show');
+	route::any('/admin/setpass','AdminController@setpass');
+
+	route::any('/admin/upload','UploadController@index');
+	//守护进程
+	route::any('/admin/upload/run','UploadController@run');
+	//上传进程
+	route::post('/admin/upload/task','UploadController@task');
+});
+//登陆
+route::any('/login','AdminController@login');
+//跳转到登陆
+route::any('/admin/',function(){
+	return view::direct(get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).'?/login');
+});
+
+/**
+ *    列目录
+ */
+define('VIEW_PATH', ROOT.'view/material/');
 route::any('{path:#all}','IndexController@index');

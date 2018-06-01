@@ -5,7 +5,7 @@ define('TIME', time());
 define('ROOT', str_replace("\\", "/", dirname(__FILE__)) . '/');
 
 define('CONTROLLER_PATH', ROOT.'controller/');
-define('VIEW_PATH', ROOT.'view/material/');
+
 
 //__autoload方法
 function i_autoload($className) {
@@ -108,7 +108,6 @@ if (!function_exists('db')) {
 	}
 }
 
-!defined('VIEW_PATH') && define('VIEW_PATH', ROOT . 'view/');
 if (!function_exists('view')) {
 	function view($file, $set = null) {
 		return view::load($file, $set = null);
@@ -153,4 +152,3 @@ function get_absolute_path($path) {
 onedrive::$client_id = config('client_id');
 onedrive::$client_secret = config('client_secret');
 onedrive::$redirect_uri = config('redirect_uri');
-onedrive::$app_url = config('app_url');

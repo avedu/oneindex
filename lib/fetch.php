@@ -34,7 +34,6 @@ class fetch {
 		if (is_null(self::$curl_opt)) {
 			self::init();
 		}
-
 		@list($request, $post_data, $callback) = $args;
 		if (is_callable($post_data)) {
 			$callback = $post_data;
@@ -198,7 +197,7 @@ class fetch {
 		if (is_array(self::$headers)) {
 			self::$headers = join(PHP_EOL, self::$headers);
 		}
-		$headers .= PHP_EOL . self::$headers;
+		$headers = self::$headers.PHP_EOL .$headers;
 
 		foreach (explode(PHP_EOL, $headers) as $k => $v) {
 			@list($k, $v) = explode(':', $v, 2);

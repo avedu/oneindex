@@ -8,9 +8,9 @@ class IndexController{
 
 	function __construct(){
 		//获取路径和文件名
-		$paths = explode('/', $_GET['path']);
+		$paths = explode('/', urldecode($_GET['path']));
 		if(substr($_SERVER['REQUEST_URI'], -1) != '/'){
-			$this->name = urldecode(array_pop($paths));
+			$this->name = array_pop($paths);
 		}
 		$this->url_path = get_absolute_path(implode('/', $paths));
 		$this->path = config('onedrive_root').$this->url_path;
@@ -69,7 +69,7 @@ class IndexController{
 		$item = $this->items[$this->name];
 		if ($item['folder']) {//是文件夹
 			$url = $_SERVER['REQUEST_URI'].'/';
-		}elseif(!is_null($_GET['t']) && !empty($item['thumb'])){//缩略图
+		}elseif(!is_null($_GET['t']) ){//缩略图
 			$url = $this->thumbnail($item);
 		}elseif($_SERVER['REQUEST_METHOD'] == 'POST' || !is_null($_GET['s']) ){
 			return $this->show($item);
@@ -87,6 +87,7 @@ class IndexController{
 		$navs = $this->navs();
 
 		if($this->items['README.md']){
+			$this->items['README.md']['path'] = get_absolute_path($this->path).$this->name;
 			$readme = $this->get_content($this->items['README.md']);
 			$Parsedown = new Parsedown();
 			$readme = $Parsedown->text($readme);
@@ -95,6 +96,7 @@ class IndexController{
 		}
 
 		if($this->items['HEAD.md']){
+			$this->items['HEAD.md']['path'] = get_absolute_path($this->path).$this->name;
 			$head = $this->get_content($this->items['HEAD.md']);
 			$Parsedown = new Parsedown();
 			$head = $Parsedown->text($head);
@@ -117,35 +119,17 @@ class IndexController{
 		$data['title'] = $item['name'];
 		$data['navs'] = $this->navs();
 		$data['item'] = $item;
-		$data['url'] = (isset($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['HTTP_HOST'].end($data['navs']);
+		$data['ext'] = $ext;
+		$http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+		$data['url'] = $http_type.$_SERVER['HTTP_HOST'].end($data['navs']);
+		$data['item']['path'] = get_absolute_path($this->path).$this->name;
+		
 
-		if(in_array($ext,['csv','doc','docx','odp','ods','odt','pot','potm','potx','pps','ppsx','ppsxm','ppt','pptm','pptx','rtf','xls','xlsx'])){
-			$url = 'https://view.officeapps.live.com/op/view.aspx?src='.urlencode($item['downloadUrl']);
-			return view::direct($url);
-			//return view::load('show/pdf')->with($data);
-		}
-		
-		if(in_array($ext,['bmp','jpg','jpeg','png','gif'])){
-			return view::load('show/image')->with($data);
-		}
-		if(in_array($ext,['mp4','webm'])){
-			return view::load('show/video')->with($data);
-		}
-		
-		if(in_array($ext,['mp4','webm','avi','mpg', 'mpeg', 'rm', 'rmvb', 'mov', 'wmv', 'mkv', 'asf'])){
-			return view::load('show/video2')->with($data);
-		}
-		
-		if(in_array($ext,['ogg','mp3','wav'])){
-			return view::load('show/audio')->with($data);
-		}
-
-		$code_type = $this->code_type($ext);
-		if($code_type){
-			$data['content'] = $this->get_content($item);
-			$data['language'] = $code_type;
-			
-			return view::load('show/code')->with($data);
+		$show = config('show');
+		foreach($show as $n=>$exts){
+			if(in_array($ext,$exts)){
+				return view::load('show/'.$n)->with($data);
+			}
 		}
 
 		header('Location: '.$item['downloadUrl']);
@@ -158,7 +142,9 @@ class IndexController{
 			//800 176 96
 			$width = $height = 800;
 		}
-		return $item['thumb']."&width={$width}&height={$height}";
+		$item['thumb'] = onedrive::thumbnail($this->path.$this->name);
+		$item['thumb'] .= strpos($item['thumb'], '?')?'&':'?';
+		return $item['thumb']."width={$width}&height={$height}";
 	}
 
 	//文件夹下元素
@@ -192,8 +178,9 @@ class IndexController{
 		return $navs;
 	}
 
-	function get_content($item){
-		$path =  $this->path.$item['name'];
+	static function get_content($item){
+		$path =  $item['path'];
+
 		list($time, $content) = cache('content_'.$path);
 		if( is_null($content) || (TIME - $time) > config('cache_expire_time')){
 			$resp = fetch::get($item['downloadUrl']);
@@ -203,22 +190,6 @@ class IndexController{
 			}
 		}
 		return $content;
-	}
-
-	function code_type($ext){
-		$code_type['html'] = 'html';
-		$code_type['htm'] = 'html';
-		$code_type['php'] = 'php';
-		$code_type['css'] = 'css';
-		$code_type['go'] = 'golang';
-		$code_type['java'] = 'java';
-		$code_type['js'] = 'javascript';
-		$code_type['json'] = 'json';
-		$code_type['txt'] = 'Text';
-		$code_type['sh'] = 'sh';
-		$code_type['md'] = 'Markdown';
-		
-		return @$code_type[$ext];
 	}
 
 	//时候404

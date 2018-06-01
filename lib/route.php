@@ -75,6 +75,21 @@ class route {
 		}
 	}
 
+	public static function group($middleware, $callback){
+		self::init();
+		if (is_string($middleware) && strpos($middleware, '@') > 0) {
+			list($class, $action) = explode('@', $middleware);
+			$object = new $class();
+			$result = $object->$action();
+		}elseif(is_callable($middleware)){
+			$result = $middleware();
+		}
+
+		if($result == true && is_callable($callback)){
+			return $callback();
+		}
+	}
+
 	public static function resource($name, $controller) {
 		self::get('/' . $name, $controller . '@index');
 		self::get('/' . $name . '/add', $controller . '@add');
@@ -88,11 +103,17 @@ class route {
 	public static function uri_match($pattern, $uri) {
 		$pattern = ($pattern == '/') ? '/' : rtrim($pattern, '\/');
 
+		$ps = explode('/', $pattern);
+
 		$searches = array_keys(static::$patterns);
 		$replaces = array_values(static::$patterns);
 
-		$pattern = str_replace($searches, $replaces, $pattern);
-		$pattern = preg_replace("`\{(\w+)\:([^\)]+)\}`", '(?P<$1>$2)', $pattern);
+		foreach($ps as &$p){
+				$p = str_replace($searches, $replaces, $p);
+				$p = preg_replace("`\{(\w+)\:([^\)]+)\}`", '(?P<$1>$2)', $p);	
+		}
+
+		$pattern = join('/',$ps);
 
 		if (preg_match("`^{$pattern}$`", $uri)) {
 			preg_match_all("`^{$pattern}$`", $uri, $matches, PREG_PATTERN_ORDER);
