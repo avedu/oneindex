@@ -25,6 +25,10 @@ class IndexController{
 
 		$this->is_password();
 
+		header("Expires:-1");
+		header("Cache-Control:no_cache");
+		header("Pragma:no-cache");
+
 		if(!empty($this->name)){//file
 			return $this->file();
 		}else{//dir
@@ -39,6 +43,8 @@ class IndexController{
 		}
 		
 		$password = $this->get_content($this->items['.password']);
+		list($password) = explode("\n",$password);
+		$password = trim($password);
 		unset($this->items['.password']);
 		if(!empty($password) && $password == $_COOKIE[md5($this->path)]){
 			return true;
@@ -53,7 +59,8 @@ class IndexController{
 			setcookie(md5($this->path), $_POST['password']);
 			return true;
 		}
-		echo view::load('password');
+		$navs = $this->navs();
+		echo view::load('password')->with('navs',$navs);
 		exit();
 	}
 
@@ -62,7 +69,7 @@ class IndexController{
 		$item = $this->items[$this->name];
 		if ($item['folder']) {//ÊÇÎÄ¼ş¼Ğ
 			$url = $_SERVER['REQUEST_URI'].'/';
-		}elseif(!is_null($_GET['t']) && !empty($item['thumbnails'])){//ËõÂÔÍ¼
+		}elseif(!is_null($_GET['t']) && !empty($item['thumb'])){//ËõÂÔÍ¼
 			$url = $this->thumbnail($item);
 		}elseif($_SERVER['REQUEST_METHOD'] == 'POST' || !is_null($_GET['s']) ){
 			return $this->show($item);
@@ -95,7 +102,7 @@ class IndexController{
 			unset($this->items['HEAD.md']);
 		}
 		
-		return view::load('list')->with('title', 'one index of '. urldecode($this->url_path))
+		return view::load('list')->with('title', 'index of '. urldecode($this->url_path))
 					->with('navs', $navs)
 					->with('path',$this->url_path)
 					->with('root', $root)
@@ -107,20 +114,28 @@ class IndexController{
 	function show($item){
 		$root = get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).config('root_path');
 		$ext = strtolower(pathinfo($item['name'], PATHINFO_EXTENSION));
-		$navs = $this->navs();
-		$navs[$item['name']] = end($navs).urlencode($item['name']);
-
 		$data['title'] = $item['name'];
-		$data['navs'] = $navs;
+		$data['navs'] = $this->navs();
 		$data['item'] = $item;
-		$data['url'] = (isset($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['HTTP_HOST'].end($navs);
+		$data['url'] = (isset($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['HTTP_HOST'].end($data['navs']);
+
+		if(in_array($ext,['csv','doc','docx','odp','ods','odt','pot','potm','potx','pps','ppsx','ppsxm','ppt','pptm','pptx','rtf','xls','xlsx'])){
+			$url = 'https://view.officeapps.live.com/op/view.aspx?src='.urlencode($item['downloadUrl']);
+			return view::direct($url);
+			//return view::load('show/pdf')->with($data);
+		}
 		
 		if(in_array($ext,['bmp','jpg','jpeg','png','gif'])){
 			return view::load('show/image')->with($data);
 		}
-		if(in_array($ext,['mp4'])){
+		if(in_array($ext,['mp4','webm'])){
 			return view::load('show/video')->with($data);
 		}
+		
+		if(in_array($ext,['mp4','webm','avi','mpg', 'mpeg', 'rm', 'rmvb', 'mov', 'wmv', 'mkv', 'asf'])){
+			return view::load('show/video2')->with($data);
+		}
+		
 		if(in_array($ext,['ogg','mp3','wav'])){
 			return view::load('show/audio')->with($data);
 		}
@@ -137,13 +152,13 @@ class IndexController{
 	}
 	//ËõÂÔÍ¼
 	function thumbnail($item){
-		$url = $item['thumbnails'][0]['large']['url'];
 		if(!empty($_GET['t'])){
 			list($width, $height) = explode('|', $_GET['t']);
-			list($url, $tmp) = explode("&width=",$url);
-			$url = $url."&width={$width}&height={$height}";
+		}else{
+			//800 176 96
+			$width = $height = 800;
 		}
-		return $url;
+		return $item['thumb']."&width={$width}&height={$height}";
 	}
 
 	//ÎÄ¼ş¼ĞÏÂÔªËØ
@@ -170,6 +185,10 @@ class IndexController{
 			}
 			$navs[urldecode($v)] = end($navs).$v.'/';
 		}
+		if(!empty($this->name)){
+			$navs[$this->name] = end($navs).urlencode($this->name);
+		}
+		
 		return $navs;
 	}
 

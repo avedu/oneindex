@@ -2,11 +2,7 @@
 
 require 'init.php';
 
-
-//route::get('/admin','AdminController@index');
-//route::any('/admin/login','AdminController@login');
-//route::any('/admin/logout','AdminController@logout');
-//route::any('/admin/setpass','AdminController@setpass');
+!defined('SITE_NAME') && define('SITE_NAME', 'one');
 
 //未初始化
 if( empty(onedrive::$app_url) ){

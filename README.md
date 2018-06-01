@@ -6,6 +6,9 @@ Onedrive Directory Index
 
 直接列onedrive目录，文件直链下载。  
 
+## demo
+[https://xn.tn](https://xn.tn)  
+
 ## change log:  
 18-03-29: 更新直链获取机制、缓存机制，避免频繁访问的token失效  
 18-03-29: 解决非英文编码问题  
@@ -27,10 +30,13 @@ Onedrive Directory Index
 18-04-18: 音频在线播放  
 18-04-18: HEAD.md 支持，在页面头部展示   
 18-04-18: .password 文件夹加密  
-
+18-05-06: 在线视频播放器替换成 Dplayer  
+18-05-06: 在线视频播放支持'mp4','webm','avi','mpg', 'mpeg', 'rm', 'rmvb', 'mov', 'wmv', 'mkv', 'asf'  
+  
+  
 ## 需求：
 1、PHP空间，PHP 5.6+ 打开curl支持  
-2、onedrive business 账号 (企业版或教育版)  
+2、onedrive business 账号 (企业版或教育版/工作或学校帐户)
 3、oneindex 程序   
 
 ## 安装：
@@ -50,6 +56,8 @@ Onedrive Directory Index
 
 ## 特殊文件实现功能  
 ` README.md `、`HEAD.md` 、 `.password`特殊文件使用  
+
+可以参考[https://github.com/donwa/oneindex/tree/files](https://github.com/donwa/oneindex/tree/files)  
 
 **在文件夹底部添加说明:**  
 >在onedrive的文件夹中添加` README.md `文件，使用markdown语法。  
@@ -134,19 +142,8 @@ php one.php upload:file demo.zip /test/d.zip
 'cache_type'=> 'sqlite'  // file | sqlite
 ```
 
-## demo
-列目录：[https://xn.tn](https://xn.tn)  
-直连下载：[https://xn.tn/node-v8.9.4-x64.msi](https://xn.tn/node-v8.9.4-x64.msi)  
-图片直连：http://xn.tn/bg.jpg  
-![Alt text](http://xn.tn/bg.jpg)
-缩略图：
-http://xn.tn/bg.jpg?t  
-![http://xn.tn/bg.jpg?t](http://xn.tn/bg.jpg?t)  
-http://xn.tn/bg.jpg?t=100|100  
-![http://xn.tn/bg.jpg?t=100|100](http://xn.tn/bg.jpg?t=100|100)  
 
-https://xn.tn/trailer.mp4?t=300|300  
-[![Watch the video](https://xn.tn/trailer.mp4?t=300|300)](https://xn.tn/trailer.mp4)
+
 
 ## Q&A:  
 **Q:需要企业版或教育版的全局管理员？**  
@@ -157,19 +154,6 @@ A:有缓存，可以在config/base.php设置缓存时间。
 
 
 **Q:能否使用自己的client_id、client_secret？**  
-A: 1、按照 https://moeclub.org/2017/03/17/24/ 教程获得 client_id、client_secret  
-    2、修改 config/base.php 中的client_id、client_secret、redirect_uri(回调url)的值，获取code  
-    3、访问 http://你的域名/?/install&code=你的code 完成账号绑定  
+A:参考：https://github.com/donwa/oneindex/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%87%AA%E5%B7%B1%E7%9A%84client_id%E3%80%81client_secret  
 
-**Q:回调地址的功能和代码是什么？会不会影响程序使用**  
-A:由于client_id、client_secret和callback_url是绑定的，为了实现一键绑定，添加了/onedrive-login作为中转  
-  其功能仅为跳转回安装目录，代码如下：  
-  ```
-<?php 
-if(!empty($_GET['state'])){
-    header('Location: '.$_GET['state'].'&code='.$_GET['code']);
-}
-  ```   
-  可自行使用 .com .org .tn 的域名进行部署。  
-  
 > 感谢 moeclub 提供的 client_id 和 client_secret,以实现一键绑定
