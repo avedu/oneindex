@@ -46,12 +46,14 @@ define('VIEW_PATH', ROOT.'view/material/');
 /**
  *    OneImg
  */
-route::group(function(){
-	$config = config('images@base');
-	return ($_COOKIE['admin'] == md5(config('password').config('refresh_token')) || $config['public']);
-},function(){
+
+$images = config('images@base');
+if( ($_COOKIE['admin'] == md5(config('password').config('refresh_token')) || $images['public']) ){
 	route::any('/images','ImagesController@index');
-});
+	if($images['home']){
+		route::any('/','ImagesController@index');
+	}
+}
 
 
 /**

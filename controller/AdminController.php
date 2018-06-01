@@ -18,7 +18,7 @@ class AdminController{
 	    'code'=>['html','htm','php', 'css', 'go','java','js','json','txt','sh','md'],
 	    'doc'=>['csv','doc','docx','odp','ods','odt','pot','potm','potx','pps','ppsx','ppsxm','ppt','pptm','pptx','rtf','xls','xlsx']
 	  ),
-	  'images'=>['public'=>false, exts=>['jpg','png','gif','bmp']]
+	  'images'=>['home'=>false,'public'=>false, exts=>['jpg','png','gif','bmp']]
 	);
 	
 	function __construct(){
@@ -71,6 +71,7 @@ class AdminController{
 
 	function images(){
 		if($_POST){
+			$config['home'] = empty($_POST['home'])?false:true;
 			$config['public'] = empty($_POST['public'])?false:true;
 			$config['exts'] = explode(" ", $_POST['exts']);
 			config('images@base',$config);

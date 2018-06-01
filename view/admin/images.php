@@ -4,9 +4,17 @@
 <div class="mdui-container-fluid">
 
 	<div class="mdui-typo">
-	  <h1> 图床设置 <small>OneImages</small></h1>
+	  <h1> <a href="?/images/" target="_blank">图床</a> <small>OneImages()</small></h1>
 	</div>
 	<form action="" method="post">
+		<div class="mdui-textfield">
+		  <h4>作为网站首页</h4>
+		  <label class="mdui-textfield-label"></label>
+		  <label class="mdui-switch">
+			  <input type="checkbox" name="home" value="1" <?php echo empty($config['home'])?'':'checked';?>/>
+			  <i class="mdui-switch-icon"></i>
+		  </label>
+		</div>
 		<div class="mdui-textfield">
 		  <h4>允许游客上传图片</h4>
 		  <label class="mdui-textfield-label"></label>
