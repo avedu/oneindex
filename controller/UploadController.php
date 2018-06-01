@@ -29,7 +29,7 @@ class UploadController{
 			config('@uploaded', array());
 		}
 		$uploading = config('@upload');
-		$uploaded = array_reverse(config('@uploaded'));
+		$uploaded = array_reverse((array)config('@uploaded'));
 		return view::load('upload')->with('uploading', $uploading)->with('uploaded', $uploaded)->with('message', $message);
 	}
 
