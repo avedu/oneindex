@@ -86,8 +86,16 @@ class IndexController{
 		$root = get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).config('root_path');
 		$navs = $this->navs();
 
+		if($this->items['index.html']){
+			$this->items['index.html']['path'] = get_absolute_path($this->path).'index.html';
+			$index = $this->get_content($this->items['index.html']);
+			header('Content-type: text/html');
+			echo $index;
+			exit();
+		}
+
 		if($this->items['README.md']){
-			$this->items['README.md']['path'] = get_absolute_path($this->path).$this->name;
+			$this->items['README.md']['path'] = get_absolute_path($this->path).'README.md';
 			$readme = $this->get_content($this->items['README.md']);
 			$Parsedown = new Parsedown();
 			$readme = $Parsedown->text($readme);
@@ -96,7 +104,7 @@ class IndexController{
 		}
 
 		if($this->items['HEAD.md']){
-			$this->items['HEAD.md']['path'] = get_absolute_path($this->path).$this->name;
+			$this->items['HEAD.md']['path'] = get_absolute_path($this->path).'HEAD.md';
 			$head = $this->get_content($this->items['HEAD.md']);
 			$Parsedown = new Parsedown();
 			$head = $Parsedown->text($head);
