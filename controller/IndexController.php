@@ -13,7 +13,7 @@ class IndexController{
 			$this->name = array_pop($paths);
 		}
 		$this->url_path = get_absolute_path(implode('/', $paths));
-		$this->path = config('onedrive_root').$this->url_path;
+		$this->path = get_absolute_path(config('onedrive_root').$this->url_path);
 		//获取文件夹下所有元素
 		$this->items = $this->items($this->path);
 	}

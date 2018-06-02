@@ -87,7 +87,10 @@ class AdminController{
 		}
 		foreach((array)$items as $item){
 		    if($item['folder']){
-		        self::_refresh_cache($path.urlencode($item['name']).'/');
+			    if(strpos(' ', $item['name'])){
+				    $item['name'] = urlencode($item['name']);
+			    }
+		        self::_refresh_cache($path.$item['name'].'/');
 		    }
 		}
 	}
