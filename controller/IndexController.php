@@ -128,9 +128,9 @@ class IndexController{
 		$data['navs'] = $this->navs();
 		$data['item'] = $item;
 		$data['ext'] = $ext;
-		$http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-		$data['url'] = $http_type.$_SERVER['HTTP_HOST'].onedrive::urlencode(end($data['navs']));
 		$data['item']['path'] = get_absolute_path($this->path).$this->name;
+		$http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+		$data['url'] = $http_type.$_SERVER['HTTP_HOST'].$root.'/'.onedrive::urlencode($data['item']['path']);
 		
 
 		$show = config('show');
