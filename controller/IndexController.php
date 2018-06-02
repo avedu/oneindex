@@ -130,7 +130,7 @@ class IndexController{
 		$data['ext'] = $ext;
 		$data['item']['path'] = get_absolute_path($this->path).$this->name;
 		$http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-		$data['url'] = $http_type.$_SERVER['HTTP_HOST'].$root.'/'.onedrive::urlencode($data['item']['path']);
+		$data['url'] = $http_type.$_SERVER['HTTP_HOST'].(($root=='/')?'/':'/?/').onedrive::urlencode($data['item']['path']);
 		
 
 		$show = config('show');
