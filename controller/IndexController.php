@@ -122,7 +122,7 @@ class IndexController{
 	}
 
 	function show($item){
-		$root = get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).config('root_path');
+		$root = get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).(config('root_path')?'?/':'');
 		$ext = strtolower(pathinfo($item['name'], PATHINFO_EXTENSION));
 		$data['title'] = $item['name'];
 		$data['navs'] = $this->navs();
@@ -130,7 +130,8 @@ class IndexController{
 		$data['ext'] = $ext;
 		$data['item']['path'] = get_absolute_path($this->path).$this->name;
 		$http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-		$data['url'] = $http_type.$_SERVER['HTTP_HOST'].((config('root_path') == '?')?$root.'/':$root).onedrive::urlencode($data['item']['path']);
+		$uri = onedrive::urlencode(get_absolute_path($this->url_path.'/'.$this->name));
+		$data['url'] = $http_type.$_SERVER['HTTP_HOST'].$root.$uri;
 		
 
 		$show = config('show');
