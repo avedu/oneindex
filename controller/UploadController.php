@@ -101,8 +101,8 @@ class UploadController{
 		$request['headers'] = "Cookie: admin=".md5(config('password').config('refresh_token')).PHP_EOL;
 		$request['headers'] .= "Host: ".$_SERVER['HTTP_HOST'];
 		$request['curl_opt']=[CURLOPT_CONNECTTIMEOUT => 1,CURLOPT_TIMEOUT=>1,CURLOPT_FOLLOWLOCATION=>true];
-		$http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-		$request['url'] = 'http://127.0.0.1'.get_absolute_path(dirname($_SERVER['PHP_SELF'])).'?/admin/upload/task';
+		$http_type = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
+		$request['url'] = $http_type.'127.0.0.1'.get_absolute_path(dirname($_SERVER['PHP_SELF'])).'?/admin/upload/task';
 		$request['post_data'] = 'remotepath='.urlencode($remotepath);
 		return $request;
 	}
