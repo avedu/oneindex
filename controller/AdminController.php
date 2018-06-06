@@ -27,14 +27,14 @@ class AdminController{
 	function login(){
 		if(!empty($_POST['password']) && $_POST['password'] == config('password')){
 			setcookie('admin', md5(config('password').config('refresh_token')) );
-			return view::direct('?/admin/');
+			return view::direct(get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).'?/admin/');
 		}
 		return view::load('login');
 	}
 
 	function logout(){
 		setcookie('admin', '' );
-		return view::direct('?/login');
+		return view::direct(get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).'?/login');
 	}
 
 	function settings(){
