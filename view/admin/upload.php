@@ -59,7 +59,7 @@
 			        	等待上传中
 		        	</td>
 		        	<td>
-			        	
+			        	<button name="begin_task"  class="mdui-btn mdui-color-green-600 mdui-ripple" type="submit" name="remotepath" value="<?php echo $task['remotepath'];?>">上传</button>
 		        	</td>
 		        <?php elseif(time() > ($task['update_time']+60)):?>
 		        	<td>已暂停</td>
