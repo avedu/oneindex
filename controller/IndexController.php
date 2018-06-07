@@ -12,7 +12,7 @@ class IndexController{
 		if(substr($_SERVER['REQUEST_URI'], -1) != '/'){
 			$this->name = array_pop($paths);
 		}
-		$this->url_path = get_absolute_path(implode('/', $paths));
+		$this->url_path = get_absolute_path(join('/', $paths));
 		$this->path = get_absolute_path(config('onedrive_root').$this->url_path);
 		//获取文件夹下所有元素
 		$this->items = $this->items($this->path);
@@ -111,10 +111,9 @@ class IndexController{
 			//不在列表中展示
 			unset($this->items['HEAD.md']);
 		}
-		
 		return view::load('list')->with('title', 'index of '. urldecode($this->url_path))
 					->with('navs', $navs)
-					->with('path',$this->url_path)
+					->with('path',join("/", array_map("rawurlencode", explode("/", $this->url_path)))  )
 					->with('root', $root)
 					->with('items', $this->items)
 					->with('head',$head)
