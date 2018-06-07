@@ -7,20 +7,20 @@ class IndexController{
 	private $time;
 
 	function __construct(){
-		//»ñÈ¡Â·¾¶ºÍÎÄ¼şÃû
-		$paths = explode('/', urldecode($_GET['path']));
+		//è·å–è·¯å¾„å’Œæ–‡ä»¶å
+		$paths = explode('/', rawurldecode($_GET['path']));
 		if(substr($_SERVER['REQUEST_URI'], -1) != '/'){
 			$this->name = array_pop($paths);
 		}
 		$this->url_path = get_absolute_path(implode('/', $paths));
 		$this->path = get_absolute_path(config('onedrive_root').$this->url_path);
-		//»ñÈ¡ÎÄ¼ş¼ĞÏÂËùÓĞÔªËØ
+		//è·å–æ–‡ä»¶å¤¹ä¸‹æ‰€æœ‰å…ƒç´ 
 		$this->items = $this->items($this->path);
 	}
 
 	
 	function index(){
-		//ÊÇ·ñ404
+		//æ˜¯å¦404
 		$this->is404();
 
 		$this->is_password();
@@ -36,7 +36,7 @@ class IndexController{
 		}
 	}
 
-	//ÅĞ¶ÏÊÇ·ñ¼ÓÃÜ
+	//åˆ¤æ–­æ˜¯å¦åŠ å¯†
 	function is_password(){
 		if(empty($this->items['.password'])){
 			return false;
@@ -64,16 +64,16 @@ class IndexController{
 		exit();
 	}
 
-	//ÎÄ¼ş
+	//æ–‡ä»¶
 	function file(){
 		$item = $this->items[$this->name];
-		if ($item['folder']) {//ÊÇÎÄ¼ş¼Ğ
+		if ($item['folder']) {//æ˜¯æ–‡ä»¶å¤¹
 			$url = $_SERVER['REQUEST_URI'].'/';
-		}elseif(!is_null($_GET['t']) ){//ËõÂÔÍ¼
+		}elseif(!is_null($_GET['t']) ){//ç¼©ç•¥å›¾
 			$url = $this->thumbnail($item);
 		}elseif($_SERVER['REQUEST_METHOD'] == 'POST' || !is_null($_GET['s']) ){
 			return $this->show($item);
-		}else{//·µ»ØÏÂÔØÁ´½Ó
+		}else{//è¿”å›ä¸‹è½½é“¾æ¥
 			$url = $item['downloadUrl'];
 		}
 		header('Location: '.$url);
@@ -81,7 +81,7 @@ class IndexController{
 
 
 	
-	//ÎÄ¼ş¼Ğ
+	//æ–‡ä»¶å¤¹
 	function dir(){
 		$root = get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).config('root_path');
 		$navs = $this->navs();
@@ -99,7 +99,7 @@ class IndexController{
 			$readme = $this->get_content($this->items['README.md']);
 			$Parsedown = new Parsedown();
 			$readme = $Parsedown->text($readme);
-			//²»ÔÚÁĞ±íÖĞÕ¹Ê¾
+			//ä¸åœ¨åˆ—è¡¨ä¸­å±•ç¤º
 			unset($this->items['README.md']);
 		}
 
@@ -108,7 +108,7 @@ class IndexController{
 			$head = $this->get_content($this->items['HEAD.md']);
 			$Parsedown = new Parsedown();
 			$head = $Parsedown->text($head);
-			//²»ÔÚÁĞ±íÖĞÕ¹Ê¾
+			//ä¸åœ¨åˆ—è¡¨ä¸­å±•ç¤º
 			unset($this->items['HEAD.md']);
 		}
 		
@@ -143,7 +143,7 @@ class IndexController{
 
 		header('Location: '.$item['downloadUrl']);
 	}
-	//ËõÂÔÍ¼
+	//ç¼©ç•¥å›¾
 	function thumbnail($item){
 		if(!empty($_GET['t'])){
 			list($width, $height) = explode('|', $_GET['t']);
@@ -156,11 +156,11 @@ class IndexController{
 		return $item['thumb']."width={$width}&height={$height}";
 	}
 
-	//ÎÄ¼ş¼ĞÏÂÔªËØ
+	//æ–‡ä»¶å¤¹ä¸‹å…ƒç´ 
 	function items($path, $fetch=false){
-		//ÊÇ·ñÓĞ»º´æ
+		//æ˜¯å¦æœ‰ç¼“å­˜
 		list($this->time, $items) = cache('dir_'.$this->path);
-		//»º´æÊ§Ğ§»òÎÄ¼ş²»´æÔÚ£¬ÖØĞÂ×¥È¡
+		//ç¼“å­˜å¤±æ•ˆæˆ–æ–‡ä»¶ä¸å­˜åœ¨ï¼Œé‡æ–°æŠ“å–
 		if( !is_array($items) || (TIME - $this->time) > config('cache_expire_time') || $fetch){
 			$items = onedrive::dir($path);
 			if(is_array($items)){
@@ -178,7 +178,7 @@ class IndexController{
 			if(empty($v)){
 				continue;
 			}
-			$navs[urldecode($v)] = end($navs).$v.'/';
+			$navs[rawurldecode($v)] = end($navs).$v.'/';
 		}
 		if(!empty($this->name)){
 			$navs[$this->name] = end($navs).urlencode($this->name);
@@ -201,7 +201,7 @@ class IndexController{
 		return $content;
 	}
 
-	//Ê±ºò404
+	//æ—¶å€™404
 	function is404(){
 		if(!empty($this->items[$this->name]) || (empty($this->name) && is_array($this->items)) ){
 			return false;
@@ -218,7 +218,7 @@ class IndexController{
 		if (!function_exists("fastcgi_finish_request")) {
 			return;
 		}
-		//ºóÌ¨Ë¢ĞÂ»º´æ
+		//åå°åˆ·æ–°ç¼“å­˜
 		if((TIME - $this->time) > config('cache_refresh_time')){
 			fastcgi_finish_request();
 			$items = onedrive::dir($this->path);
