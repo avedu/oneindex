@@ -25,9 +25,6 @@ class one{
 		}
 		foreach((array)$items as $item){
 		    if($item['folder']){
-			    if(strpos(' ', $item['name'])){
-				    $item['name'] = urlencode($item['name']);
-			    }
 		        self::_refresh_cache($path.$item['name'].'/');
 		    }
 		}
