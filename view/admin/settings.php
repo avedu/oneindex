@@ -13,6 +13,19 @@
 		</div>
 
 		<div class="mdui-textfield">
+		  <h4>网站风格<small></small></h4>
+		  <select name="style">
+			  <?php 
+				$styles = array_diff(scandir(ROOT.'view'), [".", "..", "admin"]);
+				$style = config("style")?config("style"):'material';
+			 	foreach($styles as $style_name):
+			  ?>
+			  <option value ="<?php echo $style_name;?>" <?php echo ($style==$style_name)?'selected':'';?>><?php echo $style_name;?></option>
+			  <?php endforeach;?>
+		  </select>
+		</div>
+
+		<div class="mdui-textfield">
 		  <h4>onedrive起始目录(空为根目录)<small>例：仅共享share目录 /share</small></h4>
 		  <input class="mdui-textfield-input" type="text" name="onedrive_root" value="<?php echo $config['onedrive_root'];?>"/>
 		</div>

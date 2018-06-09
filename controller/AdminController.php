@@ -4,6 +4,7 @@ class AdminController{
 	static $default_config = array(
 	  'site_name' =>'OneIndex',
 	  'password' => 'oneindex',
+	  'style'=>'material',
 	  'onedrive_root' =>'',
 	  'cache_expire_time' => 3600,
 	  'cache_refresh_time' => 600,
@@ -42,6 +43,7 @@ class AdminController{
 		if($_POST){
 
 			config('site_name',$_POST['site_name']);
+			config('style',$_POST['style']);
 			
 			config('onedrive_root',get_absolute_path($_POST['onedrive_root']));
 
