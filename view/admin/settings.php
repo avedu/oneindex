@@ -14,7 +14,7 @@
 
 		<div class="mdui-textfield">
 		  <h4>网站风格<small></small></h4>
-		  <select name="style">
+		  <select name="style" class="mdui-select">
 			  <?php 
 				$styles = array_diff(scandir(ROOT.'view'), [".", "..", "admin"]);
 				$style = config("style")?config("style"):'material';
