@@ -16,7 +16,10 @@
 		  <h4>网站风格<small></small></h4>
 		  <select name="style" class="mdui-select">
 			  <?php 
-				$styles = array_diff(scandir(ROOT.'view'), [".", "..", "admin"]);
+				foreach(scandir(ROOT.'view') as $k=>$s){
+				    $styles[$k] = trim($s, '/');
+				}
+				$styles = array_diff($styles, [".", "..", "admin"]);
 				$style = config("style")?config("style"):'material';
 			 	foreach($styles as $style_name):
 			  ?>
