@@ -1,6 +1,6 @@
 <?php
 
-require 'init.php';
+require  __DIR__.'/init.php';
 
 //世纪互联
 //onedrive::$api_url = "https://microsoftgraph.chinacloudapi.cn/v1.0";

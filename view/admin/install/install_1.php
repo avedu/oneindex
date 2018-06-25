@@ -33,7 +33,7 @@
 		<div class="mdui-textfield mdui-textfield-floating-label">
 		   <i class="mdui-icon material-icons">&#xe41a;</i>
 		   <?php if($redirect_uri == 'https://ju.tn/'):?>
-		   <label class="mdui-textfield-label">由于你的网站未使用<b>https</b>。将通过ju.tn进行中转</label>
+		   <label class="mdui-textfield-label">由于你的网站不是<b>http://localhost/</b>。将通过ju.tn进行中转</label>
 		   <?php endif;?>
 		   <label class="mdui-textfield-label"><?php echo $redirect_uri;?></label>
 		   <input type="text" class="mdui-textfield-input" disabled  value="<?php echo $redirect_uri;?>"/>

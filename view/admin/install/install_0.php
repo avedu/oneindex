@@ -19,7 +19,7 @@
 	    <tbody>
 	      <tr>
 	        <td>1</td>
-	        <td>PHP > 5.6</td>
+	        <td>PHP > 5.5</td>
 	        <?php if($check['php']): ?>
 	        <td><i class="mdui-icon material-icons" style="color:#4caf50;">&#xe5ca;</i></td>
 	        <?php else:?>

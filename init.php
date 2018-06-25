@@ -2,17 +2,13 @@
 error_reporting(E_ALL & ~E_NOTICE);
 date_default_timezone_set('PRC');
 define('TIME', time());
-define('ROOT', str_replace("\\", "/", dirname(__FILE__)) . '/');
-
-define('CONTROLLER_PATH', ROOT.'controller/');
-
+!defined('ROOT') && define('ROOT', str_replace("\\", "/", dirname(__FILE__)) . '/');
 
 //__autoload方法
 function i_autoload($className) {
 	if (is_int(strripos($className, '..'))) {
 		return;
 	}
-
 	$file = ROOT . 'lib/' . $className . '.php';
 	if (file_exists($file)) {
 		include $file;
@@ -20,80 +16,69 @@ function i_autoload($className) {
 }
 spl_autoload_register('i_autoload');
 
+!defined('FILE_FLAGS') && define('FILE_FLAGS', LOCK_EX);
 /**
  * config('name');
  * config('name@file');
  * config('@file');
  */
-!defined('CONFIG_PATH') && define('CONFIG_PATH', ROOT . 'config/');
-function config($key) {
-	static $configs = array();
-	list($key, $file) = explode('@', $key, 2);
-	$file = empty($file) ? 'base' : $file;
+if (!function_exists('config')) {
+	!defined('CONFIG_PATH') && define('CONFIG_PATH', ROOT . 'config/');
+	function config($key) {
+		static $configs = array();
+		list($key, $file) = explode('@', $key, 2);
+		$file = empty($file) ? 'base' : $file;
 
-	$file_name = CONFIG_PATH . $file . '.php';
-	//读取配置
-	if (empty($configs[$file]) AND file_exists($file_name)) {
-		$configs[$file] = @include $file_name;
-	}
+		$file_name = CONFIG_PATH . $file . '.php';
+		//读取配置
+		if (empty($configs[$file]) AND file_exists($file_name)) {
+			$configs[$file] = @include $file_name;
+		}
 
-	if (func_num_args() === 2) {
-		$value = func_get_arg(1);
-		//写入配置
-		if (!empty($key)) {
-			$configs[$file] = (array) $configs[$file];
-			if (is_null($value)) {
-				unset($configs[$file][$key]);
+		if (func_num_args() === 2) {
+			$value = func_get_arg(1);
+			//写入配置
+			if (!empty($key)) {
+				$configs[$file] = (array) $configs[$file];
+				if (is_null($value)) {
+					unset($configs[$file][$key]);
+				} else {
+					$configs[$file][$key] = $value;
+				}
+
 			} else {
-				$configs[$file][$key] = $value;
-			}
+				if (is_null($value)) {
+					return unlink($file_name);
+				} else {
+					$configs[$file] = $value;
+				}
 
+			}
+			file_put_contents($file_name, "<?php return " . var_export($configs[$file], true) . ";", FILE_FLAGS);
 		} else {
-			if (is_null($value)) {
-				return unlink($file_name);
-			} else {
-				$configs[$file] = $value;
+			//返回结果
+			if (!empty($key)) {
+				return $configs[$file][$key];
 			}
 
+			return $configs[$file];
 		}
-		file_put_contents($file_name, "<?php return " . var_export($configs[$file], true) . ";", LOCK_EX);
-	} else {
-		//返回结果
-		if (!empty($key)) {
-			return $configs[$file][$key];
-		}
-
-		return $configs[$file];
 	}
 }
-
 /**
  * config('name');
  * config('name@file');
  * config('@file');
  */
-!defined('CACHE_PATH') && define('CACHE_PATH', ROOT . 'cache/');
-
-if(config('cache_type') == 'sqlite'){
-	function cache($key, $value = null) {
-		$store = new sqlite('cache',CACHE_PATH.'data.sqlite3');
-		if (is_null($value)) {
-			$cache = $store->get($key);
-			return (array)json_decode($cache, true);
-		} else {
-			$data = array(TIME, $value);
-			$store->set($key, json_encode($data));
-			return $data;
-		}
-	}
-}else{
+if (!function_exists('cache')) {
+	!defined('CACHE_PATH') && define('CACHE_PATH', ROOT . 'cache/');
 	function cache($key, $value = null) {
 		$file = CACHE_PATH . md5($key) . '.php';
 		if (is_null($value)) {
 			$cache = @include $file;
 			return (array)$cache;
 		} else {
-			file_put_contents($file, "<?php return " . var_export(array(TIME, $value), true) . ";", LOCK_EX);
+			file_put_contents($file, "<?php return " . var_export(array(TIME, $value), true) . ";", FILE_FLAGS);
 			return array(TIME, $value);
 		}
 	}
@@ -126,13 +111,6 @@ if (!function_exists('e')) {
 	}
 }
 
-//if (!function_exists("fastcgi_finish_request")) {
-//      function fastcgi_finish_request()  {
-//      	ob_flush();
-//      	flush();
-//      }
-//}
-
 function get_absolute_path($path) {
     $path = str_replace(array('/', '\\', '//'), '/', $path);
     $parts = array_filter(explode('/', $path), 'strlen');
@@ -148,7 +126,7 @@ function get_absolute_path($path) {
     return str_replace('//','/','/'.implode('/', $absolutes).'/');
 }
 
-
+!defined('CONTROLLER_PATH') && define('CONTROLLER_PATH', ROOT.'controller/');
 onedrive::$client_id = config('client_id');
 onedrive::$client_secret = config('client_secret');
 onedrive::$redirect_uri = config('redirect_uri');

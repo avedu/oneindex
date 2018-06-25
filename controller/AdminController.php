@@ -146,7 +146,7 @@ class AdminController{
 	}
 
 	function install_0(){
-		$check['php'] = version_compare(PHP_VERSION,'5.6.0','ge');
+		$check['php'] = version_compare(PHP_VERSION,'5.5.0','ge');
 		$check['curl'] = function_exists('curl_init');
 		$check['config'] = is_writable(ROOT.'config/');
 		$check['cache'] = is_writable(ROOT.'cache/');
@@ -163,10 +163,7 @@ class AdminController{
 			config('redirect_uri',$_POST['redirect_uri']);
 			return view::direct('?step=2');
 		}
-		$https = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https'));
-		if($https){
-			$redirect_uri = 'https://'.$_SERVER['HTTP_HOST'].get_absolute_path(dirname($_SERVER['PHP_SELF']));
-		}elseif($_SERVER['HTTP_HOST'] == 'localhost'){
+		if($_SERVER['HTTP_HOST'] == 'localhost'){
 			$redirect_uri = 'http://'.$_SERVER['HTTP_HOST'].get_absolute_path(dirname($_SERVER['PHP_SELF']));
 		}else{
 			// 非https,调用ju.tn中转
