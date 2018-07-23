@@ -40,7 +40,9 @@ class IndexController{
 	function is_password(){
 		if(empty($this->items['.password'])){
 			return false;
-		}
+		}else{
+			$this->items['.password']['path'] = get_absolute_path($this->path).'.password';
+ 		}
 		
 		$password = $this->get_content($this->items['.password']);
 		list($password) = explode("\n",$password);
