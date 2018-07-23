@@ -14,6 +14,7 @@ class ImagesController{
 				$root = get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).config('root_path');
 				$http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
 				$url = $http_type.$_SERVER['HTTP_HOST'].$root.'/'.$remotefile.((config('root_path') == '?')?'&s':'?s');
+				$url = str_replace('//','/', $url);
 				view::direct($url);
 			}
 		}
