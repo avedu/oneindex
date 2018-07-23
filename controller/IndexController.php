@@ -153,6 +153,7 @@ class IndexController{
 			$width = $height = 800;
 		}
 		$item['thumb'] = onedrive::thumbnail($this->path.$this->name);
+		list($item['thumb'],$tmp) = explode('&width=', $item['thumb']);
 		$item['thumb'] .= strpos($item['thumb'], '?')?'&':'?';
 		return $item['thumb']."width={$width}&height={$height}";
 	}
