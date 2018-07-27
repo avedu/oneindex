@@ -139,6 +139,19 @@
 			$data = @json_decode($resp->content, true);
 			return $data;
 		}
+
+		static function upload_url($path, $url){
+			$request = self::request(get_absolute_path(dirname($path)),"children");
+			$request['headers'] .= "Prefer: respond-async".PHP_EOL;
+			$post_data['@microsoft.graph.sourceUrl'] = $url;
+			$post_data['name'] = pathinfo($path, PATHINFO_BASENAME );
+			$post_data['file'] = json_decode("{}");
+			$request['post_data'] = json_encode($post_data);
+			$resp = fetch::post($request);
+			list($tmp, $location) = explode('ocation:', $resp->headers);
+			list($location, $tmp) = explode(PHP_EOL, $location);
+			return trim($location);
+		}
 		
 		static function create_upload_session($path){
 			$request = self::request($path, 'createUploadSession');
