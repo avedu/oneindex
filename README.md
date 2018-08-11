@@ -40,11 +40,41 @@ Onedrive Directory Index
 18-06-01: 文件上传管理（后台） 
 18-06-01: 增加index.html特性   
 18-06-01: 图床功能   
-  
+
 ## 需求：
 1、PHP空间，PHP 5.6+ 打开curl支持  
 2、onedrive 账号 (个人、企业版或教育版/工作或学校帐户)  
 3、oneindex 程序   
+
+## docker 安装运行：
+
+从docker仓库获取镜像：
+```sh
+docker pull yinaoxiong/oneindex
+```
+
+或者从源码构建镜像：
+
+```shell
+git clone https://github.com/donwa/oneindex.git
+cd oneindex/
+docker build -t your-image-name .
+```
+
+运行：
+
+```shell
+docker run -d -p {open port}:80 --name {container name} --restart=always {image name}
+```
+
+停止删除容器：
+
+```shell
+docker stop {container name}
+docker rm -v {container name}
+```
+
+
 
 ## 安装：
 <img width="658" alt="image" src="https://raw.githubusercontent.com/donwa/oneindex/files/images/install.gif">  
@@ -116,4 +146,4 @@ php one.php upload:file demo.zip /test/d.zip
 
 //上传up/ 到onedrive /test/  
 php one.php upload:file up/ /test/
-``` 
+```
