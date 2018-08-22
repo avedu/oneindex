@@ -19,7 +19,7 @@ class AdminController{
 	    'code'=>['html','htm','php', 'css', 'go','java','js','json','txt','sh','md'],
 	    'doc'=>['csv','doc','docx','odp','ods','odt','pot','potm','potx','pps','ppsx','ppsxm','ppt','pptm','pptx','rtf','xls','xlsx']
 	  ),
-	  'images'=>['home'=>false,'public'=>false, exts=>['jpg','png','gif','bmp']]
+	  'images'=>['home'=>false,'public'=>false, 'exts'=>['jpg','png','gif','bmp']]
 	);
 	
 	function __construct(){
