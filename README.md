@@ -46,6 +46,10 @@ Onedrive Directory Index
 2、onedrive 账号 (个人、企业版或教育版/工作或学校帐户)  
 3、oneindex 程序   
 
+## 安装：
+<img width="658" alt="image" src="https://raw.githubusercontent.com/donwa/oneindex/files/images/install.gif">  
+
+
 ## docker 安装运行：
 
 从docker仓库获取镜像：
@@ -74,10 +78,6 @@ docker stop {container name}
 docker rm -v {container name}
 ```
 
-
-
-## 安装：
-<img width="658" alt="image" src="https://raw.githubusercontent.com/donwa/oneindex/files/images/install.gif">  
 
 
 ## 计划任务  
