@@ -179,6 +179,7 @@ class UploadController{
 				}elseif(!empty($data['nextExpectedRanges'])){
 					list($offset, $filesize) = explode('-',$data['nextExpectedRanges'][0]);
 					$task['offset'] = intval($offset);
+					$task['length'] = $task['length']/1.5;
 					config($task['remotepath'].'@upload', $task);
 				}
 			}
