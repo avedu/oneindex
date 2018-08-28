@@ -184,6 +184,7 @@ class one{
 			}elseif(!empty($data['nextExpectedRanges'])){
 				list($offset, $filesize) = explode('-',$data['nextExpectedRanges'][0]);
 				$info['offset'] = $offset;
+				$info['length'] = $info['length']/1.5;
 				$upload[$remotepath] = $info;
 				config('@upload', $upload);
 			}
