@@ -177,7 +177,7 @@ class one{
 		}else{
 			print ' 失败!'.PHP_EOL;
 			$data = onedrive::upload_session_status($info['url']);
-			if(empty($data)){
+			if(empty($data)|| $info['length']<100){
 				onedrive::delete_upload_session($info['url']);
 				unset($upload[$remotepath]);
 				config('@upload', $upload);

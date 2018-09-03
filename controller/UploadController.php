@@ -172,7 +172,7 @@ class UploadController{
 			//失败，重新获取信息
 				echo "re get url";
 				$data = onedrive::upload_session_status($task['url']);
-				if(empty($data)){
+				if(empty($data)|| $info['length']<100){
 					onedrive::delete_upload_session($task['url']);
 					unset($task['url']);
 					config($task['remotepath'].'@upload', $task);
