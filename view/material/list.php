@@ -110,22 +110,6 @@ $.fn.extend({
         });
     }
 });
-
-function downall() {
-    let dl_link_list = Array.from(document.querySelectorAll("li a"))
-        .map(x => x.href) // 所有list中的链接
-        .filter(x => x.slice(-1) != "/"); // 筛选出非文件夹的文件下载链接
-
-    let blob = new Blob([dl_link_list.join("\r\n")], {
-        type: 'text/plain'
-    }); // 构造Blog对象
-    let a = document.createElement('a'); // 伪造一个a对象
-    a.href = window.URL.createObjectURL(blob); // 构造href属性为Blob对象生成的链接
-    a.download = "folder_download_link.txt"; // 文件名称，你可以根据你的需要构造
-    a.click() // 模拟点击
-    a.remove();
-
-}	
 	
 $(function () {
     $('.file a').each(function () {
@@ -153,5 +137,4 @@ $(function () {
 
 });
 </script>
-<a href="javascript:downall();" class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme-accent"><i class="mdui-icon material-icons">file_download</i></a>
 <?php view::end('content');?>
