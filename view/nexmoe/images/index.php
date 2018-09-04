@@ -2,16 +2,13 @@
 
 <?php view::begin('content');?>
 	
-<div class="mdui-container-fluid" style="padding-top: 100px;">
+<div class="mdui-container-fluid">
 
-<center>
-	<div class="mdui-typo-display-3-opacity">OneImages</div>
-</center>
+<div class="nexmoe-item" style="padding: 100px!important;">
+	<div class="mdui-typo-display-3-opacity" style="text-align:center;">OneImages</div>
 
-
-<center>
 	<form action="" method="post" enctype="multipart/form-data">
-		<input type="file" style="margin: 50px 0;" name="file" />
+		<input class="mdui-center" type="file" style="margin: 50px 0;" name="file" />
 
 
 	<div class="mdui-row-xs-3">
@@ -22,7 +19,8 @@
 	</div>
 
 	</form>
-</center>
+	
+</div>
 
 </div>
 
