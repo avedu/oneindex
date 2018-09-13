@@ -1,5 +1,5 @@
 <?php 
-
+header("ALLOW-CONTROL-ALLOW-ORIGIN:*");
 $types = [
 	'chm'=>'application/octet-stream',
 	'ppt'=>'application/vnd.ms-powerpoint',
