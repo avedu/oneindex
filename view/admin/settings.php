@@ -21,6 +21,7 @@
 				}
 				$styles = array_diff($styles, [".", "..", "admin"]);
 				$style = config("style")?config("style"):'material';
+				$cache_type  = config("cache_type")?config("cache_type"):'secache';
 			 	foreach($styles as $style_name):
 			  ?>
 			  <option value ="<?php echo $style_name;?>" <?php echo ($style==$style_name)?'selected':'';?>><?php echo $style_name;?></option>
@@ -31,6 +32,18 @@
 		<div class="mdui-textfield">
 		  <h4>onedrive起始目录(空为根目录)<small>例：仅共享share目录 /share</small></h4>
 		  <input class="mdui-textfield-input" type="text" name="onedrive_root" value="<?php echo $config['onedrive_root'];?>"/>
+		</div>
+
+
+		<div class="mdui-textfield">
+		  <h4>缓存类型<small></small></h4>
+		  <select name="cache_type" class="mdui-select">
+			  <?php 
+			 	foreach(['secache', 'filecache', 'memcache'] as $type):
+			  ?>
+			  <option value ="<?php echo $type;?>" <?php echo ($type==$cache_type)?'selected':'';?>><?php echo $type;?></option>
+			  <?php endforeach;?>
+		  </select>
 		</div>
 
 		<div class="mdui-textfield">

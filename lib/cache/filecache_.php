@@ -4,7 +4,7 @@ class filecache_{
 	
 	function __construct($cache_path= null){
 		if(empty($cache_path)){
-			$cache_path = sys_get_temp_dir().'\\';
+			$cache_path = CACHE_PATH;
 		}
 		$this->cache_path = $cache_path;
 	}

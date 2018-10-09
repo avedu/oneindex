@@ -6,6 +6,7 @@ class AdminController{
 	  'password' => 'oneindex',
 	  'style'=>'material',
 	  'onedrive_root' =>'',
+	  'cache_type'=>'secache',
 	  'cache_expire_time' => 3600,
 	  'cache_refresh_time' => 600,
 	  'root_path' => '?',
@@ -47,6 +48,7 @@ class AdminController{
 			
 			config('onedrive_root',get_absolute_path($_POST['onedrive_root']));
 
+			config('cache_type',$_POST['cache_type']);
 			config('cache_expire_time',intval($_POST['cache_expire_time']));
 
 			$_POST['root_path'] = empty($_POST['root_path'])?'?':'';
@@ -58,14 +60,10 @@ class AdminController{
 
 	function cache(){
 		if(!is_null($_POST['clear'])){
-			$dir=opendir(CACHE_PATH);
-			while ($file=readdir($dir)) {
-				@unlink(CACHE_PATH.$file);
-			}
+			cache::clear();
 			$message = "清除缓存成功";
 		}elseif ( !is_null($_POST['refresh']) ){
-			set_time_limit(0);
-			self::_refresh_cache(get_absolute_path(config('onedrive_root')));
+			oneindex::refresh_cache(get_absolute_path(config('onedrive_root')));
 			$message = "重建缓存成功";
 		}
 		return view::load('cache')->with('message', $message);
@@ -82,17 +80,6 @@ class AdminController{
 		return view::load('images')->with('config', $config);;
 	}
 
-	static function _refresh_cache($path){
-		$items = onedrive::dir($path);
-		if(is_array($items)){
-			cache('dir_'.$path, $items);
-		}
-		foreach((array)$items as $item){
-		    if($item['folder']){
-		        self::_refresh_cache($path.$item['name'].'/');
-		    }
-		}
-	}
 
 	function show(){
 		if(!empty($_POST) ){

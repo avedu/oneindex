@@ -8,11 +8,11 @@ class secache_{
 		list($cachefile, $size) = explode(':', $config, 2);
 		
 		if(empty($cachefile)){
-			$cachefile = sys_get_temp_dir().'\cachedata';
+			$cachefile = CACHE_PATH.'cachedata';
 		}
 
 		if(empty($size)){
-			$size = '50M';
+			$size = '100M';
 		}
 
 		define('SECACHE_SIZE',$size);
