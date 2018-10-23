@@ -38,7 +38,7 @@ class secache_{
 	}
 
 	function clear(){
-		@unlink($this->cachefile);
+		return $this->c->clear();
 	}
 }
 
