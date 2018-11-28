@@ -28,7 +28,7 @@ const ap = new APlayer({
         name: '<?php e(pathinfo($item["name"], PATHINFO_FILENAME)); ?>',
         artist: 'Oneindex Preview',
         url: '<?php e($item['downloadUrl']);?>',
-        cover: '<?php @e($item['thumb'].'&width=176&height=176');?>'
+        cover: '<?php e( !empty($item['thumb'] ) ? $item['thumb'].'&width=176&height=176' : null);?>'
     }]
 });
 </script>
