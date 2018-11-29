@@ -15,7 +15,7 @@
 			list($type, $config) = explode(':', self::$type, 2);
 
 			$type .= '_';
-	    	if( in_array($type, array('filecache_', 'memcache_', 'secache_')) ){
+	    	if( in_array($type, array('filecache_', 'memcache_', 'secache_', 'redis_')) ){
 		    	$file = str_replace("\\", "/", dirname(__FILE__)) . '/cache/'.$type.'.php';
 			    include_once( $file );
 		    	$instance = new $type($config);
