@@ -1,15 +1,15 @@
 FROM php:fpm-alpine
-WORKDIR /var/www/html
-COPY / /var/www/html/
-RUN apk add --no-cache nginx \
-    && mkdir /run/nginx \
-    && chown -R www-data:www-data cache/ config/ \
-    && mv default.conf /etc/nginx/conf.d \
-    && mv php.ini /usr/local/etc/php
 
-EXPOSE 80
+COPY . .
+RUN apk add --no-cache nginx tzdata && \
+    mkdir -p /run/nginx && \
+    mv default.conf /etc/nginx/conf.d && \
+    mv php.ini /usr/local/etc/php && \
+    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone && \
+    chmod +x docker-entrypoint.sh
+
 # Persistent config file and cache
 VOLUME [ "/var/www/html/config", "/var/www/html/cache" ]
-
-CMD php-fpm & \
-    nginx -g "daemon off;"
+EXPOSE 80
+ENTRYPOINT [ "/var/www/html/docker-entrypoint.sh" ]
