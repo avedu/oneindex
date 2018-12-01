@@ -41,46 +41,59 @@ Onedrive Directory Index
 18-06-01: 增加index.html特性   
 18-06-01: 图床功能   
 
-## 需求：
-1、PHP空间，PHP 5.6+ 打开curl支持  
-2、onedrive 账号 (个人、企业版或教育版/工作或学校帐户)  
-3、oneindex 程序   
+## 安装运行
 
-## 安装：
-<img width="658" alt="image" src="https://raw.githubusercontent.com/donwa/oneindex/files/images/install.gif">  
-
-
-## docker 安装运行：
-
-从docker仓库获取镜像：
-```sh
-docker pull yinaoxiong/oneindex
-```
-
-或者从源码构建镜像：
-
-```shell
-git clone https://github.com/donwa/oneindex.git
-cd oneindex/
-docker build -t your-image-name .
-```
+### docker 安装运行：
 
 运行：
 
+```sh
+docker run -d --name oneindex \
+    -p 80:80 --restart=always \
+    -v ~/oneindex/config:/var/www/html/config \
+    -v ~/oneindex/cache:/var/www/html/cache \
+    -e REFRESH_TOKEN='0 * * * *' \
+    -e REFRESH_CACHE='*/10 * * * *' \
+    setzero/oneindex
+```
+
+变量说明：
+
+- `REFRESH_TOKEN`刷新一次token的crontab表达式，默认值`0 * * * *`，即每小时
+- `REFRESH_CACHE`刷新一次cache的crontab表达式，默认值`*/10 * * * *`，即每10分钟
+
+停止删除容器：
+
 ```shell
-docker run -d -p {open port}:80 --name {container name} --restart=always {image name}
+docker stop oneindex
+docker rm -v oneindex
+```
+
+### docker-compose 安装运行：
+
+运行：
+
+```sh
+docker-compose up -d
 ```
 
 停止删除容器：
 
 ```shell
-docker stop {container name}
-docker rm -v {container name}
+docker-compose down
 ```
 
+### 源码安装运行：
 
+#### 需求：
+1、PHP空间，PHP 5.6+ 打开curl支持  
+2、onedrive 账号 (个人、企业版或教育版/工作或学校帐户)  
+3、oneindex 程序   
 
-## 计划任务  
+## 配置：
+<img width="658" alt="image" src="https://raw.githubusercontent.com/donwa/oneindex/files/images/install.gif">  
+
+### 计划任务  
 [可选]**推荐配置**，非必需。后台定时刷新缓存，可增加前台访问的速度  
 ```
 # 每小时刷新一次token
