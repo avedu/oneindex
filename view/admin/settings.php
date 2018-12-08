@@ -36,6 +36,12 @@
 
 
 		<div class="mdui-textfield">
+		  <h4>需要隐藏的目录<small> 不需要列出的目录(一行一个) 清空缓存后生效</small></h4>
+		  <textarea class="mdui-textfield-input" placeholder="输入后回车换行" name="onedrive_hide"><?=@$config['onedrive_hide'];?></textarea>
+		  <small>这里是通配识别，就是存在以上字符文件夹一律会隐藏</small>
+		</div>
+
+		<div class="mdui-textfield">
 		  <h4>缓存类型<small></small></h4>
 		  <select name="cache_type" class="mdui-select">
 			  <?php 
