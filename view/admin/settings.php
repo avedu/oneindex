@@ -45,7 +45,7 @@
 		  <h4>缓存类型<small></small></h4>
 		  <select name="cache_type" class="mdui-select">
 			  <?php 
-			 	foreach(['secache', 'filecache', 'memcache'] as $type):
+			 	foreach(['secache', 'filecache', 'memcache', 'redis'] as $type):
 			  ?>
 			  <option value ="<?php echo $type;?>" <?php echo ($type==$cache_type)?'selected':'';?>><?php echo $type;?></option>
 			  <?php endforeach;?>
