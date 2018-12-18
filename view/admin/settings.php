@@ -21,6 +21,7 @@
 				}
 				$styles = array_diff($styles, [".", "..", "admin"]);
 				$style = config("style")?config("style"):'material';
+				$cache_type  = config("cache_type")?config("cache_type"):'secache';
 			 	foreach($styles as $style_name):
 			  ?>
 			  <option value ="<?php echo $style_name;?>" <?php echo ($style==$style_name)?'selected':'';?>><?php echo $style_name;?></option>
@@ -31,6 +32,24 @@
 		<div class="mdui-textfield">
 		  <h4>onedrive起始目录(空为根目录)<small>例：仅共享share目录 /share</small></h4>
 		  <input class="mdui-textfield-input" type="text" name="onedrive_root" value="<?php echo $config['onedrive_root'];?>"/>
+		</div>
+
+
+		<div class="mdui-textfield">
+		  <h4>需要隐藏的目录<small> 不需要列出的目录(一行一个) 清空缓存后生效</small></h4>
+		  <textarea class="mdui-textfield-input" placeholder="输入后回车换行" name="onedrive_hide"><?=@$config['onedrive_hide'];?></textarea>
+		  <small>这里是通配识别，就是存在以上字符文件夹一律会隐藏</small>
+		</div>
+
+		<div class="mdui-textfield">
+		  <h4>缓存类型<small></small></h4>
+		  <select name="cache_type" class="mdui-select">
+			  <?php 
+			 	foreach(['secache', 'filecache', 'memcache'] as $type):
+			  ?>
+			  <option value ="<?php echo $type;?>" <?php echo ($type==$cache_type)?'selected':'';?>><?php echo $type;?></option>
+			  <?php endforeach;?>
+		  </select>
 		</div>
 
 		<div class="mdui-textfield">

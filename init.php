@@ -65,26 +65,10 @@ if (!function_exists('config')) {
 		}
 	}
 }
-/**
- * config('name');
- * config('name@file');
- * config('@file');
- */
-if (!function_exists('cache')) {
-	!defined('CACHE_PATH') && define('CACHE_PATH', ROOT . 'cache/');
-	function cache($key, $value = null) {
-		$file = CACHE_PATH . md5($key) . '.php';
-		if (is_null($value)) {
-			$cache = @include $file;
-			return (array)$cache;
-		} else {
-			file_put_contents($file, "<?php return " . var_export(array(TIME, $value), true) . ";", FILE_FLAGS);
-			return array(TIME, $value);
-		}
-	}
-}
 
-
+// cache
+define('CACHE_PATH', ROOT.'cache/');
+cache::$type = empty( config('cache_type') )?'secache':config('cache_type');
 
 
 if (!function_exists('db')) {

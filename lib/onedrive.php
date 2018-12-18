@@ -6,7 +6,7 @@
 		static $api_url = 'https://graph.microsoft.com/v1.0';
 		static $oauth_url = 'https://login.microsoftonline.com/common/oauth2/v2.0';
 
-		//ÑéÖ¤URL£¬ä¯ÀÀÆ÷·ÃÎÊ¡¢ÊÚÈ¨
+		//éªŒè¯URLï¼Œæµè§ˆå™¨è®¿é—®ã€æˆæƒ
 		static function authorize_url(){
 			$client_id = self::$client_id;
 			$scope = urlencode("offline_access files.readwrite.all");
@@ -20,7 +20,7 @@
 			return $url;
 		}
 
-		//Ê¹ÓÃ $code, »ñÈ¡ $refresh_token
+		//ä½¿ç”¨ $code, è·å– $refresh_token
 		static function authorize($code = ""){
 			$client_id = self::$client_id;
 			$client_secret = self::$client_secret;
@@ -34,7 +34,7 @@
 			return $data;
 		}
 
-		//Ê¹ÓÃ $refresh_token£¬»ñÈ¡ $access_token
+		//ä½¿ç”¨ $refresh_tokenï¼Œè·å– $access_token
 		static function get_token($refresh_token){
 			$client_id = self::$client_id;
 			$client_secret = self::$client_secret;
@@ -48,7 +48,7 @@
 			return $data;
 		}
 
-		//»ñÈ¡ $access_token, ´ø»º´æ
+		//è·å– $access_token, å¸¦ç¼“å­˜
 		static function access_token(){
 			$token = config('@token');
 			if($token['expires_on'] > time()+600){
@@ -66,7 +66,7 @@
 		}
 
 
-		// Éú³ÉÒ»¸örequest£¬´øtoken
+		// ç”Ÿæˆä¸€ä¸ªrequestï¼Œå¸¦token
 		static function request($path="/", $query=""){
 			$path = self::urlencode($path);
 			$path = empty($path)?'/':":/{$path}:/";
@@ -77,15 +77,24 @@
 		}
 
 		
-		//·µ»ØÄ¿Â¼ĞÅÏ¢
+		//è¿”å›ç›®å½•ä¿¡æ¯
 		static function dir($path="/"){
 			$request = self::request($path, "children?select=name,size,folder,@microsoft.graph.downloadUrl,lastModifiedDateTime");
 			$items = array();
 			self::dir_next_page($request, $items);
+			//ä¸åœ¨åˆ—è¡¨æ˜¾ç¤ºçš„æ–‡ä»¶å¤¹
+			$hide_list = explode(PHP_EOL,config('onedrive_hide'));
+			if(is_array($hide_list) && count($hide_list)>0){
+				foreach($hide_list as $hide_dir){
+					foreach($items as $key=>$_array){
+						if(stristr($key,trim($hide_dir)))unset($items[$key]);
+					}
+				}
+			}
 			return $items;
 		}
 
-		//Í¨¹ı·ÖÒ³»ñÈ¡Ò³ÃæËùÓĞitem
+		//é€šè¿‡åˆ†é¡µè·å–é¡µé¢æ‰€æœ‰item
 		static function dir_next_page($request, &$items, $retry=0){
 			$resp = fetch::get($request);
 			
@@ -122,7 +131,7 @@
 		//	return $resp->content;
 		//}
 
-		//ÎÄ¼şËõÂÔÍ¼Á´½Ó
+		//æ–‡ä»¶ç¼©ç•¥å›¾é“¾æ¥
 		static function thumbnail($path,$size='large'){
 			$request = self::request($path,"thumbnails/0?select={$size}");
 			$resp = fetch::get($request);
@@ -131,7 +140,7 @@
 			return @$data[$size]['url'];
 		}
 
-		//ÎÄ¼şÉÏ´«º¯Êı
+		//æ–‡ä»¶ä¸Šä¼ å‡½æ•°
 		static function upload($path,$content){
 			$request = self::request($path,"content");
 			$request['post_data'] = $content;
@@ -200,7 +209,7 @@
 		}
 
 		static function file_content($file, $offset, $length){
-			$handler = fopen($file, "rb") OR die('»ñÈ¡ÎÄ¼şÄÚÈİÊ§°Ü');
+			$handler = fopen($file, "rb") OR die('è·å–æ–‡ä»¶å†…å®¹å¤±è´¥');
 			fseek($handler, $offset);
 			
 			return fread($handler, $length);

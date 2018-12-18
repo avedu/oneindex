@@ -35,6 +35,7 @@ route::group(function(){
 });
 //登陆
 route::any('/login','AdminController@login');
+
 //跳转到登陆
 route::any('/admin/',function(){
 	return view::direct(get_absolute_path(dirname($_SERVER['SCRIPT_NAME'])).'?/login');
@@ -46,7 +47,6 @@ define('VIEW_PATH', ROOT.'view/'.(config('style')?config('style'):'material').'/
 /**
  *    OneImg
  */
-
 $images = config('images@base');
 if( ($_COOKIE['admin'] == md5(config('password').config('refresh_token')) || $images['public']) ){
 	route::any('/images','ImagesController@index');
