@@ -40,24 +40,50 @@ class AdminController{
 	}
 
 	function settings(){
-		
+		$message = false;
+
 		if($_POST){
-
-			config('site_name',$_POST['site_name']);
-			config('style',$_POST['style']);
 			
-			config('onedrive_root',get_absolute_path($_POST['onedrive_root']));
+			if ($this->cache_exists($_POST['cache_type'])) {
+				$message = '保存成功';
+				config('cache_type', $_POST['cache_type']);
+			} else {
+				$message = '缓存类型不可用，请确认已经安装了该拓展。';
+				config('cache_type', 'secache');
+			}
 
-			config('onedrive_hide',$_POST['onedrive_hide']);
-
-			config('cache_type',$_POST['cache_type']);
-			config('cache_expire_time',intval($_POST['cache_expire_time']));
-
+			config('site_name', $_POST['site_name']);
+			config('style', $_POST['style']);
+			config('onedrive_root', get_absolute_path($_POST['onedrive_root']));
+			config('onedrive_hide', $_POST['onedrive_hide']);
+			config('cache_expire_time', intval($_POST['cache_expire_time']));
 			$_POST['root_path'] = empty($_POST['root_path'])?'?':'';
-			config('root_path',$_POST['root_path']);
+			config('root_path', $_POST['root_path']);
 		}
+
 		$config = config('@base');
-		return view::load('settings')->with('config', $config);
+
+		return view::load('settings')->with('config', $config)->with('message', $message);
+	}
+
+	/**
+	 * 判断缓存类型
+	 *
+	 * @param string $cache_type 缓存类型
+	 * @return void
+	 */
+	function cache_exists($cache_type){
+		// 需要判断环境的缓存类型
+		$_cache_type = [
+			'redis',
+			'memcache',
+		];
+
+		if (in_array($cache_type, $_cache_type)) {
+			return class_exists(ucfirst($cache_type));
+		}
+
+		return true;
 	}
 
 	function cache(){
