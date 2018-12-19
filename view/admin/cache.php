@@ -59,7 +59,9 @@ $script_path = $_SERVER['DOCUMENT_ROOT'].'/one.php';
 </div>
 <script>
 $('button[name=refresh]').on('click',function(){
-	mdui.alert('正在重建缓存，请耐心等待...');
+	mdui.snackbar({
+		message: '正在重建缓存，请耐心等待...'
+	});
 });
 </script>
 <?php view::end('content');?>

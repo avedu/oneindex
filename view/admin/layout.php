@@ -65,7 +65,7 @@
 <script>
 	$("a[href='<?php echo'?'.(route::get_uri());?>']").addClass("mdui-text-color-blue");
   // 消息提示
-  <?php echo (isset($message) && !empty($message)) ? "mdui.alert('{$message}')" : '';?>
+  <?php echo (isset($message) && !empty($message)) ? "mdui.snackbar({message: '{$message}'});" : '';?>
 </script>
 </body>
 
