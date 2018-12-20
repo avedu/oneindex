@@ -59,4 +59,38 @@ if( ($_COOKIE['admin'] == md5(config('password').config('refresh_token')) || $im
 /**
  *    列目录
  */
-route::any('{path:#all}','IndexController@index');
+route::group(function () {
+	$hotlink = config('onedrive_hotlink');
+
+	// 未启用防盗链
+	if (!$hotlink) {
+		return true;
+	}
+	// referer 不存在
+	if (!isset($_SERVER['HTTP_REFERER'])) {
+		return true;
+	}
+
+	$referer_domain = get_domain($_SERVER['HTTP_REFERER']);
+	// 当前域本身
+	if (str_is(get_domain(), $referer_domain)) {
+		return true;
+	}
+
+	// 白名单
+	$hotlinks = explode(';', $hotlink);
+	$referer = false;
+	
+	foreach ($hotlinks as $_hotlink) {
+		if (str_is(trim($_hotlink), $referer_domain)) {
+			$referer = true;
+		}
+	}
+	if (!$referer) {
+		header('HTTP/1.1 403 Forbidden');
+	}
+
+	return $referer;
+}, function() {
+    route::any('{path:#all}','IndexController@index');
+});
