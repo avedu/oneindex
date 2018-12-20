@@ -25,7 +25,7 @@ class redis_{
                         $this->redis->set("OneIndex_gRefreshTime", $gRefreshTime);
                 }
                 $key = "OneIndex_$gRefreshTime\_" . $key;
-                return $this->redis->set($key, serialize($value), (time() + $expire));
+                return $this->redis->set($key, serialize($value), $expire);
         }
 
         function clear(){
