@@ -95,6 +95,40 @@ if (!function_exists('e')) {
 	}
 }
 
+if (!function_exists('str_is')) {
+	function str_is($pattern, $value)
+	{
+		if (is_null($pattern)) {
+			$patterns = [];
+		}
+		$patterns = ! is_array($pattern) ? [$pattern] : $pattern;
+		if (empty($patterns)) {
+			return false;
+		}
+		foreach ($patterns as $pattern) {
+			if ($pattern == $value) {
+				return true;
+			}
+			$pattern = preg_quote($pattern, '#');
+			$pattern = str_replace('\*', '.*', $pattern);
+			if (preg_match('#^'.$pattern.'\z#u', $value) === 1) {
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
+if (!function_exists('get_domain')) {
+	function get_domain($url=null)
+	{
+		if (is_null($url)) {
+			return $_SERVER['HTTP_HOST'];
+		}
+		return strstr(ltrim(strstr($url, '://'), '://'), '/', true);
+	}
+}
+
 function get_absolute_path($path) {
     $path = str_replace(array('/', '\\', '//'), '/', $path);
     $parts = array_filter(explode('/', $path), 'strlen');
