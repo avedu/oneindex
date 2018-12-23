@@ -4,7 +4,7 @@
 	
 <div class="mdui-container-fluid">
 	<div class="mdui-typo">
-	  <h1>系统安装 <small>绑定账号</small></h1>
+	  <h1>程序安装 <small>绑定微软账号</small></h1>
 	</div>
 
 

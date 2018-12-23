@@ -13,7 +13,7 @@
 		</div>
 
 		<div class="mdui-textfield">
-		  <h4>网站风格<small></small></h4>
+		  <h4>网站主题<small></small></h4>
 		  <select name="style" class="mdui-select">
 			  <?php 
 				foreach(scandir(ROOT.'view') as $k=>$s){
@@ -30,7 +30,7 @@
 		</div>
 
 		<div class="mdui-textfield">
-		  <h4>onedrive起始目录(空为根目录)<small>例：仅共享share目录 /share</small></h4>
+		  <h4>OneDrive起始目录(空为根目录)<small>例：仅共享share目录 /share</small></h4>
 		  <input class="mdui-textfield-input" type="text" name="onedrive_root" value="<?php echo $config['onedrive_root'];?>"/>
 		</div>
 
@@ -64,7 +64,7 @@
 		</div>
 
 		<div class="mdui-textfield">
-		  <h4>去掉<code style="color: #c7254e;background-color: #f7f7f9;font-size:16px;">/?/</code> (需配合伪静态使用!!)</h4>
+		  <h4>去掉地址栏中的<code style="color: #c7254e;background-color: #f7f7f9;font-size:16px;">/?/</code> (需配合伪静态使用!!)</h4>
 		  <label class="mdui-textfield-label"></label>
 		  <label class="mdui-switch">
 			  <input type="checkbox" name="root_path" value="?" <?php echo empty($config['root_path'])?'checked':'';?>/>

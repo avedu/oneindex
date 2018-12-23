@@ -52,7 +52,7 @@
 
     <a href="https://onedrive.live.com/" class="mdui-list-item" target="_blank">
       <i class="mdui-list-item-icon mdui-icon material-icons">&#xe2bf;</i>
-      <div class="mdui-list-item-content">文件管理(onedrive)</div>
+      <div class="mdui-list-item-content">文件管理(OneDrive)</div>
     </a>
   </div>
 </div>
