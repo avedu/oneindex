@@ -4,7 +4,7 @@
 	
 <div class="mdui-container-fluid">
 	<div class="mdui-col-md-6 mdui-col-offset-md-3">
-	  <center><h1 class="mdui-typo-display-2-opacity">输入密码进行查看</h1></center>
+	  <center><h1 class="mdui-typo-display-2-opacity">这是一个受保护的文件夹，您需要提供访问密码才能查看。</h1></center>
 	  <form action="" method="post">
 		  <div class="mdui-textfield mdui-textfield-floating-label">
 		    <i class="mdui-icon material-icons">https</i>
