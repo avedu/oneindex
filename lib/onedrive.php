@@ -141,6 +141,15 @@
 			return @$data[$size]['url'];
 		}
 
+		static function share($path){
+			$request = self::request($path,"createLink");
+			$post_data['type'] = 'view';
+			$post_data['scope'] = 'anonymous';
+			$resp = fetch::post($request, json_encode($post_data));
+			$data = json_decode($resp->content, true);
+			return $data;
+		}
+
 		//文件上传函数
 		static function upload($path,$content){
 			$request = self::request($path,"content");

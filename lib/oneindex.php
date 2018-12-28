@@ -101,6 +101,36 @@
 			return false;
 		}
 
+		static function web_url($path){
+			$path = self::get_absolute_path($path);
+			$path = rtrim($path, '/');
+
+			if(!empty(config($path.'@weburl'))){
+				return config($path.'@weburl');
+			}else{
+				$share = onedrive::share($path);
+				if(!empty($share['link']['webUrl'])){
+					config($path.'@weburl', $share['link']['webUrl']);
+					return $share['link']['webUrl'];
+				}
+			}
+		}
+
+		static function direct_link($path){
+			$web_url = self::web_url($path);
+			if(!empty($web_url)){
+				$arr = explode('/', $web_url);
+				if( strpos($arr[2],'sharepoint.com') >0 ){
+					$k = array_pop($arr);
+					unset($arr[3]);
+					unset($arr[4]);
+					return join('/', $arr).'/_layouts/15/download.aspx?share='.$k;
+				}elseif ( strpos($arr[2],'1drv.ms') >0 ){
+					# code...
+				}
+			}
+		}
+
 
 		//工具函数获取绝对路径
 		static function get_absolute_path($path) {
