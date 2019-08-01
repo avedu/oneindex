@@ -27,7 +27,7 @@ const dp = new DPlayer({
 	video: {
 	    url: '<?php e($item['downloadUrl']);?>',
 	    pic: '<?php @e($item['thumb']);?>',
-	    type: 'auto'
+	    type: '<?php e((pathinfo($item["name"], PATHINFO_EXTENSION) === 'flv') ? 'flv' : 'auto'); ?>'
 	}
 });
 </script>
