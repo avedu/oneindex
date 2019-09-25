@@ -21,47 +21,6 @@ Onedrive Directory Index
 ## 配置：
 <img width="658" alt="image" src="https://raw.githubusercontent.com/donwa/oneindex/files/images/install.gif">  
 
-
-### Docker 安装运行：
-
-运行：
-
-```sh
-docker run -d --name oneindex \
-    -p 80:80 --restart=always \
-    -v ~/oneindex/config:/var/www/html/config \
-    -v ~/oneindex/cache:/var/www/html/cache \
-    -e REFRESH_TOKEN='0 * * * *' \
-    -e REFRESH_CACHE='*/10 * * * *' \
-    setzero/oneindex
-```
-
-变量说明：
-
-- `REFRESH_TOKEN`刷新一次token的crontab表达式，默认值`0 * * * *`，即每小时
-- `REFRESH_CACHE`刷新一次cache的crontab表达式，默认值`*/10 * * * *`，即每10分钟
-
-停止删除容器：
-
-```shell
-docker stop oneindex
-docker rm -v oneindex
-```
-
-### Docker-compose 安装运行：
-
-运行：
-
-```sh
-docker-compose up -d
-```
-
-停止删除容器：
-
-```shell
-docker-compose down
-```
-
 ### 计划任务  
 [可选]**推荐配置**，非必需。后台定时刷新缓存，可增加前台访问的速度。  
 ```
@@ -71,6 +30,10 @@ docker-compose down
 # 每十分钟后台刷新一遍缓存
 */10 * * * * /具体路径/php /程序具体路径/one.php cache:refresh
 ```
+
+### Docker 安装运行
+
+- 请参考[TimeBye/oneindex](https://github.com/TimeBye/oneindex)
 
 ## 特殊文件实现功能  
 ` README.md `、`HEAD.md` 、 `.password`特殊文件使用  
